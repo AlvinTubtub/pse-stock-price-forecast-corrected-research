@@ -238,9 +238,9 @@ export async function buildCompareContext(): Promise<string> {
     .join("; ");
   const operationalModels = companies.map((company) => `${company.symbol}: ${company.bestModel}`).join(", ");
 
-  return `[Context: Formal Study and Operational Model Results]
+  return `[Context: Formal Study Model Performance]
 Formal study:
-- Run ID: ${formal.runId}; status: ${formal.status}; immutable.
+- Formal Holdout Study: status: ${formal.status}; immutable.
 - Data cutoff: ${formal.data.cutoffDate}; holdout: ${formal.data.holdoutStart} to ${formal.data.holdoutEnd}; 243 dates per company.
 - Conclusion: ${formal.conclusion.summary}
 - Descriptive principal-model RMSE wins: Lag-Informed Regression 7, ARIMA 7, LSTM 1. No model reached the required 8/15 threshold.
@@ -252,12 +252,7 @@ Formal model summary:
 ${modelSummary}
 
 Formal descriptive principal winners:
-${winners}
-
-Operational deployment:
-- Current generated metrics timestamp: ${metrics?.generatedAt || "unavailable"}.
-- Pre-promotion deployment model choices: ${operationalModels}.
-- Operational forecasts and metrics can change with new PSE data and must not be described as replacements for the fixed formal study.`;
+${winners}`;
 }
 
 /**

@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "node scripts/test-models-page.cjs",
+    "test:all": "node scripts/test-models-page.cjs && node scripts/test-operational-data.cjs"
   },
   "dependencies": {
     "@google/genai": "^2.17.1",
