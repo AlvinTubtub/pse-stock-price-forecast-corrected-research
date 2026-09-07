@@ -285,54 +285,14 @@ class TestDailyInference(unittest.TestCase):
     # Batch runner
     # ------------------------------------------------------------------
     def test_run_daily_inference_batch(self):
-        """run_daily_inference processes specified symbols and reports status."""
-        for sym in ["A", "B"]:
-            df = self.df.copy()
-            df["Close"] = df["Close"] + np.random.randn() * 5
-            # Recompute High/Low to maintain OHLC consistency
-            df["Low"] = df[["Open", "High", "Low", "Close"]].min(axis=1) - 0.01
-            df["High"] = df[["Open", "High", "Low", "Close"]].max(axis=1) + 0.01
-            csv = daily_inference.RAW_DIR / f"{sym}.csv"
-            df.to_csv(csv, index=False)
-
-            for d in (daily_inference.LAG_MODELS_DIR, daily_inference.ARIMA_MODELS_DIR):
-                (d / f"{sym}.pkl").write_bytes(b"dummy")
-            (daily_inference.LSTM_MODELS_DIR / f"{sym}.pth").write_bytes(b"dummy")
-
-            cache = self.cache.copy()
-            cache["next_close"] = {"lag": 100.0, "arima": 100.0, "lstm": 100.0}
-            (daily_inference.PREDICTION_CACHE_DIR / f"{sym}.json").write_text(json.dumps(cache))
-
-        def mock_arima_load(path):
-            sym = Path(path).stem
-            df_sym = pd.read_csv(daily_inference.RAW_DIR / f"{sym}.csv")
-            m = MagicMock()
-            m.nobs = len(df_sym)
-            m.model.endog = df_sym["Close"].values.reshape(-1, 1)
-            return m
-
-        with patch("scripts.daily_inference.lag_regression.load"),              patch("scripts.daily_inference.lag_regression.predict_next", return_value=101.0),              patch("scripts.daily_inference.arima_model.load", side_effect=mock_arima_load),              patch("scripts.daily_inference.arima_model.predict_next", return_value=102.0),              patch("scripts.daily_inference.lstm_model.load"),              patch("scripts.daily_inference.lstm_model.predict_next", return_value=103.0):
-
-            result = daily_inference.run_daily_inference(raw_dir=daily_inference.RAW_DIR, symbols=["A", "B"])
-
-        self.assertEqual(result["status"], "ok")
-        self.assertEqual(set(result["symbols_processed"]), {"A", "B"})
-        self.assertEqual(result["symbols_failed"], {})
-
-        for sym in ["A", "B"]:
-            cache = json.loads((daily_inference.PREDICTION_CACHE_DIR / f"{sym}.json").read_text())
-            self.assertIn("inference_metadata", cache)
-            self.assertEqual(cache["next_close"]["lag"], 101.0)
-            history = json.loads((daily_inference.PRODUCTION_HISTORY_DIR / f"{sym}.json").read_text())
-            self.assertEqual(len(history["records"]), 1)
-            self.assertIsNone(history["records"][0]["actual"])
+        """The public runner now rejects unapproved symbols before fitting."""
+        with self.assertRaises(ValueError):
+            daily_inference.run_daily_inference(raw_dir=daily_inference.RAW_DIR, symbols=["A", "B"])
 
     def test_run_daily_inference_missing_csv(self):
-        """Missing CSV should be reported as failure, not crash."""
-        (daily_inference.PREDICTION_CACHE_DIR / "NOCSV.json").write_text(json.dumps(self.cache))
-        result = daily_inference.run_daily_inference(symbols=["NOCSV"])
-        self.assertIn("NOCSV", result["symbols_failed"])
-        self.assertEqual(result["status"], "failure")
+        """Unknown symbols cannot fall back to legacy cache or persisted artifacts."""
+        with self.assertRaises(ValueError):
+            daily_inference.run_daily_inference(symbols=["NOCSV"])
 
     # ------------------------------------------------------------------
     # Cache replacement / stale prevention

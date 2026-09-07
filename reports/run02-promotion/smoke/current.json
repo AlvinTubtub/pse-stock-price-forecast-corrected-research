@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "deploymentVersion": "RUN02_OPS_20260907_01",
+  "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+  "formalRunId": "FORMAL_CORRECTED_20260828_02",
+  "approvalStatus": "approved",
+  "promotionDate": "2026-09-07",
+  "developmentOnly": true,
+  "generatedAt": "2026-09-07T19:30:42.900527+08:00",
+  "promotionBoundary": {
+    "firstIssuedAt": "2026-09-07T19:30:42.900527+08:00",
+    "firstTargetDate": "2026-09-08"
+  },
+  "forecasts": {
+    "ALI": {
+      "symbol": "ALI",
+      "model": "Lag-Informed Regression",
+      "predictedClose": 15.08,
+      "previousClose": 15.1,
+      "dataAsOf": "2026-09-07",
+      "forecastFor": "2026-09-08",
+      "issuedAt": "2026-09-07T19:30:42.900527+08:00",
+      "actual": null,
+      "error": null,
+      "deploymentVersion": "RUN02_OPS_20260907_01",
+      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "formalRunId": "FORMAL_CORRECTED_20260828_02",
+      "sourceDataSha256": "fb8e8ec7590102419fec50d23d2894f379317a41cffb094a37e5cd379e2c7d5e",
+      "configuration": {
+        "alpha": 0.1,
+        "candidate_features": [
+          "lag_1",
+          "lag_2",
+          "lag_3",
+          "lag_5",
+          "ma_5",
+          "ma_10",
+          "volume_ma_5",
+          "ema_10",
+          "ema_20",
+          "rsi_14",
+          "macd",
+          "macd_signal",
+          "bb_upper",
+          "bb_lower",
+          "daily_return",
+          "rolling_volatility",
+          "hl_range_pct",
+          "oc_return_pct",
+          "ema_gap_pct",
+          "macd_pct",
+          "bb_width_pct",
+          "bb_percent_b",
+          "return_lag_5",
+          "return_mean_5",
+          "return_mean_10",
+          "return_mean_20",
+          "return_vol_5",
+          "return_vol_10",
+          "return_vol_20",
+          "log_volume",
+          "volume_mean_10",
+          "volume_mean_20"
+        ],
+        "pacf_selected_lags": [
+          5
+        ],
+        "max_iter": 50000,
+        "tol": 0.001,
+        "seed": 42,
+        "target": "next_close_delta",
+        "scaler": "StandardScaler"
+      },
+      "coverage": "development_smoke"
+    },
+    "BPI": {
+      "symbol": "BPI",
+      "model": "ARIMA",
+      "predictedClose": 105.16,
+      "previousClose": 105.2,
+      "dataAsOf": "2026-09-07",
+      "forecastFor": "2026-09-08",
+      "issuedAt": "2026-09-07T19:30:42.900527+08:00",
+      "actual": null,
+      "error": null,
+      "deploymentVersion": "RUN02_OPS_20260907_01",
+      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "formalRunId": "FORMAL_CORRECTED_20260828_02",
+      "sourceDataSha256": "bb61ea55a2e1138d7d0ae2e7301cefa399db852ed0ade4bcbb23ee9afeb003d0",
+      "configuration": {
+        "order": [
+          1,
+          1,
+          1
+        ],
+        "trend": "n",
+        "method": "statespace",
+        "maxiter": 2000,
+        "target": "Close"
+      },
+      "coverage": "development_smoke"
+    }
+  },
+  "history": []
+}

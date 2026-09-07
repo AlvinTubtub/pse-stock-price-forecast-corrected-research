@@ -764,3 +764,17 @@ def predict_next(artifact, df: pd.DataFrame) -> float:
     next_delta = float(artifact["y_scaler"].inverse_transform([[next_delta_scaled]])[0, 0])
 
     return float(df["Close"].iloc[-1] + next_delta)
+
+
+def refit_frozen_lstm(df: pd.DataFrame, frozen: dict) -> dict:
+    """Operational refit with the approved epochs and seed; no stopping-tail search."""
+    if not HAS_TORCH:
+        raise RuntimeError("PyTorch is required for the promoted LSTM")
+    config = LSTMConfig(frozen["lookback"], frozen["hidden_size"], frozen["learning_rate"], frozen["batch_size"])
+    samples = _formal_delta_samples(df, config.lookback)
+    scaler = MinMaxScaler().fit(df["Close"].astype(float).diff().dropna().to_numpy().reshape(-1, 1))
+    X, y = _scale_sequences(np.stack(samples["sequence"]), samples["target_delta"].to_numpy(), scaler)
+    model = _train_fixed_epochs(X, y, config, epochs=frozen["fixed_epochs"], seed=frozen["seed"])
+    log.info("Frozen LSTM refit: %d sequences, %d epochs, seed=%d", len(samples), frozen["fixed_epochs"], frozen["seed"])
+    return {"artifact_version": 2, "input_design": FORMAL_INPUT_DESIGN, "state_dict": model.state_dict(),
+            "input_size": 1, "seq_len": config.lookback, "hidden_size": config.hidden_size, "delta_scaler": scaler}

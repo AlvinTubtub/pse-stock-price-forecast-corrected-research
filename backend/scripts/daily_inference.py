@@ -1,17 +1,8 @@
-"""Daily inference runner: loads persisted weekly models and generates
-fresh next-trading-day forecasts using the latest validated OHLCV data.
+"""Approved Run 02 daily entrypoint.
 
-This module is deliberately separate from training:
-  - It NEVER fits, retrains, or refits any model.
-  - It ONLY loads already-persisted artifacts (from weekly training)
-    and runs predict_next() on the newest data.
-  - It updates prediction_cache/<TICKER>.json with fresh predictions
-    while preserving all training-time metadata (metrics, backtests,
-    model-selection results, statistical tests).
-
-Intended to run Monday-Friday after new PSE EOD data is ingested,
-*before* export_forecast_artifacts.py, so the frontend always serves
-forecasts computed on the most recent close.
+run_daily_inference delegates to operational_deployment.generate: fresh refits
+with explicitly approved frozen configurations. Earlier inference helpers are
+retained for legacy artifact inspection/tests and are not the operational path.
 """
 from __future__ import annotations
 
@@ -286,7 +277,7 @@ def _record_issued_forecast(symbol: str, cache: dict) -> bool:
 # ---------------------------------------------------------------------------
 
 
-def run_daily_inference(
+def _legacy_run_daily_inference(
     raw_dir: Path = RAW_DIR,
     symbols: list[str] | None = None,
     enforce_universe: bool | None = None,
@@ -369,6 +360,13 @@ def run_daily_inference(
         )
 
     return results
+
+
+def run_daily_inference(raw_dir: Path = RAW_DIR, symbols=None, enforce_universe=None):
+    """Operational entrypoint: only approved fixed-configuration refits."""
+    from services.operational_deployment import generate
+    payload = generate(raw_dir=raw_dir, symbols=symbols)
+    return {"status": "ok", "symbols_processed": list(payload["forecasts"]), "symbols_failed": {}}
 
 
 def main() -> int:

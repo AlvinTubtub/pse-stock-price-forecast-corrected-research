@@ -1,0 +1,15 @@
+{
+  "README.md": "bf63588a921b8a3ab0838c4e525160b984149c5212e87a4f40c21eafe13e81b0",
+  "backend/README.md": "a628abc18bc341423d7ac4c069ba3ef08b24ed3622addc65d33d3d2303a4c563",
+  "backend/scripts/export_forecast_artifacts.py": "a4eed329b1ed69d66d3ac43b0d09d2f9b02bb751b5568f1a3b453aab528cb65c",
+  "backend/scripts/validate_exports.py": "b3af9e6abff2b6045d96bf3efe93b2abff80fe54baae0de3fcb23aca454fd6a0",
+  "backend/scripts/export_formal_study_results.py": "e3a7357013ce3c6940d50cb3f8048777ed2f08402cd067baea219b46437e0118",
+  "backend/tests/test_export_formal_study_results.py": "11ad19953db781b59c3c73708fd457cc66938a9f96366f32fac33ac5efdabe6e",
+  "frontend/src/app/compare/page.tsx": "ad4e602387f7059e93f96f872236b843f8bef53b7d2c76ff59d3ad491c01afb9",
+  "frontend/src/app/learn-stocks/page.tsx": "8d153a35a6c33b6478db683fc2524f1b46976247a95a1ccac67c006abfc18ae3",
+  "frontend/src/components/company/CompanyDetailView.tsx": "c4afcc914fc196ef55a3a71b4497953b083354d4a6fb90ef075ae49bf9380c2f",
+  "frontend/src/lib/ai/context.ts": "cc3bd22e4cb93205725d88aee08bcba15ba68202af38a8acab7b6787dbc9b594",
+  "frontend/src/lib/data.ts": "9f5c53a1437da9d16e788e85a6de2029d737aab95a760d172120feb5bad822f0",
+  "frontend/src/lib/types.ts": "0a017709ee499cde09801c2fa01b2c40f3e93ed46279a856dac25ac1de4d656c",
+  "frontend/public/forecasts/formal/FORMAL_CORRECTED_20260828_02.json": "c0a5962709be16a82e5f5eeb634424ef0cad93a05d08db5c8af02e1d90ff5a6e"
+}

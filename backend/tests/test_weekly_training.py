@@ -5,16 +5,17 @@ BACKEND = Path(__file__).resolve().parents[1]
 REPO_ROOT = BACKEND.parent
 
 
-def test_scheduled_refresh_runs_only_on_november_3_and_is_strict():
+def test_remote_refresh_is_disabled_during_promotion_review():
     workflow = (REPO_ROOT / ".github" / "workflows" / "train_models.yml").read_text()
-    assert 'cron: "0 0 3 11 *"' in workflow
+    assert "schedule:" not in workflow
+    assert "if: ${{ false }}" in workflow
     assert 'cron: "0 0 * * 0"' not in workflow
     assert "python -m services.model_selector --mode deployment-refresh --strict" in workflow
     assert "--mode deployment-retune" not in workflow
     assert "--mode formal" not in workflow
     assert "python scripts/export_forecast_artifacts.py" in workflow
     assert "python scripts/validate_exports.py" in workflow
-    assert "contents: write" in workflow
+    assert "contents: read" in workflow
     assert "continue-on-error" not in workflow
 
 

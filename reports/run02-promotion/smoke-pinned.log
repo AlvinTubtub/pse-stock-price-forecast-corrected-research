@@ -1,0 +1,8 @@
+[operational] Validated approved deployment RUN02_OPS_20260907_01 (16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591)
+[operational] Refitting ALI selected lag_reg on 1629 official-source rows
+[operational] Deployment refresh Lag Regression: alpha=0.1, candidate_features=32.
+[operational] ALI refit complete: 15.08 for 2026-09-08 (development_smoke)
+[operational] Refitting BPI selected arima on 1629 official-source rows
+[operational] Deployment refresh ARIMA: order=(1, 1, 1), trend=n, convergence confirmed.
+[operational] BPI refit complete: 105.16 for 2026-09-08 (development_smoke)
+[operational] Published complete 2-company development artifact to reports/run02-promotion/smoke-pinned/current.json

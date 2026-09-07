@@ -20,6 +20,7 @@ Exit codes:
 from __future__ import annotations
 
 import json
+import math
 import sys
 from pathlib import Path
 
@@ -33,6 +34,10 @@ from services.pdf_pipeline.config import TARGET_COMPANIES  # noqa: E402
 EXPECTED_TICKERS = sorted(TARGET_COMPANIES.keys())
 BACKTEST_MODELS = {"Lag-Informed Regression", "ARIMA", "LSTM", "Naive baseline"}
 PRODUCTION_BACKTEST_MODELS = {"Lag-Informed Regression", "ARIMA", "LSTM"}
+FORMAL_RUN_ID = "FORMAL_CORRECTED_20260828_02"
+FORMAL_CODE_COMMIT = "bfb33b8c184c87cc8828af5529410da94addd71c"
+FORMAL_ARCHIVE_SHA256 = "2b2ed0ca6b88ea6cfef5ac14013440da1c7c55c1d9f9640e04a595fdafca5d24"
+FORMAL_MODEL_IDS = {"lag_reg", "arima", "lstm", "naive"}
 
 
 def _load(path: Path) -> dict | list | None:
@@ -42,6 +47,71 @@ def _load(path: Path) -> dict | list | None:
         return json.loads(path.read_text())
     except Exception as exc:
         raise AssertionError(f"{path} is not valid JSON: {exc}") from exc
+
+
+def _validate_formal_study(errors: list[str]) -> None:
+    path = FORECASTS_DIR / "formal" / f"{FORMAL_RUN_ID}.json"
+    formal = _load(path)
+    if not isinstance(formal, dict):
+        errors.append(f"Missing or invalid approved formal-study dataset: {path}")
+        return
+    if formal.get("schemaVersion") != 1 or formal.get("kind") != "immutable_formal_study":
+        errors.append("formal study: unsupported schema or artifact kind")
+    if formal.get("runId") != FORMAL_RUN_ID or formal.get("status") != "complete":
+        errors.append("formal study: approved run identity/status is invalid")
+    identity = formal.get("identity", {})
+    if identity.get("repositoryCommit") != FORMAL_CODE_COMMIT:
+        errors.append("formal study: repository commit does not match the approved runner")
+    if identity.get("archiveSha256") != FORMAL_ARCHIVE_SHA256:
+        errors.append("formal study: evidence archive SHA-256 does not match the audited release")
+    data = formal.get("data", {})
+    expected_data = {
+        "companyCount": 15,
+        "rowsPerCompany": 1624,
+        "totalRows": 24360,
+        "developmentPairsPerCompany": 1380,
+        "holdoutPairsPerCompany": 243,
+        "totalHoldoutPredictions": 14580,
+        "cutoffDate": "2026-08-28",
+    }
+    for key, expected_value in expected_data.items():
+        if data.get(key) != expected_value:
+            errors.append(f"formal study: {key}={data.get(key)!r}, expected {expected_value!r}")
+    conclusion = formal.get("conclusion", {})
+    if conclusion.get("principalRmseWins") != {"lag_reg": 7, "arima": 7, "lstm": 1}:
+        errors.append("formal study: principal RMSE win counts must remain 7/7/1")
+    if conclusion.get("dominantModel") is not None or conclusion.get("dominanceThreshold") != 8:
+        errors.append("formal study: no model should be reported as meeting the 8-of-15 threshold")
+    significant = {(row.get("symbol"), row.get("model")) for row in conclusion.get("significantVsNaive", [])}
+    if significant != {("ICT", "lag_reg"), ("MBT", "lag_reg")}:
+        errors.append("formal study: significant-vs-Naive findings do not match the audit")
+
+    rows = formal.get("perCompany")
+    if not isinstance(rows, list):
+        errors.append("formal study: perCompany must be a list")
+        return
+    symbols = [row.get("symbol") for row in rows if isinstance(row, dict)]
+    if sorted(symbols) != EXPECTED_TICKERS or len(symbols) != len(set(symbols)):
+        errors.append("formal study: per-company coverage must contain all 15 companies exactly once")
+    metric_row_count = 0
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        metrics_by_model = row.get("metrics")
+        if not isinstance(metrics_by_model, dict) or set(metrics_by_model) != FORMAL_MODEL_IDS:
+            errors.append(f"formal study: {row.get('symbol')} has incomplete model metrics")
+            continue
+        for model, metric in metrics_by_model.items():
+            metric_row_count += 1
+            if not isinstance(metric, dict):
+                errors.append(f"formal study: {row.get('symbol')}/{model} metric is malformed")
+                continue
+            for key in ("rmse", "mae", "mase", "r2"):
+                value = metric.get(key)
+                if not isinstance(value, (int, float)) or not math.isfinite(value):
+                    errors.append(f"formal study: {row.get('symbol')}/{model}/{key} is not finite")
+    if metric_row_count != 60:
+        errors.append(f"formal study: found {metric_row_count} metric rows, expected 60")
 
 
 def main() -> int:
@@ -85,6 +155,8 @@ def main() -> int:
     if metrics is None:
         errors.append(f"Missing {FORECASTS_DIR / 'metrics.json'}")
 
+    _validate_formal_study(errors)
+
     for symbol in EXPECTED_TICKERS:
         company_path = FORECASTS_DIR / "company" / f"{symbol}.json"
         history_path = FORECASTS_DIR / "history" / f"{symbol}.json"
@@ -122,6 +194,17 @@ def main() -> int:
         elif any(not isinstance(values, list) or len(values) != len(production_dates) for values in production_by_model.values()):
             errors.append(f"{symbol}: production prediction series do not align with production dates")
 
+    from services.operational_deployment import load_manifest, read_json, validate_batch
+    try:
+        manifest, sha = load_manifest()
+        operational = FORECASTS_DIR / "operational.json"
+        if operational.exists():
+            validate_batch(read_json(operational), manifest, sha)
+        else:
+            print("[validate] Approved manifest valid; full operational generation pending (legacy snapshot only).")
+    except Exception as exc:
+        errors.append(f"operational deployment: {exc}")
+
     print("=" * 60)
     print("Validating exported frontend artifacts...")
     print(f"Directory: {FORECASTS_DIR}")
@@ -134,7 +217,7 @@ def main() -> int:
         return 1
 
     print(f"OK — {len(EXPECTED_TICKERS)}/{len(EXPECTED_TICKERS)} companies present, "
-          "dashboard/metrics/latest all consistent.")
+          "operational exports consistent, approved formal study intact.")
     return 0
 
 

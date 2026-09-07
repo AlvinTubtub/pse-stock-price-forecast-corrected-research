@@ -182,33 +182,13 @@ class TestUniverseEnforcement(unittest.TestCase):
         shutil.rmtree(self._temp_dir, ignore_errors=True)
 
     def test_missing_ticker_fails_the_batch(self):
-        def mock_arima_load(path):
-            sym = Path(path).stem
-            df_sym = pd.read_csv(daily_inference.RAW_DIR / f"{sym}.csv")
-            from unittest.mock import MagicMock
-            m = MagicMock()
-            m.nobs = len(df_sym)
-            m.model.endog = df_sym["Close"].values.reshape(-1, 1)
-            return m
+        """Missing canonical input aborts the whole approved batch before fitting."""
+        with self.assertRaises(FileNotFoundError):
+            daily_inference.run_daily_inference(raw_dir=daily_inference.RAW_DIR)
 
-        with patch("scripts.daily_inference.lag_regression.load"),              patch("scripts.daily_inference.lag_regression.predict_next", return_value=101.0),              patch("scripts.daily_inference.arima_model.load", side_effect=mock_arima_load),              patch("scripts.daily_inference.arima_model.predict_next", return_value=102.0),              patch("scripts.daily_inference.lstm_model.load"),              patch("scripts.daily_inference.lstm_model.predict_next", return_value=103.0):
-            # symbols=None -> production mode -> enforces the full universe
-            result = daily_inference.run_daily_inference(raw_dir=daily_inference.RAW_DIR, symbols=None)
-
-        self.assertIn("GHOST_TICKER", result["symbols_failed"])
-        self.assertIn("missing entirely", result["symbols_failed"]["GHOST_TICKER"])
-        self.assertEqual(set(result["symbols_processed"]), {"ALI", "BPI"})
-        self.assertIn(result["status"], ("partial_failure", "failure"))
-
-    def test_explicit_symbols_list_does_not_enforce_universe(self):
-        """Passing an explicit symbols= list (e.g. from tests, or a
-        targeted re-run) must NOT trigger universe enforcement — only the
-        production default (symbols=None) does."""
-        result = daily_inference.run_daily_inference(
-            raw_dir=daily_inference.RAW_DIR, symbols=["NOT_IN_UNIVERSE"]
-        )
-        self.assertIn("NOT_IN_UNIVERSE", result["symbols_failed"])
-        self.assertNotIn("missing entirely", result["symbols_failed"]["NOT_IN_UNIVERSE"])
+    def test_explicit_symbols_cannot_bypass_approved_universe(self):
+        with self.assertRaises(ValueError):
+            daily_inference.run_daily_inference(raw_dir=daily_inference.RAW_DIR, symbols=["NOT_IN_UNIVERSE"])
 
 
 if __name__ == "__main__":

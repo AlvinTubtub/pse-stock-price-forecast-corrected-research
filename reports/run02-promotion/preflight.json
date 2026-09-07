@@ -1,0 +1,97 @@
+{
+  "checked_at": "2026-09-07T19:46:31.655753+08:00",
+  "manifest_sha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+  "status": "PASS",
+  "companies": {
+    "ALI": {
+      "rows": 1629,
+      "data_as_of": "2026-09-07",
+      "next_session": "2026-09-08",
+      "sha256": "fb8e8ec7590102419fec50d23d2894f379317a41cffb094a37e5cd379e2c7d5e"
+    },
+    "APX": {
+      "rows": 1629,
+      "data_as_of": "2026-09-07",
+      "next_session": "2026-09-08",
+      "sha256": "221e064aa57b89d4c36431982beb493c8c8da0483d8cacdcf4dbf5308bf33665"
+    },
+    "BPI": {
+      "rows": 1629,
+      "data_as_of": "2026-09-07",
+      "next_session": "2026-09-08",
+      "sha256": "bb61ea55a2e1138d7d0ae2e7301cefa399db852ed0ade4bcbb23ee9afeb003d0"
+    },
+    "GLO": {
+      "rows": 1629,
+      "data_as_of": "2026-09-07",
+      "next_session": "2026-09-08",
+      "sha256": "62541ddfeda0ec73560eae00029af1fcdd8a5c55fbd41ef87f405aae7e834f83"
+    },
+    "ICT": {
+      "rows": 1629,
+      "data_as_of": "2026-09-07",
+      "next_session": "2026-09-08",
+      "sha256": "1539a724b13ee3160d14abd70bae57f331eb098573d0ae6c82c0cfdc0c477108"
+    },
+    "JFC": {
+      "rows": 1629,
+      "data_as_of": "2026-09-07",
+      "next_session": "2026-09-08",
+      "sha256": "8073417dd20cbec2fba72908796fe0d4368abcc8dac92f0abc8480d1a42d41d4"
+    },
+    "MBT": {
+      "rows": 1629,
+      "data_as_of": "2026-09-07",
+      "next_session": "2026-09-08",
+      "sha256": "237377da8c57b1e695508f95a37993f561f49b93ca26bc3a5d62e61a02a3af2f"
+    },
+    "MEG": {
+      "rows": 1629,
+      "data_as_of": "2026-09-07",
+      "next_session": "2026-09-08",
+      "sha256": "76a8ce11169098269d2087c99841f64c15c45e2e6697863c3ad6d449ae1a0023"
+    },
+    "MER": {
+      "rows": 1629,
+      "data_as_of": "2026-09-07",
+      "next_session": "2026-09-08",
+      "sha256": "e2de6192e59f3d101e053f1a97e3a862ce328f4fd6551aab37f876742dec8592"
+    },
+    "NIKL": {
+      "rows": 1629,
+      "data_as_of": "2026-09-07",
+      "next_session": "2026-09-08",
+      "sha256": "31dc41f944a017e5220a36535e919688fdea0faa8a5d65c9adc19ff8bef72a72"
+    },
+    "PGOLD": {
+      "rows": 1629,
+      "data_as_of": "2026-09-07",
+      "next_session": "2026-09-08",
+      "sha256": "a6de0dbbda174e384d1701a3cb7fc424e4605204608f626be758165ace2c79a4"
+    },
+    "SCC": {
+      "rows": 1629,
+      "data_as_of": "2026-09-07",
+      "next_session": "2026-09-08",
+      "sha256": "3dc87bc418408da4f8e59af0ce8bbf8e7a0ec3d6f3ac58000fe30c995af79f93"
+    },
+    "SECB": {
+      "rows": 1629,
+      "data_as_of": "2026-09-07",
+      "next_session": "2026-09-08",
+      "sha256": "50e91dc2ef894da29aef85525407fe59577c8969385931733c9f2fbc2d76b80b"
+    },
+    "SHLPH": {
+      "rows": 1629,
+      "data_as_of": "2026-09-07",
+      "next_session": "2026-09-08",
+      "sha256": "a8782a41665efa886cd4aa4a91853f1073ab9c326753f3bd5c4d10a7df4b2b77"
+    },
+    "SMPH": {
+      "rows": 1629,
+      "data_as_of": "2026-09-07",
+      "next_session": "2026-09-08",
+      "sha256": "6add0a4a21f844c3b77df1e2a63be7ab5c69d7be516331522f216d957f0703bd"
+    }
+  }
+}

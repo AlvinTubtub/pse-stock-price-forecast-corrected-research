@@ -108,6 +108,9 @@ export default function CompanyDetailView({ company }: CompanyDetailViewProps) {
 
   return (
     <div className="space-y-8">
+      <p className="text-sm text-amber-300">Historical evaluation and errors below belong to the pre-promotion snapshot.
+        <a href="/operations" className="underline ml-1">View Run 02 operational forecasts and post-promotion error coverage.</a>
+      </p>
       {/* 1. Header & Navigation */}
       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
         <div>
@@ -430,7 +433,7 @@ export default function CompanyDetailView({ company }: CompanyDetailViewProps) {
             Backtest: Predicted vs. Actual (Last 60 Sessions)
           </h2>
           <span className="rounded-md border border-amber-400/30 bg-amber-400/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-300">
-            Audited evaluation
+            Pre-promotion evaluation
           </span>
           {hasRealizedProductionHistory && (
             <span className="rounded-md border border-emerald-400/30 bg-emerald-400/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-emerald-300">
@@ -439,8 +442,9 @@ export default function CompanyDetailView({ company }: CompanyDetailViewProps) {
           )}
         </div>
         <p className="text-sm text-slate-400 mb-4">
-          Latest audited evaluation followed by verified live ForecastPH forecasts. The vertical
-          marker separates the research holdout from live history; research metrics are unchanged.
+          Stored pre-promotion evaluation followed by legacy issued forecasts. The vertical
+          marker separates the stored evaluation window from prospective operational history. The
+          approved formal study remains fixed on the Models page.
         </p>
         <PredictionChart
           dates={chartDates}
@@ -457,7 +461,7 @@ export default function CompanyDetailView({ company }: CompanyDetailViewProps) {
           <div className="flex flex-wrap items-center gap-2 mb-1">
             <h2 className="text-lg font-semibold text-white">Forecast Error Over Time</h2>
             <span className="rounded-md border border-amber-400/30 bg-amber-400/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-300">
-              Audited evaluation
+              Pre-promotion evaluation
             </span>
             {hasRealizedProductionHistory && (
               <span className="rounded-md border border-emerald-400/30 bg-emerald-400/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-emerald-300">
@@ -466,9 +470,9 @@ export default function CompanyDetailView({ company }: CompanyDetailViewProps) {
             )}
           </div>
           <p className="text-sm text-slate-400 mb-4">
-            Audited evaluation error followed by verified live ForecastPH error. The vertical marker
-            separates the research holdout from live history; both use predicted close minus actual
-            close (₱).
+            Pre-promotion evaluation error followed by verified live ForecastPH error. The vertical
+            marker separates the stored evaluation window from prospective operational history; both
+            use predicted close minus actual close (₱).
           </p>
           <ErrorChart
             dates={chartDates}
@@ -488,8 +492,8 @@ export default function CompanyDetailView({ company }: CompanyDetailViewProps) {
               Model Performance for {company.symbol}
             </h2>
             <p className="text-xs text-slate-400">
-              Chronological backtest evaluation metrics across all forecasting models and the naive
-              baseline.
+              Stored pre-promotion evaluation metrics across all forecasting models and the naive
+              baseline. These are separate from the immutable formal-study metrics.
             </p>
           </div>
 
@@ -546,7 +550,8 @@ export default function CompanyDetailView({ company }: CompanyDetailViewProps) {
           <div className="mt-4 pt-3 border-t border-dark-border/60 text-xs text-slate-400 space-y-1">
             <p>
               &bull; <strong className="text-slate-300">Model Selection: </strong>
-              Selected model is determined by the lowest test-set RMSE on the held-out test window.
+              The forecast model comes from the active deployment when generated. Metrics below remain pre-promotion. Formal-study RMSE
+              rankings are reported separately on the Models page.
             </p>
             <p>
               &bull; <strong className="text-slate-300">MASE Benchmark: </strong>

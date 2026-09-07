@@ -1,25 +1,9 @@
 #!/usr/bin/env python3
-"""Headless runner for the PSE data-ingestion pipeline (PDF -> data/raw/ CSVs).
+"""Manual official-data ingestion followed by approved Run 02 fixed-config refits.
 
-In production this is invoked exclusively by the Fast Pipeline
-(.github/workflows/update_pipeline.yml, Monday-Friday, always with
---no-train), which is itself triggered externally by Cron-job.org
-(4:00 PM Philippine Time) via a repository_dispatch call.
-
-Model retraining is a separate concern, handled weekly by
-.github/workflows/train_models.yml calling
-services.model_selector.train_and_select_all() directly.
-
-Usage:
-    python run_pipeline.py                  # download + process + train
-    python run_pipeline.py --no-download     # only process staged PDFs
-    python run_pipeline.py --no-train        # skip retraining
-    python run_pipeline.py --no-inference    # skip daily inference
-    python run_pipeline.py --start-date 2026-07-01 --end-date 2026-07-27
-
-Exit codes:
-    0  success
-    1  failure — nothing usable extracted, or daily inference failed
+No legacy selection, automatic promotion, remote schedules, or publishing.
+Use --no-inference for ingestion only. --no-train remains a compatibility flag;
+legacy training is always disabled in this entrypoint.
 """
 from __future__ import annotations
 
@@ -145,7 +129,7 @@ def _parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--inference", dest="run_inference", action="store_true",
-        help="Run daily inference using persisted weekly models after data merge. "
+        help="Refit approved Run 02 configurations after data merge. "
              "This is the default for the Fast Pipeline; use --no-inference to skip.",
     )
     parser.add_argument(
@@ -158,159 +142,28 @@ def _parse_args() -> argparse.Namespace:
         "--ignore-calendar", dest="ignore_calendar", action="store_true", default=False,
         help="Bypass the PSE trading calendar check (force-run on weekends or holidays).",
     )
-    parser.set_defaults(download=True, train_models=True, run_inference=True)
+    parser.set_defaults(download=True, train_models=False, run_inference=True)
     return parser.parse_args()
 
 
 def main() -> int:
+    """Ingest official reports, then refit only the approved operational mapping."""
+    from services.operational_deployment import load_manifest, generate
     args = _parse_args()
-    started = time.monotonic()
-
-    today_pht = datetime.now(PHT).date()
-    calendar = get_calendar()
-
-    # Guard: on non-trading days (weekends & PSE holidays), skip daily update if no explicit date range was requested
-    if not args.start_date and not args.end_date and not args.ignore_calendar:
-        if not calendar.is_trading_day(today_pht):
-            reason = calendar.get_holiday_reason(today_pht) or "Non-Trading Day"
-            next_session = calendar.next_trading_day(today_pht)
-            print("=" * 60)
-            print("PSE Trading Calendar Check")
-            print(f"Date: {today_pht}")
-            print("PSE Status: CLOSED")
-            print(f"Reason: {reason}")
-            print("Action: SKIP daily trading-data update")
-            print(f"Next PSE Trading Session: {next_session}")
-            print("=" * 60)
-            print("Finished successfully (holiday/non-trading day skip).")
-            return 0
-
-    print("=" * 60)
-    print("Starting pipeline...")
-    print("=" * 60)
-
-    if args.download:
-        print("Downloading reports...")
-    print("Extracting...")
-    print("Cleaning...")
-    print("Validating...")
-    print("Merging...")
-    if args.train_models:
-        print("Training models...")
+    load_manifest()  # fail before ingestion if approval is missing or invalid
+    result = run_pipeline(download=args.download, start_date=args.start_date,
+                          end_date=args.end_date, train_models=False)
+    if result["status"] not in INFERENCE_ELIGIBLE_STATUSES:
+        print(f"[pipeline] Ingestion failed: {result['status']}")
+        return 1
     if args.run_inference:
-        print("Daily inference (persisted weekly models)...")
-
-    result = run_pipeline(
-        download=args.download,
-        start_date=args.start_date,
-        end_date=args.end_date,
-        train_models=args.train_models,
-    )
-
-    # ------------------------------------------------------------------
-    # DAILY INFERENCE: run after data merge, before frontend export
-    # ------------------------------------------------------------------
-    inference_result = None
-    if args.run_inference and result["status"] in INFERENCE_ELIGIBLE_STATUSES:
-        # Reconcile first: this reads only forecasts issued on earlier runs
-        # and the newly ingested actual close. It does not run inference or
-        # alter the audited deployment-backtest evaluation.
-        from scripts.daily_inference import reconcile_production_history, run_daily_inference
-        reconciliation_result = reconcile_production_history()
-        print(
-            "Production reconciliation: "
-            f"{reconciliation_result['status']} "
-            f"({reconciliation_result['records_reconciled']} record(s) reconciled)"
-        )
-        if reconciliation_result["symbols_failed"]:
-            result["status"] = "error"
-            result["error"] = (
-                "Production-history reconciliation failed for: "
-                + ", ".join(sorted(reconciliation_result["symbols_failed"]))
-            )
+        try:
+            generate()
+        except Exception as exc:
+            print(f"[pipeline] Approved generation stopped: {exc}")
             return 1
-        # Don't rely on merge_summaries alone to decide whether inference
-        # runs — a day with no new PDF (status "no_files") can still have
-        # raw data that's newer than the cache (e.g. a previous inference
-        # run failed, or data was added out-of-band). Compare every
-        # expected ticker's latest raw date against its cached
-        # data_as_of and only skip when everything is already current.
-        stale_tickers = tickers_needing_inference()
-        if stale_tickers:
-            print("-" * 60)
-            print(
-                f"{len(stale_tickers)}/{len(EXPECTED_TICKERS)} ticker(s) have stale or "
-                f"missing cached forecasts vs. raw data: {', '.join(stale_tickers)}"
-            )
-            print("Running daily inference...")
-            try:
-                inference_result = run_daily_inference()
-                print(f"Daily inference: {inference_result['status']} "
-                      f"({len(inference_result['symbols_processed'])} OK, "
-                      f"{len(inference_result['symbols_failed'])} failed)")
-                if inference_result["symbols_failed"]:
-                    print("Failures:")
-                    for sym, err in inference_result["symbols_failed"].items():
-                        print(f"  {sym}: {err}")
-                    # Fail the workflow if daily inference fails for any symbol
-                    result["status"] = "error"
-                    result["error"] = (
-                        f"Daily inference failed for {len(inference_result['symbols_failed'])} symbol(s): "
-                        + ", ".join(inference_result["symbols_failed"].keys())
-                    )
-                missing_tickers = sorted(set(EXPECTED_TICKERS) - set(inference_result["symbols_processed"]) - set(inference_result["symbols_failed"]))
-                if missing_tickers:
-                    # Enforce the full 15-ticker universe here too, in case
-                    # a ticker's raw CSV doesn't exist at all yet.
-                    result["status"] = "error"
-                    result["error"] = (
-                        (result["error"] + "; " if result.get("error") else "")
-                        + f"Missing expected ticker(s) entirely (no raw data): {', '.join(missing_tickers)}"
-                    )
-            except Exception as exc:
-                print(f"Daily inference step failed unexpectedly: {exc}")
-                result["status"] = "error"
-                result["error"] = f"Daily inference exception: {exc}"
-        else:
-            print(
-                f"All {len(EXPECTED_TICKERS)} cached forecasts are already current "
-                "with the latest raw data — skipping daily inference."
-            )
-
-    elapsed = round(time.monotonic() - started, 2)
-    status = result["status"]
-
-    print("-" * 60)
-    if result["download"] is not None:
-        dl = result["download"]
-        print(f"Download: {len(dl.downloaded)} new, {len(dl.skipped)} already had, "
-              f"{len(dl.not_found)} not published yet, {len(dl.errors)} failed")
-    print(f"PDFs processed : {result['pdf_count']} ({result['parsed_count']} parsed OK)")
-    print(f"Records extracted: {result['record_count']}")
-    if result["parse_warnings"]:
-        print(f"Warnings        : {len(result['parse_warnings'])}")
-    if result["merge_summaries"]:
-        print(f"Symbols updated : {len(result['merge_summaries'])}")
-    if result["post_validation_errors"]:
-        print(f"Post-validation failures: {len(result['post_validation_errors'])}")
-    if result["training"]:
-        print(f"Models trained  : {len(result['training']['best_models'])} ticker(s)")
-        print("Statistical tests: statistical_tests.json")
-    if inference_result:
-        print(f"Daily inference : {inference_result['status']} ({len(inference_result['symbols_processed'])} symbols)")
-    print(f"Status          : {status}")
-    print(f"Elapsed         : {elapsed}s")
-    print("-" * 60)
-
-    if status in SUCCESS_STATUSES:
-        print("Finished successfully.")
-        return 0
-
-    print(f"Finished with a failure status: {status}")
-    if result.get("error"):
-        print(f"Error: {result['error']}")
-    print("See data/pdf_pipeline/pipeline.log for details.")
-    return 1
+    print("[pipeline] Completed; automatic selection and promotion are disabled.")
+    return 0
 
 
 if __name__ == "__main__":

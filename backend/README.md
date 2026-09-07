@@ -1,3 +1,12 @@
+> **Run 02 operational control (September 7, 2026):** The active approved mapping is
+> `RUN02_OPS_20260907_01`. Manual operations now require the versioned manifest and
+> refit its frozen choices. Full generation remains pending; ALI/BPI smoke results
+> are development-only. Remote workflows, schedules, automatic promotion and
+> publishing are disabled. Earlier scheduling/persisted-model descriptions below
+> describe the legacy pipeline and are superseded by the promotion review.
+>
+> See [promotion mapping, safety rules, tests and run commands](../reports/run02-promotion/REVIEW.md).
+
 # ForecastPH — Backend (Data/ML Pipeline)
 
 ForecastPH forecasts next-session closing prices for selected PSE-listed companies. **This directory
@@ -64,13 +73,14 @@ Commit changed artifacts only
         Dashboard reflects the latest data/models — no user interaction required
 ```
 
-Data refreshes daily (Mon-Fri); models retrain weekly (Sun) — see
+Data and inference refresh daily on trading days; approved deployment
+configurations are refitted monthly — see
 "Automated Pipeline" below for why, and the runtime numbers behind that
 split.
 
 The frontend (`../frontend/`) only ever:
-- reads the JSON `scripts/export_forecast_artifacts.py` exports from `data/raw/*.csv`, `prediction_cache/`, `best_models.json`, `latest_processed.json`
-- displays the Company List, Company Details, Forecast Results, Model Performance, charts, and dashboard metrics built from what it read
+- reads operational JSON exported by `scripts/export_forecast_artifacts.py` and the separately generated immutable formal-study JSON
+- displays company details and rolling next-day forecasts separately from the approved formal-study metrics and statistical findings
 
 The frontend never downloads PDFs, processes data, retrains models, executes any forecasting pipeline, or writes anything back to the repository. There is no "Update Data" page, no upload widget, and no button anywhere in the app that triggers processing — the only way data changes is a commit from the automated pipeline landing in the repo.
 
@@ -96,19 +106,18 @@ PSE EDGE PDF -> PDF Extraction -> CSV Generation -> Data Validation
     -> Saved Models -> export_forecast_artifacts.py -> Frontend Dashboard (read-only)
 ```
 
-All three models predict next-day **ΔClose** = Close(t+1) − Close(t)
-rather than the raw Close level, and reconstruct
-`Predicted Close(t+1) = Close(t) + Predicted ΔClose(t+1)` before any
-metric is computed — this matches the capstone paper's methodology and
-keeps RMSE/MAE/MASE/R² reported in peso terms, not on an internal
-differenced/scaled target.
+Lag-Informed Regression and LSTM predict next-day **ΔClose** =
+Close(t+1) − Close(t). ARIMA models the closing-price level and performs
+differencing internally according to its selected order. All three produce
+the same next-day closing-price output and are evaluated on identical target
+dates in peso terms.
 
 - `services/feature_engineering.py` — lag features + technical indicators
   (EMA 10/20, RSI 14, MACD/Signal, Bollinger Bands, daily return, rolling
   volatility, High-Low and Open-Close spreads) plus the expanded return
   feature set (lagged returns 1-20, rolling return mean/volatility at
-  5/10/20, high-low range %, log volume, rolling volume means), shared by
-  every model.
+  5/10/20, high-low range %, log volume, rolling volume means) used only by
+  Lag-Informed Regression. ARIMA and LSTM use their own model-specific inputs.
 - `services/time_series_cv.py` — shared expanding-window rolling-origin
   CV splitter (5 folds, shrinking only for short series), used by both
   the regression's lambda selection and the ARIMA order search.
@@ -145,9 +154,9 @@ differenced/scaled target.
   deployment refresh, and manual challenger retuning as explicit operations.
   Refresh reads approved configuration metadata and never reruns formal tests.
 
-Deployment refresh is decoupled from data ingestion:
+Deployment refresh is decoupled from data ingestion and formal evaluation:
 `refresh_deployment_all()` is called directly by
-`.github/workflows/train_models.yml` (weekly), *not* by every run of
+`.github/workflows/train_models.yml` (monthly), *not* by every run of
 `services/pdf_pipeline/pipeline.py`/`run_pipeline.py` (Fast Pipeline,
 Monday-Friday — see "Automated Pipeline" below for the full split and
 why). `run_pipeline.py` still supports training inline via its
@@ -160,6 +169,31 @@ python scripts/smoke_formal_runner.py --symbols BPI --epochs 2  # development on
 python run_pipeline.py                     # ingest + train in one go (local/dev; CI never does both together)
 python run_pipeline.py --no-train           # ingest new data only, skip retraining (what the Fast Pipeline runs)
 ```
+
+### Frontend result separation
+
+The deployed site reads two independent presentation contracts:
+
+- `frontend/public/forecasts/*.json` contains rolling operational data and
+  next-session forecasts. The daily pipeline may update these files.
+- `frontend/public/forecasts/formal/FORMAL_CORRECTED_20260828_02.json`
+  contains the approved immutable research summary. Daily inference and
+  deployment refreshes do not generate or overwrite it.
+
+The formal file was generated once from the completed evidence directory:
+
+```bash
+python backend/scripts/export_formal_study_results.py \
+  --run-dir formal_evidence/FORMAL_CORRECTED_20260828_02 \
+  --output frontend/public/forecasts/formal/FORMAL_CORRECTED_20260828_02.json \
+  --archive-sha256 2b2ed0ca6b88ea6cfef5ac14013440da1c7c55c1d9f9640e04a595fdafca5d24 \
+  --source-data-commit 2e72058057f5ba2ef903147c8390c3f05f41ffe3
+```
+
+The exporter refuses to overwrite a non-identical formal JSON file. The normal
+export validator checks its run ID, code identity, evidence hash, company
+coverage, metric completeness, 7–7–1 RMSE counts, and statistical conclusions
+on every automated update.
 
 An optional formal corporate-action registry is passed with
 `--corporate-actions-file`. It must be reviewed before the run and use this
@@ -304,9 +338,9 @@ the Fast Pipeline needs Cron-job.org:
 
 **Never commit the PAT to this repository.** Store it only in Cron-job.org's own encrypted request-header field.
 
-GitHub Actions' own cron (used by Heavy Training) can be delayed by a few
+GitHub Actions' own cron (used by Deployment Refresh) can be delayed by a few
 minutes during periods of high platform load — not a concern for a
-weekly, non-latency-sensitive job, which is why it's only used there and
+monthly, non-latency-sensitive job, which is why it is only used there and
 not for the Fast Pipeline's tighter Monday-Friday schedule.
 
 ### What each workflow does
@@ -322,7 +356,7 @@ not for the Fast Pipeline's tighter Monday-Friday schedule.
 7. Uploads `backend/data/pdf_pipeline/pipeline.log` as a build artifact either way, for troubleshooting.
 8. Vercel (Root Directory: `frontend/`) picks up the new commit and redeploys automatically via its Git integration — no separate step needed on this repo's side.
 
-**Heavy Training** (Sunday):
+**Deployment Refresh** (monthly, day 3 at 08:00 PHT):
 
 1. Checks out the repo (already current through Friday, via the week's Fast Pipeline commits) and installs `backend/requirements-pipeline.txt`.
 2. Runs `python -m services.model_selector --mode deployment-refresh --strict` (from `backend/`), which refits each approved configuration and preserves existing formal metrics and model-family choices.
@@ -336,7 +370,7 @@ Both workflows are granted only `contents: write` — nothing else.
 ### Manual / ops trigger (workflow_dispatch)
 
 For a maintainer testing or backfilling outside the scheduled runs:
-**Actions → PSE Fast Data Pipeline → Run workflow** (optional `start_date`/`end_date` inputs, YYYY-MM-DD) or **Actions → PSE Weekly Model Training → Run workflow** (no inputs — trains on whatever `data/raw/` currently has). Both are operator actions taken directly in GitHub, entirely outside the deployed frontend.
+**Actions → Fast Pipeline (data + inference, no training) → Run workflow** or **Actions → PSE Scheduled Model Refresh → Run workflow**. Both are operator actions taken directly in GitHub, entirely outside the deployed frontend. Challenger retuning and promotion use their explicit researcher-only commands and are never automatic.
 
 ### Running it locally
 

@@ -78,7 +78,11 @@ def test_scheduled_refresh_never_invokes_formal_code_or_modifies_formal_runs(tmp
     monkeypatch.setattr(model_selector, "validate_ohlcv_csv", lambda _path: pd.DataFrame({"Date": ["2026-01-01"], "Close": [100.0]}))
     monkeypatch.setattr(model_selector, "refresh_deployment_symbol", lambda _symbol, _df, _approved, cache: cache)
 
+    from services import operational_deployment
+    approved_runner = Mock(return_value={"forecasts": {"BPI": {"model": "ARIMA"}}})
+    monkeypatch.setattr(operational_deployment, "generate", approved_runner)
     result = model_selector.refresh_deployment_all(raw_dir=raw_dir)
+    approved_runner.assert_called_once_with(raw_dir=raw_dir)
 
     assert result == {"BPI": "ARIMA"}
     formal_evaluation.assert_not_called()

@@ -5,7 +5,7 @@ import Navbar from "@/components/Navbar";
 import EducationalBanner from "@/components/EducationalBanner";
 import Footer from "@/components/Footer";
 import MobileNav from "@/components/MobileNav";
-import { getCompanies, getLatest } from "@/lib/data";
+import { getCompanies, getLatest, getDeploymentManifest, getOperationalBatch } from "@/lib/data";
 
 import { WatchlistProvider } from "@/context/WatchlistContext";
 import AIChatbot from "@/components/AIChatbot";
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const [companies, latest] = await Promise.all([getCompanies(), getLatest()]);
+  const [companies, latest, deployment, operational] = await Promise.all([getCompanies(), getLatest(), getDeploymentManifest(), getOperationalBatch()]);
 
   return (
     <html lang="en" className="dark scroll-smooth" suppressHydrationWarning>
@@ -43,6 +43,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <Navbar companies={companies} />
           <EducationalBanner latest={latest} />
           <main className="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 mb-20 md:mb-8">
+            <aside className="mb-6 rounded-lg border border-amber-400/30 p-4 text-sm" aria-label="Operational deployment status">
+              <a href="/operations" className="font-semibold text-brand-400">Operational deployment: {deployment?.promotion_id ?? "Unavailable"}</a>
+              <p>{operational ? `Active locally. First prospective target: ${operational.promotionBoundary.firstTargetDate}.`
+                : "Approved configuration; full operational generation pending. Existing forecast cards and charts show the legacy deployment snapshot."}</p>
+              <p>Manual generation only. <a href="/compare" className="underline">Immutable Run 02 Formal Study Results</a> remain separate.</p>
+            </aside>
             {children}
           </main>
           <AIChatbot />

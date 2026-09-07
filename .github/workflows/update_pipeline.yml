@@ -1,93 +1,36 @@
-name: Fast Pipeline (data + inference, no training)
+name: Manual official-data pipeline (disabled)
 
-# Triggered externally by Cron-job.org (Mon-Fri, 4:00 PM Philippine Time)
-# via repository_dispatch.
-# workflow_dispatch is included for manual/debug runs.
-#
-# This workflow NEVER trains models.
-# It:
-#   1. Checks the PSE trading calendar (skips if weekend or Philippine holiday)
-#   2. Ingests the latest PSE EOD data
-#   3. Runs daily inference using persisted weekly models
-#   4. Exports frontend JSON artifacts
-#   5. Validates the exported artifacts
-#   6. Commits and pushes updated artifacts
-#
-# Weekly model retraining is handled separately.
-
+# Run 02 review: no cron, external dispatch, commit, push, or deployment.
 on:
-  repository_dispatch:
-    types: [update-pse-data]
   workflow_dispatch: {}
+
+permissions:
+  contents: read
 
 concurrency:
   group: pse-pipeline
   cancel-in-progress: false
 
-permissions:
-  contents: write
-
 jobs:
   update:
+    # Remote execution requires a separate reviewed change after local acceptance.
+    if: ${{ false }}
     runs-on: ubuntu-latest
-    timeout-minutes: 20
-
+    timeout-minutes: 240
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version-file: backend/.python-version
-
       - name: Install dependencies
         working-directory: backend
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements-fast.txt
-          pip install -r requirements-inference.txt
-
-      - name: Check PSE Trading Calendar
-        id: check_calendar
+        run: pip install -r requirements-pipeline.txt
+      - name: Run pipeline (ingestion) and Run daily inference (approved refits)
         working-directory: backend
-        run: |
-          python scripts/check_pse_trading_day.py
-
-      - name: Run pipeline (ingestion) and Run daily inference (no training)
-        if: steps.check_calendar.outputs.is_trading_day == 'true'
-        working-directory: backend
-        run: |
-          python run_pipeline.py --no-train
-
+        run: python run_pipeline.py --no-train
       - name: Export frontend JSON artifacts
-        if: steps.check_calendar.outputs.is_trading_day == 'true'
         working-directory: backend
-        run: |
-          python scripts/export_forecast_artifacts.py
-
+        run: python scripts/export_forecast_artifacts.py
       - name: Validate exported artifacts
-        if: steps.check_calendar.outputs.is_trading_day == 'true'
         working-directory: backend
-        run: |
-          python scripts/validate_exports.py
-
-      - name: Commit and push changed artifacts
-        if: steps.check_calendar.outputs.is_trading_day == 'true'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          git add \
-            backend/data/raw/*.csv \
-            backend/prediction_cache/*.json \
-            backend/production_history \
-            backend/latest_processed.json \
-            frontend/public/forecasts
-
-          if git diff --cached --quiet; then
-            echo "No changes to commit."
-          else
-            git commit -m "Automated data + inference update ($(date -u +'%Y-%m-%d %H:%M UTC'))"
-            git push
-          fi
+        run: python scripts/validate_exports.py

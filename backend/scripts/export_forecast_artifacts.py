@@ -1,10 +1,8 @@
 """Exports static JSON artifacts for the Next.js frontend from the
 existing pipeline outputs.
 
-This is the ONLY new piece of Python needed to satisfy the target
-architecture: everything upstream (scrape -> clean -> features -> train
--> evaluate -> predict) already exists in services/ and is untouched.
-This script just re-shapes what run_pipeline.py already produced
+This script exports only rolling operational data. It re-shapes what the
+deployment pipeline produced
 (backend/data/raw/*.csv, backend/prediction_cache/*.json, backend/best_models.json,
 backend/latest_processed.json, backend/statistical_tests.json) into the flat JSON
 contract the frontend reads at build/runtime from frontend/public/forecasts/.
@@ -22,10 +20,9 @@ It writes (into the sibling frontend/ directory):
     frontend/public/forecasts/company/<SYMBOL>.json
     frontend/public/forecasts/history/<SYMBOL>.json
 
-Nothing here trains, scrapes, or infers anything — read-only reshaping,
-same contract as the old ui/data.py, so it can safely run on the same
-GitHub Actions runner that just finished the pipeline (no extra deps
-beyond the stdlib + pandas, both already installed for the pipeline).
+Nothing here trains, scrapes, or infers anything. It also never reads or
+rewrites an immutable formal run. Approved research results are exported once
+with ``export_formal_study_results.py`` and validated separately.
 """
 from __future__ import annotations
 
@@ -215,7 +212,7 @@ def reconciled_production_backtest_60(symbol: str) -> tuple[list[str], list[floa
     return dates, actual, by_model
 
 
-def main() -> None:
+def export_legacy_snapshot() -> None:
     COMPANY_OUT_DIR.mkdir(parents=True, exist_ok=True)
     HISTORY_OUT_DIR.mkdir(parents=True, exist_ok=True)
     print("[export] Building frontend artifacts from audited deployment caches.")
@@ -398,6 +395,11 @@ def main() -> None:
     (OUT_DIR / "latest.json").write_text(json.dumps(latest_json, indent=2))
 
     print(f"Exported {len(companies_out)} companies to {OUT_DIR} ({len(missing)} missing: {missing})")
+
+
+def main() -> None:
+    from scripts.export_operational import export_operational
+    export_operational()
 
 
 if __name__ == "__main__":

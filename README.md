@@ -1,3 +1,12 @@
+> **Run 02 operational control (September 7, 2026):** The active approved mapping is
+> `RUN02_OPS_20260907_01`. Manual operations now require the versioned manifest and
+> refit its frozen choices. Full generation remains pending; ALI/BPI smoke results
+> are development-only. Remote workflows, schedules, automatic promotion and
+> publishing are disabled. Earlier scheduling/persisted-model descriptions below
+> describe the legacy pipeline and are superseded by the promotion review.
+>
+> See [promotion mapping, safety rules, tests and run commands](reports/run02-promotion/REVIEW.md).
+
 # ForecastPH
 
 **Cross-Sector Next-Day Stock Price Forecasting of Selected PSE-Listed Companies Using Lag-Informed Regression, ARIMA, and LSTM**
@@ -898,6 +907,15 @@ Generated frontend JSON should be treated as a **presentation artifact**, not th
 
 Do not manually edit forecast values as a long-term solution because generated files may be overwritten by subsequent pipeline runs.
 
+The Models page deliberately separates two datasets:
+
+- **Formal Study Results** come from the immutable approved run
+  `FORMAL_CORRECTED_20260828_02`, with data through August 28, 2026.
+- **Operational Forecasts** come from the rolling daily pipeline and target the
+  next PSE trading session. They may change as new validated observations arrive.
+
+The daily pipeline never recomputes or overwrites the formal-study dataset.
+
 ---
 
 ## Deployment Workflow
@@ -926,22 +944,27 @@ This ensures the dashboard reflects backend-generated results rather than manual
 
 ForecastPH separates model retraining from normal daily forecasting.
 
-### Weekly Model Retraining
+### Monthly Deployment Refitting
 
 Scheduled:
 
 ```text
-Sunday — 8:00 AM PHT
+Day 3 of each month — 8:00 AM PHT
 ```
 
-Weekly retraining should:
+The scheduled refresh should:
 
 ```text
 latest main branch
 → corrected deployment methodology
-→ fresh deployment models
+→ refit the already approved configurations
 → updated deployment metadata
 ```
+
+This job does not rerun the formal experiment, retune hyperparameters, or
+automatically promote challengers. Retuning is a separate researcher-initiated
+process and should normally wait for substantially more prospective evidence
+(approximately 60 new sessions unless a predeclared drift trigger is met).
 
 ---
 
