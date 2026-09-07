@@ -45,7 +45,7 @@ export default function CompanyLogo({
   if (hasError || !sym) {
     return (
       <div
-        className={`${config.container} bg-brand-600/10 border border-brand-500/30 text-brand-400 font-bold flex items-center justify-center shrink-0 uppercase select-none ${className}`}
+        className={`${config.container} bg-neon-500/10 border border-neon-400/30 text-neon-400 font-mono font-bold flex items-center justify-center shrink-0 uppercase select-none shadow-neon-sm ${className}`}
         title={name || sym}
       >
         <span className={config.text}>{sym.slice(0, 3)}</span>

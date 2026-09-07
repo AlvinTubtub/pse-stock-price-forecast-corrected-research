@@ -14,8 +14,8 @@ import {
 } from "recharts";
 
 const MODEL_COLORS: Record<string, string> = {
-  ARIMA: "#f59e0b",
-  "Lag-Informed Regression": "#3b82f6",
+  ARIMA: "#ffb800",
+  "Lag-Informed Regression": "#00f0ff",
   LSTM: "#a855f7",
   "Naive baseline": "#64748b",
   "Naive Baseline": "#64748b",
@@ -99,10 +99,10 @@ export default function ErrorChart({ dates, actual, byModel, selectedModel, live
 
   if (data.length === 0) {
     return (
-      <div className="flex h-[360px] items-center justify-center rounded-lg border border-dashed border-dark-border bg-dark-bg/40 px-6 text-center">
+      <div className="flex h-[360px] items-center justify-center rounded-lg border border-dashed border-slate-200 dark:border-charcoal-700 bg-slate-50 dark:bg-charcoal-950/40 px-6 text-center">
         <div className="max-w-md space-y-2">
-          <p className="text-sm font-medium text-slate-200">No realized production forecast errors yet</p>
-          <p className="text-xs leading-relaxed text-slate-400">
+          <p className="text-sm font-medium text-slate-700 dark:text-slate-200">No realized production forecast errors yet</p>
+          <p className="text-xs leading-relaxed text-slate-500 dark:text-slate-400">
             Errors appear only after ForecastPH&apos;s previously issued prediction can be matched to the
             actual close for that trading session.
           </p>
@@ -117,8 +117,8 @@ export default function ErrorChart({ dates, actual, byModel, selectedModel, live
     const headerDate = point?.fullDate || point?.displayDate || point?.step;
 
     return (
-      <div className="bg-dark-card border border-dark-border rounded-xl p-3 shadow-xl text-xs space-y-1.5 min-w-[230px]">
-        <p className="font-semibold text-white border-b border-dark-border pb-1.5 mb-1.5">
+      <div className="bg-charcoal-900/95 border border-charcoal-700/80 rounded-xl p-3 shadow-card-glow text-xs space-y-1.5 min-w-[230px] backdrop-blur-md">
+        <p className="font-semibold text-white font-mono border-b border-charcoal-700 pb-1.5 mb-1.5">
           {headerDate}
         </p>
         {payload.map((entry: any) => {
@@ -139,12 +139,12 @@ export default function ErrorChart({ dates, actual, byModel, selectedModel, live
                 />
                 <span
                   className={`font-medium ${
-                    isSelected ? "text-brand-400 font-semibold" : "text-slate-300"
+                    isSelected ? "text-neon-400 font-semibold" : "text-slate-300"
                   }`}
                 >
                   {label}
                   {isSelected && (
-                    <span className="ml-1 text-[10px] text-brand-400 uppercase font-semibold">
+                    <span className="ml-1 text-[10px] text-neon-400 uppercase font-semibold">
                       (Selected)
                     </span>
                   )}
@@ -152,7 +152,7 @@ export default function ErrorChart({ dates, actual, byModel, selectedModel, live
               </div>
               <span
                 className={`font-mono font-semibold ${
-                  val > 0 ? "text-amber-400" : val < 0 ? "text-blue-400" : "text-slate-300"
+                  val > 0 ? "text-accent-amber" : val < 0 ? "text-neon-400" : "text-slate-300"
                 }`}
               >
                 {sign}₱
@@ -176,8 +176,8 @@ export default function ErrorChart({ dates, actual, byModel, selectedModel, live
           Overprediction, Negative = Underprediction
         </span>
         {liveStartDate && (
-          <span className="inline-flex items-center gap-1.5 rounded-md border border-teal-400/40 bg-teal-400/10 px-2 py-1 font-semibold text-teal-100">
-            <span className="h-3 border-l-2 border-dashed border-teal-300" aria-hidden="true" />
+          <span className="inline-flex items-center gap-1.5 rounded-md border border-neon-400/40 bg-neon-400/10 px-2 py-1 font-semibold text-neon-300 font-mono text-[11px]">
+            <span className="h-3 border-l-2 border-dashed border-neon-400" aria-hidden="true" />
             Live forecast begins
           </span>
         )}
@@ -189,7 +189,7 @@ export default function ErrorChart({ dates, actual, byModel, selectedModel, live
             data={data}
             margin={{ top: 10, right: 15, left: 10, bottom: 5 }}
           >
-            <CartesianGrid stroke="#334155" strokeDasharray="3 3" vertical={false} />
+            <CartesianGrid stroke="#22252e" strokeDasharray="3 3" vertical={false} />
             {liveStartDate && (
               <ReferenceLine
                 x={liveStartDate}
@@ -272,9 +272,9 @@ export default function ErrorChart({ dates, actual, byModel, selectedModel, live
         </ResponsiveContainer>
       </div>
 
-      <div className="pt-2 text-xs text-slate-400 leading-relaxed border-t border-dark-border/60">
+      <div className="pt-2 text-xs text-slate-500 dark:text-slate-400 leading-relaxed border-t border-slate-200 dark:border-charcoal-800">
         <p>
-          <strong className="text-slate-300 font-medium">Interpretation: </strong>
+          <strong className="text-slate-700 dark:text-slate-300 font-medium">Interpretation: </strong>
           Forecast error = predicted price − actual price. Positive values indicate overprediction;
           negative values indicate underprediction. A value of ₱0.00 represents a perfect prediction.
         </p>

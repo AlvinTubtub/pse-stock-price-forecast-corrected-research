@@ -121,7 +121,7 @@ export default function MobileNav() {
   return (
     <nav
       aria-label="Mobile Navigation"
-      className="fixed bottom-0 left-0 right-0 w-full glass z-50 border-t border-dark-border md:hidden safe-area-pb"
+      className="fixed bottom-0 left-0 right-0 w-full glass z-50 border-t border-slate-200 dark:border-charcoal-800 md:hidden safe-area-pb"
     >
       <div className="flex items-center justify-around h-16 px-1 max-w-lg mx-auto">
         {ITEMS.map((item) => {

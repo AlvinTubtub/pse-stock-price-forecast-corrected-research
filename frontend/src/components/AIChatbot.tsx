@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { usePathname } from "next/navigation";
 import { useWatchlist } from "@/context/WatchlistContext";
+import ModernIcon from "@/components/ModernIcon";
 
 interface Message {
   id: string;
@@ -132,7 +133,7 @@ function InlineText({ text }: { text: string }) {
           return (
             <code
               key={idx}
-              className="px-1 py-0.5 rounded bg-dark-bg border border-dark-border text-brand-300 text-[11px] font-mono"
+              className="px-1 py-0.5 rounded bg-slate-100 dark:bg-charcoal-950 border border-slate-200 dark:border-charcoal-800 text-brand-600 dark:text-brand-300 text-[11px] font-mono"
             >
               {part.slice(1, -1)}
             </code>
@@ -254,7 +255,7 @@ export default function AIChatbot() {
         {
           id: "msg-err-" + Date.now(),
           role: "assistant",
-          text: `⚠️ ${errMsg}`,
+          text: errMsg,
           timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
           isError: true,
         },
@@ -285,18 +286,18 @@ export default function AIChatbot() {
           type="button"
           onClick={() => setIsOpen(true)}
           aria-label="Open PSE Forecast AI Assistant"
-          className="group relative flex items-center gap-2.5 px-4 py-3 bg-gradient-to-r from-brand-600 to-blue-600 hover:from-brand-500 hover:to-blue-500 text-white font-semibold text-sm rounded-full shadow-lg hover:shadow-brand-500/25 transition-all duration-200 cursor-pointer active:scale-95 border border-brand-400/30"
+          className="group relative flex items-center gap-2.5 px-4 py-3 bg-neon-500 hover:bg-neon-400 text-charcoal-950 font-semibold text-sm rounded-full shadow-neon-sm neon-btn-glow transition-all duration-200 cursor-pointer active:scale-95 border border-neon-300"
         >
           {/* Sparkle Icon */}
           <svg
-            className="w-5 h-5 text-amber-300 animate-pulse"
+            className="w-5 h-5 text-charcoal-950 animate-pulse"
             viewBox="0 0 24 24"
             fill="currentColor"
           >
             <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
           </svg>
           <span>Ask AI</span>
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping absolute -top-0.5 -right-0.5" />
+          <span className="w-2 h-2 rounded-full bg-accent-emerald animate-ping absolute -top-0.5 -right-0.5" />
         </button>
       )}
 
@@ -306,13 +307,13 @@ export default function AIChatbot() {
           role="dialog"
           aria-modal="true"
           aria-label="PSE Forecast Assistant Chat"
-          className="w-[calc(100vw-2rem)] sm:w-[420px] max-h-[85vh] sm:h-[580px] bg-dark-card border border-dark-border rounded-2xl shadow-2xl flex flex-col overflow-hidden backdrop-blur-xl transition-all duration-200 animate-in fade-in slide-in-from-bottom-5"
+          className="w-[calc(100vw-2rem)] sm:w-[420px] max-h-[85vh] sm:h-[580px] glass-panel border border-charcoal-700/80 rounded-2xl shadow-card-glow flex flex-col overflow-hidden backdrop-blur-xl transition-all duration-200 animate-in fade-in slide-in-from-bottom-5"
         >
           {/* Header */}
-          <div className="px-4 py-3.5 bg-dark-bg/90 border-b border-dark-border flex items-center justify-between gap-3">
+          <div className="px-4 py-3.5 bg-charcoal-900/90 border-b border-charcoal-700/80 flex items-center justify-between gap-3">
             <div className="flex items-center gap-2.5 min-w-0">
-              <div className="w-8 h-8 rounded-xl bg-brand-500/20 border border-brand-500/40 flex items-center justify-center shrink-0">
-                <svg className="w-4 h-4 text-brand-400" viewBox="0 0 24 24" fill="currentColor">
+              <div className="w-8 h-8 rounded-xl bg-neon-500/10 border border-neon-400/30 flex items-center justify-center shrink-0">
+                <svg className="w-4 h-4 text-neon-400" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
                 </svg>
               </div>
@@ -333,7 +334,7 @@ export default function AIChatbot() {
                   onClick={clearChat}
                   title="Clear conversation"
                   aria-label="Clear chat"
-                  className="p-1.5 text-slate-400 hover:text-slate-200 hover:bg-dark-bg rounded-lg transition-colors cursor-pointer text-xs"
+                  className="p-1.5 text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-charcoal-800 rounded-lg transition-colors cursor-pointer text-xs"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
@@ -350,7 +351,7 @@ export default function AIChatbot() {
                 onClick={() => setIsOpen(false)}
                 title="Close chat (Esc)"
                 aria-label="Close chat"
-                className="p-1.5 text-slate-400 hover:text-white hover:bg-dark-bg rounded-lg transition-colors cursor-pointer"
+                className="p-1.5 text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-charcoal-800 rounded-lg transition-colors cursor-pointer"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -397,7 +398,7 @@ export default function AIChatbot() {
                         key={idx}
                         type="button"
                         onClick={() => handleSendMessage(q)}
-                        className="w-full text-left px-3 py-2 rounded-xl bg-dark-bg/80 hover:bg-dark-bg border border-dark-border/80 hover:border-brand-500/40 text-xs text-slate-200 hover:text-white transition-all cursor-pointer flex items-center justify-between group"
+                        className="w-full text-left px-3 py-2 rounded-xl bg-slate-100 dark:bg-charcoal-950/80 hover:bg-slate-200/80 dark:hover:bg-charcoal-900 border border-slate-200 dark:border-charcoal-700/80 hover:border-brand-500/40 text-xs text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer flex items-center justify-between group"
                       >
                         <span className="truncate">{q}</span>
                         <svg
@@ -422,19 +423,24 @@ export default function AIChatbot() {
                   <div
                     className={`max-w-[88%] rounded-2xl px-3.5 py-2.5 text-xs shadow-sm ${
                       msg.role === "user"
-                        ? "bg-brand-600 text-white rounded-br-xs"
+                        ? "bg-neon-500 text-charcoal-950 font-medium rounded-br-xs"
                         : msg.isError
-                        ? "bg-rose-500/10 border border-rose-500/30 text-rose-300 rounded-bl-xs"
-                        : "bg-dark-bg border border-dark-border text-slate-200 rounded-bl-xs"
+                        ? "bg-accent-rose/10 border border-accent-rose/30 text-accent-rose rounded-bl-xs"
+                        : "bg-charcoal-800 border border-charcoal-700/80 text-slate-200 rounded-bl-xs"
                     }`}
                   >
                     {msg.role === "user" ? (
                       <p className="whitespace-pre-wrap">{msg.text}</p>
+                    ) : msg.isError ? (
+                      <div className="flex items-start gap-1.5">
+                        <ModernIcon name="alertTriangle" className="w-4 h-4 shrink-0 text-accent-rose mt-0.5" />
+                        <FormattedMessageText text={msg.text} />
+                      </div>
                     ) : (
                       <FormattedMessageText text={msg.text} />
                     )}
                   </div>
-                  <span className="text-[9px] text-slate-500 mt-1 px-1">{msg.timestamp}</span>
+                  <span className="text-[9px] text-slate-500 mt-1 px-1 font-mono">{msg.timestamp}</span>
                 </div>
               ))
             )}
@@ -442,10 +448,10 @@ export default function AIChatbot() {
             {/* Loading typing bubble */}
             {isLoading && (
               <div className="flex flex-col items-start">
-                <div className="bg-dark-bg border border-dark-border rounded-2xl rounded-bl-xs px-4 py-3 flex items-center gap-1.5 shadow-sm">
-                  <span className="w-1.5 h-1.5 rounded-full bg-brand-400 animate-bounce [animation-delay:-0.3s]" />
-                  <span className="w-1.5 h-1.5 rounded-full bg-brand-400 animate-bounce [animation-delay:-0.15s]" />
-                  <span className="w-1.5 h-1.5 rounded-full bg-brand-400 animate-bounce" />
+                <div className="bg-charcoal-800 border border-charcoal-700 rounded-2xl rounded-bl-xs px-4 py-3 flex items-center gap-1.5 shadow-sm">
+                  <span className="w-1.5 h-1.5 rounded-full bg-neon-400 animate-bounce [animation-delay:-0.3s]" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-neon-400 animate-bounce [animation-delay:-0.15s]" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-neon-400 animate-bounce" />
                   <span className="text-[11px] text-slate-400 ml-1.5 font-medium">Analyzing...</span>
                 </div>
               </div>
@@ -455,8 +461,8 @@ export default function AIChatbot() {
           </div>
 
           {/* Input Footer */}
-          <div className="p-3 bg-dark-bg/90 border-t border-dark-border space-y-2">
-            <div className="relative flex items-end gap-1.5 bg-dark-card border border-dark-border rounded-xl p-1.5 focus-within:ring-1 focus-within:ring-brand-500 focus-within:border-brand-500 transition-all">
+          <div className="p-3 bg-charcoal-900/95 border-t border-charcoal-700/80 space-y-2">
+            <div className="relative flex items-end gap-1.5 bg-charcoal-800 border border-charcoal-700 rounded-xl p-1.5 focus-within:ring-1 focus-within:ring-neon-400 focus-within:border-neon-400 transition-all">
               <textarea
                 ref={inputRef}
                 value={input}
@@ -474,7 +480,7 @@ export default function AIChatbot() {
                 onClick={() => handleSendMessage()}
                 disabled={isLoading || !input.trim()}
                 aria-label="Send question"
-                className="p-1.5 bg-brand-600 hover:bg-brand-500 disabled:opacity-40 disabled:hover:bg-brand-600 text-white rounded-lg transition-colors cursor-pointer disabled:cursor-not-allowed shrink-0"
+                className="p-1.5 bg-neon-500 hover:bg-neon-400 disabled:opacity-40 disabled:hover:bg-neon-500 text-charcoal-950 font-semibold rounded-lg transition-all cursor-pointer disabled:cursor-not-allowed shrink-0 shadow-neon-sm"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />

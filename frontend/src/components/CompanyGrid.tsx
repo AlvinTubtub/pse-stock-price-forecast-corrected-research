@@ -38,7 +38,7 @@ export default function CompanyGrid({ companies }: { companies: CompanySummary[]
           id="sector-filter"
           value={sector}
           onChange={(e) => setSector(e.target.value)}
-          className="bg-dark-card border border-dark-border text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block w-full p-2.5 text-white"
+          className="bg-charcoal-900 border border-charcoal-700 text-sm rounded-xl focus:ring-neon-400 focus:border-neon-400 block w-full p-2.5 text-white font-mono shadow-card-glow"
         >
           {sectors.map((s) => (
             <option key={s} value={s}>

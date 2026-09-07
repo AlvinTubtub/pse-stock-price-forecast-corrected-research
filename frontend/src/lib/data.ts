@@ -86,7 +86,7 @@ export async function getCompanyDetail(symbol: string): Promise<CompanyDetail | 
   return { ...company, model: row.model, predictedClose: row.predictedClose,
     previousClose: row.previousClose, pesoChange, pctChange: pesoChange / row.previousClose * 100,
     direction: pesoChange >= 0 ? "bullish" : "bearish", confidence: undefined,
-    nextClose: key ? { [key]: row.predictedClose } : {},
+    nextClose: key ? { ...(company.nextClose ?? {}), [key]: row.predictedClose } : (company.nextClose ?? {}),
     ohlcv: operational?.ohlcv[symbol.toUpperCase()] ?? company.ohlcv,
     forecastDate: row.forecastFor, dataAsOf: row.dataAsOf, inferenceAt: row.issuedAt };
 

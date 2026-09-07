@@ -7,6 +7,7 @@ import {
   getStoredWatchlist,
   setStoredWatchlist,
 } from "@/lib/watchlist";
+import ModernIcon, { ModernSquircleBadge } from "@/components/ModernIcon";
 
 export interface WatchlistContextType {
   watchlist: string[];
@@ -143,9 +144,9 @@ export function WatchlistProvider({
       {children}
       {/* Toast Notification for limit or warnings */}
       {toastMessage && (
-        <div className="fixed bottom-20 md:bottom-8 right-4 z-50 max-w-md bg-dark-card border border-amber-500/50 text-slate-100 p-4 rounded-xl shadow-2xl backdrop-blur-md animate-[fadeIn_0.2s_ease-out]">
+        <div className="fixed bottom-20 md:bottom-8 right-4 z-50 max-w-md glass-card border border-amber-500/50 text-slate-100 p-4 rounded-xl shadow-card-glow backdrop-blur-md animate-[fadeIn_0.2s_ease-out]">
           <div className="flex items-start gap-3">
-            <span className="text-amber-400 text-lg leading-none mt-0.5">⚠️</span>
+            <ModernSquircleBadge icon="alertTriangle" color="amber" size="sm" />
             <div className="flex-1 text-xs sm:text-sm text-slate-200 leading-relaxed">
               {toastMessage}
             </div>
@@ -155,7 +156,7 @@ export function WatchlistProvider({
               className="text-slate-400 hover:text-white text-xs font-semibold p-1 cursor-pointer"
               aria-label="Dismiss notification"
             >
-              ✕
+              <ModernIcon name="x" className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>

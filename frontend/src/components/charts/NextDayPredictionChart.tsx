@@ -122,26 +122,26 @@ export default function NextDayPredictionChart({
 
     if (point.isForecastPoint) {
       return (
-        <div className="bg-dark-card border border-dark-border rounded-xl p-3.5 shadow-xl text-xs space-y-2 min-w-[240px]">
-          <div className="font-semibold text-white border-b border-dark-border pb-1.5 mb-1.5 flex items-center justify-between">
-            <span>{point.fullDate}</span>
-            <span className="text-[10px] px-1.5 py-0.5 rounded bg-brand-500/20 text-brand-400 font-normal">
+        <div className="bg-charcoal-900/95 border border-charcoal-700/80 rounded-xl p-3.5 shadow-card-glow text-xs space-y-2 min-w-[240px] backdrop-blur-md">
+          <div className="font-semibold text-white border-b border-charcoal-700 pb-1.5 mb-1.5 flex items-center justify-between">
+            <span className="font-mono">{point.fullDate}</span>
+            <span className="text-[10px] px-1.5 py-0.5 rounded bg-neon-500/10 text-neon-400 border border-neon-400/30 font-medium">
               Forecast
             </span>
           </div>
           <div className="space-y-1.5">
             <div className="flex items-center justify-between text-slate-300 pb-1">
               <span className="text-slate-400">Latest Actual Close:</span>
-              <span className="font-mono font-medium text-white">{formatPeso(previousClose)}</span>
+              <span className="font-mono font-medium text-accent-emerald">{formatPeso(previousClose)}</span>
             </div>
-            <div className="border-t border-dark-border/60 pt-1.5 space-y-1.5">
+            <div className="border-t border-charcoal-700/60 pt-1.5 space-y-1.5">
               {nextClose.arima !== undefined && (
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-[#a855f7]" />
+                    <span className="w-2 h-2 rounded-full bg-[#ffb800]" />
                     <span className="text-slate-300">ARIMA:</span>
                   </div>
-                  <span className="font-mono font-semibold text-[#c084fc]">
+                  <span className="font-mono font-semibold text-[#ffb800]">
                     {formatPeso(nextClose.arima)}
                   </span>
                 </div>
@@ -149,10 +149,10 @@ export default function NextDayPredictionChart({
               {nextClose.lag !== undefined && (
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-[#38bdf8]" />
+                    <span className="w-2 h-2 rounded-full bg-[#00f0ff]" />
                     <span className="text-slate-300">Lag-Informed Regression:</span>
                   </div>
-                  <span className="font-mono font-semibold text-[#38bdf8]">
+                  <span className="font-mono font-semibold text-[#00f0ff]">
                     {formatPeso(nextClose.lag)}
                   </span>
                 </div>
@@ -160,10 +160,10 @@ export default function NextDayPredictionChart({
               {nextClose.lstm !== undefined && (
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-[#f97316]" />
+                    <span className="w-2 h-2 rounded-full bg-[#a855f7]" />
                     <span className="text-slate-300">LSTM:</span>
                   </div>
-                  <span className="font-mono font-semibold text-[#fb923c]">
+                  <span className="font-mono font-semibold text-[#a855f7]">
                     {formatPeso(nextClose.lstm)}
                   </span>
                 </div>
@@ -175,18 +175,18 @@ export default function NextDayPredictionChart({
     }
 
     return (
-      <div className="bg-dark-card border border-dark-border rounded-xl p-3 shadow-xl text-xs space-y-1 min-w-[180px]">
-        <p className="font-semibold text-white border-b border-dark-border pb-1 mb-1">
+      <div className="bg-charcoal-900/95 border border-charcoal-700/80 rounded-xl p-3 shadow-card-glow text-xs space-y-1 min-w-[180px] backdrop-blur-md">
+        <p className="font-semibold text-white font-mono border-b border-charcoal-700 pb-1 mb-1">
           {point.fullDate}
         </p>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-slate-400 dark:bg-white" />
+            <span className="w-2 h-2 rounded-full bg-accent-emerald" />
             <span className="text-slate-300">
               {point.isLatestActual ? "Latest Actual Close:" : "Actual Close:"}
             </span>
           </div>
-          <span className="font-mono font-semibold text-white">
+          <span className="font-mono font-semibold text-accent-emerald">
             {formatPeso(point.actualClose)}
           </span>
         </div>
@@ -217,6 +217,7 @@ export default function NextDayPredictionChart({
     const { cx, cy, index } = props;
     const total = chartData.length;
     if (index !== total - 1) return <React.Fragment key={index} />;
+    if (cx === undefined || cy === undefined || isNaN(cx) || isNaN(cy)) return <React.Fragment key={index} />;
 
     return (
       <circle
@@ -234,36 +235,36 @@ export default function NextDayPredictionChart({
   return (
     <div className="w-full space-y-4 select-none">
       {/* 1. Header Legend & Range Switcher */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-1 border-b border-dark-border/60">
-        <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-1 border-b border-slate-200 dark:border-charcoal-800">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs">
           <div className="flex items-center gap-1.5">
-            <span className="w-3.5 h-0.5 bg-slate-900 dark:bg-white inline-block rounded-full"></span>
-            <span className="w-2 h-2 rounded-full bg-slate-900 dark:bg-white inline-block -ml-2.5"></span>
-            <span className="font-medium text-slate-800 dark:text-slate-200">
+            <span className="w-3.5 h-0.5 bg-accent-emerald inline-block rounded-full"></span>
+            <span className="w-2 h-2 rounded-full bg-accent-emerald inline-block -ml-2.5"></span>
+            <span className="font-medium text-slate-700 dark:text-slate-200">
               Actual close (latest)
+            </span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="w-3.5 h-0 border-t-2 border-dashed border-[#ffb800] inline-block"></span>
+            <span className="w-2 h-2 rounded-full bg-[#ffb800] inline-block -ml-2.5"></span>
+            <span className="font-medium text-slate-700 dark:text-slate-200">ARIMA (next day)</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="w-3.5 h-0 border-t-2 border-dashed border-[#00f0ff] inline-block"></span>
+            <span className="w-2 h-2 rounded-full bg-[#00f0ff] inline-block -ml-2.5"></span>
+            <span className="font-medium text-slate-700 dark:text-slate-200">
+              Lag-Informed Regression (next day)
             </span>
           </div>
           <div className="flex items-center gap-1.5">
             <span className="w-3.5 h-0 border-t-2 border-dashed border-[#a855f7] inline-block"></span>
             <span className="w-2 h-2 rounded-full bg-[#a855f7] inline-block -ml-2.5"></span>
-            <span className="font-medium text-slate-800 dark:text-slate-200">ARIMA (next day)</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <span className="w-3.5 h-0 border-t-2 border-dashed border-[#38bdf8] inline-block"></span>
-            <span className="w-2 h-2 rounded-full bg-[#38bdf8] inline-block -ml-2.5"></span>
-            <span className="font-medium text-slate-800 dark:text-slate-200">
-              Lag-Informed Regression (next day)
-            </span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <span className="w-3.5 h-0 border-t-2 border-dashed border-[#f97316] inline-block"></span>
-            <span className="w-2 h-2 rounded-full bg-[#f97316] inline-block -ml-2.5"></span>
-            <span className="font-medium text-slate-800 dark:text-slate-200">LSTM (next day)</span>
+            <span className="font-medium text-slate-700 dark:text-slate-200">LSTM (next day)</span>
           </div>
         </div>
 
         {/* Range Buttons */}
-        <div className="flex items-center gap-1 self-end sm:self-auto bg-dark-bg border border-dark-border rounded-lg p-0.5 text-xs">
+        <div className="flex items-center gap-1 self-end sm:self-auto bg-slate-100 dark:bg-charcoal-900 border border-slate-300 dark:border-charcoal-700 rounded-lg p-0.5 text-xs font-mono">
           {[15, 25, 40, 60].map((size) => (
             <button
               key={size}
@@ -271,8 +272,8 @@ export default function NextDayPredictionChart({
               onClick={() => setWindowSize(size)}
               className={`px-2.5 py-1 rounded-md transition-colors cursor-pointer ${
                 windowSize === size
-                  ? "bg-brand-600 text-white font-medium shadow-sm"
-                  : "text-slate-400 hover:text-white"
+                  ? "bg-neon-500 text-charcoal-950 font-semibold shadow-neon-sm"
+                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
               }`}
             >
               {size}d
@@ -288,7 +289,7 @@ export default function NextDayPredictionChart({
             data={chartData}
             margin={{ top: 15, right: 30, left: 10, bottom: 15 }}
           >
-            <CartesianGrid stroke="#334155" strokeDasharray="3 3" vertical={false} />
+            <CartesianGrid stroke="#22252e" strokeDasharray="3 3" vertical={false} />
             <XAxis
               dataKey="dateKey"
               tick={{ fill: "#94a3b8", fontSize: 11 }}
@@ -318,7 +319,7 @@ export default function NextDayPredictionChart({
               type="linear"
               dataKey="actualClose"
               name="Actual close (latest)"
-              stroke="var(--chart-actual-line)"
+              stroke="#00f59b"
               strokeWidth={2.5}
               dot={renderActualDot}
               activeDot={{ r: 5 }}
@@ -330,10 +331,10 @@ export default function NextDayPredictionChart({
               type="linear"
               dataKey="arimaNext"
               name="ARIMA (next day)"
-              stroke="#a855f7"
+              stroke="#ffb800"
               strokeWidth={2}
               strokeDasharray="4 4"
-              dot={renderPredictionDot("#a855f7")}
+              dot={renderPredictionDot("#ffb800")}
               activeDot={{ r: 5 }}
               connectNulls={false}
             />
@@ -343,10 +344,10 @@ export default function NextDayPredictionChart({
               type="linear"
               dataKey="lagNext"
               name="Lag-Informed Regression (next day)"
-              stroke="#38bdf8"
+              stroke="#00f0ff"
               strokeWidth={2}
               strokeDasharray="4 4"
-              dot={renderPredictionDot("#38bdf8")}
+              dot={renderPredictionDot("#00f0ff")}
               activeDot={{ r: 5 }}
               connectNulls={false}
             />
@@ -356,10 +357,10 @@ export default function NextDayPredictionChart({
               type="linear"
               dataKey="lstmNext"
               name="LSTM (next day)"
-              stroke="#f97316"
+              stroke="#a855f7"
               strokeWidth={2}
               strokeDasharray="4 4"
-              dot={renderPredictionDot("#f97316")}
+              dot={renderPredictionDot("#a855f7")}
               activeDot={{ r: 5 }}
               connectNulls={false}
             />
@@ -371,47 +372,47 @@ export default function NextDayPredictionChart({
       {!hideModelBreakdown && (
         <>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
-            <div className="bg-dark-bg border border-dark-border rounded-lg p-2.5 text-center">
-              <p className="text-[11px] text-slate-400 uppercase tracking-wider">Latest Actual Close</p>
-              <p className="text-sm sm:text-base font-bold text-white mt-0.5">
+            <div className="glass-card rounded-xl p-3 text-center border-slate-200 dark:border-charcoal-700">
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 uppercase tracking-wider">Latest Actual Close</p>
+              <p className="text-sm sm:text-base font-bold text-accent-emerald font-mono mt-0.5">
                 {formatPeso(previousClose)}
               </p>
-              <p className="text-[10px] text-slate-500">{dataAsOf ? `as of ${formatDate(dataAsOf)}` : ""}</p>
+              <p className="text-[10px] text-slate-500 font-mono">{dataAsOf ? `as of ${formatDate(dataAsOf)}` : ""}</p>
             </div>
-            <div className="bg-dark-bg border border-[#a855f7]/30 rounded-lg p-2.5 text-center">
-              <p className="text-[11px] text-[#c084fc] font-medium uppercase tracking-wider">
+            <div className="glass-card rounded-xl p-3 text-center border-amber-500/30 dark:border-[#ffb800]/30">
+              <p className="text-[11px] text-amber-600 dark:text-[#ffb800] font-medium uppercase tracking-wider">
                 ARIMA Forecast
               </p>
-              <p className="text-sm sm:text-base font-bold text-[#c084fc] mt-0.5">
+              <p className="text-sm sm:text-base font-bold text-amber-600 dark:text-[#ffb800] font-mono mt-0.5">
                 {nextClose.arima !== undefined ? formatPeso(nextClose.arima) : "--"}
               </p>
-              <p className="text-[10px] text-slate-500">
+              <p className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">
                 {nextClose.arima !== undefined && previousClose
                   ? `${nextClose.arima >= previousClose ? "+" : ""}${((nextClose.arima - previousClose) / previousClose * 100).toFixed(2)}%`
                   : ""}
               </p>
             </div>
-            <div className="bg-dark-bg border border-[#38bdf8]/30 rounded-lg p-2.5 text-center">
-              <p className="text-[11px] text-[#38bdf8] font-medium uppercase tracking-wider">
+            <div className="glass-card rounded-xl p-3 text-center border-cyan-500/30 dark:border-[#00f0ff]/30">
+              <p className="text-[11px] text-cyan-600 dark:text-[#00f0ff] font-medium uppercase tracking-wider">
                 Lag-Reg Forecast
               </p>
-              <p className="text-sm sm:text-base font-bold text-[#38bdf8] mt-0.5">
+              <p className="text-sm sm:text-base font-bold text-cyan-600 dark:text-[#00f0ff] font-mono mt-0.5">
                 {nextClose.lag !== undefined ? formatPeso(nextClose.lag) : "--"}
               </p>
-              <p className="text-[10px] text-slate-500">
+              <p className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">
                 {nextClose.lag !== undefined && previousClose
                   ? `${nextClose.lag >= previousClose ? "+" : ""}${((nextClose.lag - previousClose) / previousClose * 100).toFixed(2)}%`
                   : ""}
               </p>
             </div>
-            <div className="bg-dark-bg border border-[#f97316]/30 rounded-lg p-2.5 text-center">
-              <p className="text-[11px] text-[#fb923c] font-medium uppercase tracking-wider">
+            <div className="glass-card rounded-xl p-3 text-center border-purple-500/30 dark:border-[#a855f7]/30">
+              <p className="text-[11px] text-purple-600 dark:text-[#c084fc] font-medium uppercase tracking-wider">
                 LSTM Forecast
               </p>
-              <p className="text-sm sm:text-base font-bold text-[#fb923c] mt-0.5">
+              <p className="text-sm sm:text-base font-bold text-purple-600 dark:text-[#c084fc] font-mono mt-0.5">
                 {nextClose.lstm !== undefined ? formatPeso(nextClose.lstm) : "--"}
               </p>
-              <p className="text-[10px] text-slate-500">
+              <p className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">
                 {nextClose.lstm !== undefined && previousClose
                   ? `${nextClose.lstm >= previousClose ? "+" : ""}${((nextClose.lstm - previousClose) / previousClose * 100).toFixed(2)}%`
                   : ""}
@@ -420,14 +421,14 @@ export default function NextDayPredictionChart({
           </div>
 
           {/* 4. Notes and Methodology Footer */}
-          <div className="pt-3 border-t border-dark-border/60 text-xs text-slate-400 space-y-1 leading-relaxed">
+          <div className="pt-3 border-t border-slate-200 dark:border-charcoal-700/60 text-xs text-slate-600 dark:text-slate-400 space-y-1 leading-relaxed">
             <p>
-              <strong className="text-slate-300 font-medium">Notes: </strong>
+              <strong className="text-slate-700 dark:text-slate-300 font-medium">Notes: </strong>
               Broken lines represent next-day predictions for{" "}
-              <strong className="text-slate-300">{formatDate(forecastDate)}</strong> (the next trading
+              <strong className="text-slate-900 dark:text-slate-200">{formatDate(forecastDate)}</strong> (the next trading
               session).
             </p>
-            <p className="text-[11px] text-slate-500">
+            <p className="text-[11px] text-slate-500 dark:text-slate-400">
               ARIMA = AutoRegressive Integrated Moving Average &middot; Lag-Informed Regression =
               Lag-Informed Regression &middot; LSTM = Long Short-Term Memory.
             </p>

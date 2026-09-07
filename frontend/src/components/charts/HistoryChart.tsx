@@ -150,11 +150,11 @@ export default function HistoryChart({ data }: { data: OhlcvPoint[] }) {
   return (
     <div className="w-full select-none space-y-3.5">
       {/* 1. PSE EDGE-Style Period & Date Range Control Bar */}
-      <div className="bg-dark-card/60 backdrop-blur border border-dark-border rounded-xl p-3 shadow-sm flex flex-wrap items-center justify-between gap-3 text-xs">
+      <div className="glass-panel p-3.5 shadow-card-glow flex flex-wrap items-center justify-between gap-3 text-xs">
         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <div className="flex items-center gap-1.5 font-semibold text-slate-200">
             <svg
-              className="w-4 h-4 text-brand-400"
+              className="w-4 h-4 text-neon-400"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -180,10 +180,10 @@ export default function HistoryChart({ data }: { data: OhlcvPoint[] }) {
                 setStartDateInput(e.target.value);
                 setActiveQuickRange("");
               }}
-              className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-2.5 py-1 text-slate-900 dark:text-slate-100 font-medium text-xs focus:outline-none focus:ring-1 focus:ring-brand-500 transition-colors shadow-xs"
+              className="bg-charcoal-900/90 border border-charcoal-700 rounded-lg px-2.5 py-1 text-slate-100 font-mono text-xs focus:outline-none focus:ring-1 focus:ring-neon-400 focus:border-neon-400/50 transition-colors shadow-xs"
               aria-label="Start Date"
             />
-            <span className="text-slate-500 font-medium">–</span>
+            <span className="text-slate-500 font-mono">–</span>
             <input
               type="date"
               value={endDateInput}
@@ -193,13 +193,13 @@ export default function HistoryChart({ data }: { data: OhlcvPoint[] }) {
                 setEndDateInput(e.target.value);
                 setActiveQuickRange("");
               }}
-              className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-2.5 py-1 text-slate-900 dark:text-slate-100 font-medium text-xs focus:outline-none focus:ring-1 focus:ring-brand-500 transition-colors shadow-xs"
+              className="bg-charcoal-900/90 border border-charcoal-700 rounded-lg px-2.5 py-1 text-slate-100 font-mono text-xs focus:outline-none focus:ring-1 focus:ring-neon-400 focus:border-neon-400/50 transition-colors shadow-xs"
               aria-label="End Date"
             />
           </div>
 
           {/* Quick Range Buttons */}
-          <div className="flex items-center gap-1 bg-dark-bg/50 border border-dark-border/60 rounded-lg p-0.5">
+          <div className="flex items-center gap-1 bg-charcoal-900/70 border border-charcoal-700/60 rounded-lg p-0.5">
             {(
               [
                 { label: "1 Month", key: "1M" },
@@ -212,10 +212,10 @@ export default function HistoryChart({ data }: { data: OhlcvPoint[] }) {
                 key={btn.key}
                 type="button"
                 onClick={() => handleQuickRange(btn.key)}
-                className={`px-2.5 py-0.5 rounded-md text-[11px] font-medium transition-all cursor-pointer ${
+                className={`px-2.5 py-0.5 rounded-md text-[11px] font-mono transition-all cursor-pointer ${
                   activeQuickRange === btn.key
-                    ? "bg-brand-600 text-white shadow-xs font-semibold"
-                    : "text-slate-400 hover:text-slate-200 hover:bg-dark-card/80"
+                    ? "bg-neon-500 text-charcoal-950 shadow-neon-sm font-semibold"
+                    : "text-slate-400 hover:text-slate-200 hover:bg-charcoal-800"
                 }`}
               >
                 {btn.label}
@@ -227,7 +227,7 @@ export default function HistoryChart({ data }: { data: OhlcvPoint[] }) {
           <button
             type="button"
             onClick={handleApplyDateRange}
-            className="px-3 py-1 bg-brand-600 hover:bg-brand-500 text-white font-semibold rounded-lg shadow-xs transition-colors cursor-pointer text-xs flex items-center gap-1"
+            className="px-3 py-1 bg-neon-500 hover:bg-neon-400 text-charcoal-950 font-semibold rounded-lg shadow-neon-sm neon-btn-glow transition-colors cursor-pointer text-xs flex items-center gap-1 font-mono"
           >
             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M5 13l4 4L19 7" />
@@ -262,10 +262,10 @@ export default function HistoryChart({ data }: { data: OhlcvPoint[] }) {
           <button
             type="button"
             onClick={() => toggleSeries("open")}
-            className={`px-2 py-0.5 rounded border transition-colors cursor-pointer ${
+            className={`px-2.5 py-0.5 rounded border text-[11px] font-mono transition-colors cursor-pointer ${
               visibleSeries.open
-                ? "bg-amber-500/10 border-amber-500/50 text-amber-400 font-medium"
-                : "bg-slate-800/50 border-slate-700 text-slate-500 line-through"
+                ? "bg-accent-amber/15 border-accent-amber/50 text-accent-amber font-semibold"
+                : "bg-charcoal-850/50 border-charcoal-700 text-slate-500 line-through"
             }`}
           >
             Open
@@ -273,10 +273,10 @@ export default function HistoryChart({ data }: { data: OhlcvPoint[] }) {
           <button
             type="button"
             onClick={() => toggleSeries("high")}
-            className={`px-2 py-0.5 rounded border transition-colors cursor-pointer ${
+            className={`px-2.5 py-0.5 rounded border text-[11px] font-mono transition-colors cursor-pointer ${
               visibleSeries.high
-                ? "bg-green-500/10 border-green-500/50 text-green-400 font-medium"
-                : "bg-slate-800/50 border-slate-700 text-slate-500 line-through"
+                ? "bg-accent-emerald/15 border-accent-emerald/50 text-accent-emerald font-semibold"
+                : "bg-charcoal-850/50 border-charcoal-700 text-slate-500 line-through"
             }`}
           >
             High
@@ -284,10 +284,10 @@ export default function HistoryChart({ data }: { data: OhlcvPoint[] }) {
           <button
             type="button"
             onClick={() => toggleSeries("low")}
-            className={`px-2 py-0.5 rounded border transition-colors cursor-pointer ${
+            className={`px-2.5 py-0.5 rounded border text-[11px] font-mono transition-colors cursor-pointer ${
               visibleSeries.low
-                ? "bg-red-500/10 border-red-500/50 text-red-400 font-medium"
-                : "bg-slate-800/50 border-slate-700 text-slate-500 line-through"
+                ? "bg-accent-rose/15 border-accent-rose/50 text-accent-rose font-semibold"
+                : "bg-charcoal-850/50 border-charcoal-700 text-slate-500 line-through"
             }`}
           >
             Low
@@ -295,10 +295,10 @@ export default function HistoryChart({ data }: { data: OhlcvPoint[] }) {
           <button
             type="button"
             onClick={() => toggleSeries("close")}
-            className={`px-2 py-0.5 rounded border transition-colors cursor-pointer ${
+            className={`px-2.5 py-0.5 rounded border text-[11px] font-mono transition-colors cursor-pointer ${
               visibleSeries.close
-                ? "bg-blue-500/10 border-blue-500/50 text-blue-400 font-medium"
-                : "bg-slate-800/50 border-slate-700 text-slate-500 line-through"
+                ? "bg-neon-500/15 border-neon-400/50 text-neon-400 font-semibold"
+                : "bg-charcoal-850/50 border-charcoal-700 text-slate-500 line-through"
             }`}
           >
             Close
@@ -306,10 +306,10 @@ export default function HistoryChart({ data }: { data: OhlcvPoint[] }) {
           <button
             type="button"
             onClick={() => toggleSeries("volume")}
-            className={`px-2 py-0.5 rounded border transition-colors cursor-pointer ${
+            className={`px-2.5 py-0.5 rounded border text-[11px] font-mono transition-colors cursor-pointer ${
               visibleSeries.volume
-                ? "bg-sky-500/10 border-sky-500/50 text-sky-400 font-medium"
-                : "bg-slate-800/50 border-slate-700 text-slate-500 line-through"
+                ? "bg-neon-300/15 border-neon-300/40 text-neon-300 font-semibold"
+                : "bg-charcoal-850/50 border-charcoal-700 text-slate-500 line-through"
             }`}
           >
             Volume
@@ -319,7 +319,7 @@ export default function HistoryChart({ data }: { data: OhlcvPoint[] }) {
 
       {/* 3. Main Chart or Empty State */}
       {filteredData.length === 0 ? (
-        <div className="w-full py-16 text-center text-slate-400 bg-dark-card/40 rounded-xl border border-dark-border px-4">
+        <div className="w-full py-16 text-center text-slate-400 glass-card rounded-xl px-4">
           <svg className="w-8 h-8 text-slate-500 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
           </svg>
@@ -337,7 +337,7 @@ export default function HistoryChart({ data }: { data: OhlcvPoint[] }) {
               data={filteredData}
               margin={{ top: 15, right: 10, left: 0, bottom: 0 }}
             >
-              <CartesianGrid stroke="#334155" strokeDasharray="3 3" vertical={false} />
+              <CartesianGrid stroke="#22252e" strokeDasharray="3 3" vertical={false} />
               <XAxis dataKey="date" tick={{ fill: "#94a3b8", fontSize: 11 }} minTickGap={35} />
               <YAxis
                 yAxisId="price"
@@ -348,13 +348,14 @@ export default function HistoryChart({ data }: { data: OhlcvPoint[] }) {
               <YAxis yAxisId="volume" orientation="right" tick={{ fill: "#94a3b8", fontSize: 11 }} hide />
               <Tooltip
                 contentStyle={{
-                  background: "#1e293b",
-                  border: "1px solid #334155",
+                  background: "rgba(16, 17, 21, 0.95)",
+                  backdropFilter: "blur(8px)",
+                  border: "1px solid rgba(255, 255, 255, 0.08)",
                   borderRadius: 8,
                   fontSize: 12,
-                  boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.5)",
+                  boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 240, 255, 0.05)",
                 }}
-                labelStyle={{ color: "#f8fafc", fontWeight: 600, marginBottom: 4 }}
+                labelStyle={{ color: "#f8fafc", fontWeight: 600, marginBottom: 4, fontFamily: "var(--font-jetbrains-mono)" }}
                 formatter={(value: any, name: any) => {
                   const num = Number(value);
                   if (isNaN(num)) return [value, name];
@@ -373,7 +374,7 @@ export default function HistoryChart({ data }: { data: OhlcvPoint[] }) {
                   type="monotone"
                   dataKey="volume"
                   name="Volume"
-                  fill="#3b82f6"
+                  fill="#00f0ff"
                   stroke="none"
                   fillOpacity={0.15}
                 />
@@ -386,7 +387,7 @@ export default function HistoryChart({ data }: { data: OhlcvPoint[] }) {
                   type="monotone"
                   dataKey="open"
                   name="Open"
-                  stroke="#f59e0b"
+                  stroke="#ffb800"
                   dot={false}
                   strokeWidth={1.2}
                 />
@@ -397,7 +398,7 @@ export default function HistoryChart({ data }: { data: OhlcvPoint[] }) {
                   type="monotone"
                   dataKey="high"
                   name="High"
-                  stroke="#22c55e"
+                  stroke="#00f59b"
                   dot={false}
                   strokeWidth={1.2}
                 />
@@ -408,7 +409,7 @@ export default function HistoryChart({ data }: { data: OhlcvPoint[] }) {
                   type="monotone"
                   dataKey="low"
                   name="Low"
-                  stroke="#ef4444"
+                  stroke="#ff3b69"
                   dot={false}
                   strokeWidth={1.2}
                 />
@@ -419,7 +420,7 @@ export default function HistoryChart({ data }: { data: OhlcvPoint[] }) {
                   type="monotone"
                   dataKey="close"
                   name="Close"
-                  stroke="#60a5fa"
+                  stroke="#00f0ff"
                   dot={false}
                   strokeWidth={2}
                 />

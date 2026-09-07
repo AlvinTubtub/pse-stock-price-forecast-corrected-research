@@ -44,7 +44,7 @@ export default function ThemeToggle() {
       onClick={toggleTheme}
       aria-label={ariaLabel}
       title={ariaLabel}
-      className="p-2 rounded-lg bg-dark-bg border border-dark-border text-slate-300 hover:text-white hover:border-brand-500/50 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-colors flex items-center justify-center cursor-pointer"
+      className="p-2 rounded-lg glass-pill text-slate-300 hover:text-neon-400 hover:border-neon-400/40 focus:outline-none focus:ring-2 focus:ring-neon-400 transition-all flex items-center justify-center cursor-pointer"
     >
       {!mounted ? (
         <span className="w-5 h-5 block" aria-hidden="true" />
@@ -57,7 +57,7 @@ export default function ThemeToggle() {
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="w-5 h-5 text-blue-300"
+          className="w-5 h-5 text-neon-400"
           aria-hidden="true"
         >
           <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />

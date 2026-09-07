@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import CompanyLogo from "@/components/CompanyLogo";
 import ChangeBadge from "@/components/ChangeBadge";
+import ModernIcon, { ModernSquircleBadge } from "@/components/ModernIcon";
 import { useWatchlist } from "@/context/WatchlistContext";
 import { formatDate, formatNum, formatPeso, formatPct } from "@/lib/format";
 import type { CompanySummary, MetricsData } from "@/lib/types";
@@ -47,20 +48,21 @@ export default function WatchlistClient({
   return (
     <div className="space-y-8 animate-[fadeIn_0.3s_ease-out]">
       {/* 1. Header Section */}
-      <div className="bg-dark-card border border-dark-border rounded-2xl p-6 sm:p-8 shadow-sm">
+      <div className="glass-card rounded-2xl p-6 sm:p-8 shadow-card-glow">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <span className="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold text-amber-300 bg-amber-500/10 border border-amber-500/30 rounded-full">
-                ★ Client-Side Watchlist
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold font-mono text-accent-amber bg-accent-amber/15 border border-accent-amber/30 rounded-full">
+                <ModernIcon name="star" className="w-3.5 h-3.5 fill-current" />
+                Client-Side Watchlist
               </span>
             </div>
-            <h1 className="text-2xl sm:text-4xl font-bold text-white tracking-tight">
+            <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
               My Watchlist
             </h1>
             <p className="text-slate-300 text-sm sm:text-base mt-2">
               Watching{" "}
-              <span className="font-semibold text-white">
+              <span className="font-semibold font-mono text-white">
                 {watchedCompanies.length} of {maxLimit}
               </span>{" "}
               companies
@@ -72,7 +74,7 @@ export default function WatchlistClient({
               <button
                 type="button"
                 onClick={clearWatchlist}
-                className="text-xs font-medium text-slate-400 hover:text-red-400 px-3 py-2 rounded-lg border border-dark-border bg-dark-bg hover:border-red-500/40 transition-colors cursor-pointer"
+                className="text-xs font-medium font-mono text-slate-400 hover:text-accent-rose px-3 py-2 rounded-lg border border-charcoal-700 bg-charcoal-900 hover:border-accent-rose/40 transition-colors cursor-pointer"
               >
                 Clear Watchlist
               </button>
@@ -83,10 +85,8 @@ export default function WatchlistClient({
 
       {/* 2. Content: Watched List or Empty State */}
       {watchedCompanies.length === 0 ? (
-        <div className="bg-dark-card border border-dark-border rounded-2xl p-8 sm:p-12 text-center max-w-2xl mx-auto space-y-4">
-          <div className="w-14 h-14 mx-auto rounded-full bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-2xl text-slate-400">
-            ☆
-          </div>
+        <div className="glass-card rounded-2xl p-8 sm:p-12 text-center max-w-2xl mx-auto space-y-4 shadow-card-glow">
+          <ModernSquircleBadge icon="starOutline" color="cyan" size="lg" className="mx-auto" />
           <h2 className="text-xl font-bold text-white">No companies in your watchlist yet</h2>
           <p className="text-sm text-slate-400 leading-relaxed">
             Add up to 5 companies to quickly monitor their latest ForecastPH predictions.
@@ -94,7 +94,7 @@ export default function WatchlistClient({
           <div className="pt-2">
             <Link
               href="/companies"
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-sm font-semibold shadow-lg shadow-brand-500/20 transition-all"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-neon-500 hover:bg-neon-400 text-charcoal-950 text-sm font-bold font-mono shadow-neon-sm neon-btn-glow transition-all"
             >
               Explore Companies →
             </Link>
@@ -103,7 +103,7 @@ export default function WatchlistClient({
       ) : (
         <>
           {/* Contextual Help & Privacy Note */}
-          <div className="p-4 bg-dark-bg/70 border border-dark-border/70 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-slate-400">
+          <div className="p-4 glass-panel rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-slate-400">
             <p>
               <span className="font-semibold text-slate-300">Device Storage: </span>
               Your watchlist is saved only on this browser and device.
@@ -112,7 +112,7 @@ export default function WatchlistClient({
               <span>Not sure how to interpret these forecasts?</span>
               <Link
                 href="/learn-stocks"
-                className="text-brand-400 hover:text-brand-300 font-medium underline underline-offset-2"
+                className="text-neon-400 hover:text-neon-300 font-mono font-medium underline underline-offset-2"
               >
                 Learn Stock Trading Basics
               </Link>
@@ -123,7 +123,7 @@ export default function WatchlistClient({
           {watchedCompanies.map((company) => (
             <div
               key={company.symbol}
-              className="bg-dark-card border border-dark-border rounded-xl p-5 hover:border-brand-500/40 transition-all shadow-sm flex flex-col justify-between space-y-4"
+              className="glass-card rounded-xl p-5 hover:border-neon-400/50 shadow-card-glow hover:shadow-neon-sm transition-all flex flex-col justify-between space-y-4"
             >
               <div className="space-y-3">
                 {/* Header Row */}
@@ -133,7 +133,7 @@ export default function WatchlistClient({
                     <div className="min-w-0">
                       <Link
                         href={`/companies/${company.symbol}`}
-                        className="font-bold text-white text-lg hover:text-brand-400 transition-colors leading-tight block"
+                        className="font-bold font-mono text-white text-lg hover:text-neon-400 transition-colors leading-tight block"
                       >
                         {company.symbol}
                       </Link>
@@ -145,49 +145,39 @@ export default function WatchlistClient({
                   <ChangeBadge pctChange={company.pctChange} />
                 </div>
 
-                {/* Details Grid */}
-                <div className="pt-3 border-t border-dark-border/60 grid grid-cols-2 gap-2 text-left">
+                {/* Details Row (Selected Model Removed) */}
+                <div className="pt-3 border-t border-slate-200 dark:border-charcoal-700/60 flex items-baseline justify-between gap-2 text-left font-mono">
                   <div>
-                    <p className="text-[11px] text-slate-400">Forecasted Close</p>
-                    <p className="text-base font-semibold text-white">
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400">Forecasted Close</p>
+                    <p className="text-base font-bold text-slate-900 dark:text-white">
                       {formatPeso(company.predictedClose)}
                     </p>
                   </div>
-                  <div>
-                    <p className="text-[11px] text-slate-400">Selected Model</p>
-                    <p className="text-xs font-medium text-brand-400 truncate">
-                      {company.bestModel}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Metadata Row */}
-                <div className="flex items-center justify-between text-xs text-slate-400 pt-1">
-                  {company.forecastDate ? (
-                    <span className="text-[11px] text-slate-400">
-                      Forecast for {formatDate(company.forecastDate)}
+                  <div className="text-right flex flex-col items-end gap-1">
+                    <span className="text-[10px] px-2 py-0.5 rounded bg-slate-100 dark:bg-charcoal-900 border border-slate-200 dark:border-charcoal-700 text-slate-600 dark:text-slate-300">
+                      {company.sector}
                     </span>
-                  ) : (
-                    <span />
-                  )}
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-dark-bg border border-dark-border text-slate-400">
-                    {company.sector}
-                  </span>
+                    {company.forecastDate && (
+                      <span className="text-[11px] text-slate-500 dark:text-slate-400">
+                        For {formatDate(company.forecastDate)}
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
 
               {/* Action Footer */}
-              <div className="pt-3 border-t border-dark-border/50 flex items-center justify-between gap-2">
+              <div className="pt-3 border-t border-charcoal-700/50 flex items-center justify-between gap-2 font-mono">
                 <Link
                   href={`/companies/${company.symbol}`}
-                  className="text-xs font-medium text-brand-400 hover:text-brand-300 transition-colors"
+                  className="text-xs font-semibold text-neon-400 hover:text-neon-300 transition-colors"
                 >
                   View Details →
                 </Link>
                 <button
                   type="button"
                   onClick={() => removeFromWatchlist(company.symbol)}
-                  className="text-xs text-slate-400 hover:text-red-400 px-2.5 py-1 rounded border border-transparent hover:border-red-500/30 hover:bg-red-500/10 transition-colors cursor-pointer"
+                  className="text-xs text-slate-400 hover:text-accent-rose px-2.5 py-1 rounded border border-transparent hover:border-accent-rose/30 hover:bg-accent-rose/10 transition-colors cursor-pointer"
                 >
                   Remove
                 </button>
@@ -196,30 +186,38 @@ export default function WatchlistClient({
           ))}
           </div>
 
-          <section className="bg-dark-card border border-dark-border rounded-2xl p-5 sm:p-6 shadow-sm">
-            <div className="flex flex-wrap items-start justify-between gap-2 mb-5 pb-4 border-b border-dark-border/70">
+          <section className="glass-card rounded-2xl p-5 sm:p-6 shadow-card-glow">
+            <div className="flex flex-wrap items-start justify-between gap-2 mb-5 pb-4 border-b border-charcoal-700/70">
               <div>
                 <h2 className="text-base font-bold text-white">Expected Change (%) Comparison</h2>
                 <p className="text-xs text-slate-400 mt-1">Next-session forecast movement across your watched companies.</p>
               </div>
-              <span className="text-[11px] text-slate-300">Forecast horizon: next session</span>
+              <span className="text-[11px] text-slate-400 font-mono">Forecast horizon: next session</span>
             </div>
             <div className="h-64 sm:h-72">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={comparisonRows} margin={{ top: 10, right: 8, left: -12, bottom: 0 }}>
-                  <CartesianGrid stroke="#334155" strokeDasharray="3 3" vertical={false} />
-                  <XAxis dataKey="symbol" tick={{ fill: "#f1f5f9", fontSize: 12, fontWeight: 600 }} axisLine={{ stroke: "#64748b" }} tickLine={false} />
-                  <YAxis tick={{ fill: "#cbd5e1", fontSize: 11 }} tickFormatter={(value) => `${value}%`} axisLine={{ stroke: "#64748b" }} tickLine={false} />
+                  <CartesianGrid stroke="#22252e" strokeDasharray="3 3" vertical={false} />
+                  <XAxis dataKey="symbol" tick={{ fill: "#f1f5f9", fontSize: 12, fontWeight: 600, fontFamily: "var(--font-jetbrains-mono)" }} axisLine={{ stroke: "#334155" }} tickLine={false} />
+                  <YAxis tick={{ fill: "#cbd5e1", fontSize: 11, fontFamily: "var(--font-jetbrains-mono)" }} tickFormatter={(value) => `${value}%`} axisLine={{ stroke: "#334155" }} tickLine={false} />
                   <Tooltip
-                    cursor={{ fill: "rgba(148, 163, 184, 0.08)" }}
-                    contentStyle={{ background: "#0f172a", border: "1px solid #64748b", borderRadius: 10, color: "#f8fafc", fontSize: 12 }}
-                    labelStyle={{ color: "#f8fafc", fontWeight: 700 }}
-                    itemStyle={{ color: "#e2e8f0" }}
+                    cursor={{ fill: "rgba(0, 240, 255, 0.05)" }}
+                    contentStyle={{
+                      background: "rgba(16, 17, 21, 0.95)",
+                      backdropFilter: "blur(8px)",
+                      border: "1px solid rgba(255, 255, 255, 0.08)",
+                      borderRadius: 10,
+                      color: "#f8fafc",
+                      fontSize: 12,
+                      boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 240, 255, 0.05)",
+                    }}
+                    labelStyle={{ color: "#f8fafc", fontWeight: 700, fontFamily: "var(--font-jetbrains-mono)" }}
+                    itemStyle={{ color: "#e2e8f0", fontFamily: "var(--font-jetbrains-mono)" }}
                     formatter={(value: number) => [formatPct(value), "Expected Change"]}
                   />
                   <Bar dataKey="pctChange" radius={[5, 5, 0, 0]} maxBarSize={70}>
                     {comparisonRows.map((company) => (
-                      <Cell key={company.symbol} fill={company.pctChange >= 0 ? "#22c55e" : "#f87171"} />
+                      <Cell key={company.symbol} fill={company.pctChange >= 0 ? "#00f59b" : "#ff3b69"} />
                     ))}
                   </Bar>
                 </BarChart>
@@ -227,33 +225,33 @@ export default function WatchlistClient({
             </div>
           </section>
 
-          <section className="bg-dark-card border border-dark-border rounded-2xl p-5 sm:p-6 shadow-sm">
-            <div className="mb-5 pb-4 border-b border-dark-border/70">
+          <section className="glass-card rounded-2xl p-5 sm:p-6 shadow-card-glow">
+            <div className="mb-5 pb-4 border-b border-charcoal-700/70">
               <h2 className="text-base font-bold text-white">Side-by-Side Stock Metrics</h2>
               <p className="text-xs text-slate-400 mt-1">Compare current forecast values and selected-model evaluation metrics.</p>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full min-w-[760px] text-sm">
                 <thead>
-                  <tr className="border-b border-dark-border/70 text-left">
+                  <tr className="border-b border-charcoal-700/70 text-left font-mono">
                     <th className="px-3 py-3 text-[11px] uppercase tracking-wide text-slate-400 font-semibold">Metric</th>
                     {comparisonRows.map((company) => (
                       <th key={company.symbol} className="px-3 py-3 min-w-[155px]">
-                        <Link href={`/companies/${company.symbol}`} className="text-brand-400 hover:text-brand-300 font-bold">{company.symbol} →</Link>
-                        <p className="mt-1 text-[11px] font-normal text-slate-400 truncate max-w-[170px]">{company.name}</p>
+                        <Link href={`/companies/${company.symbol}`} className="text-neon-400 hover:text-neon-300 font-bold">{company.symbol} →</Link>
+                        <p className="mt-1 text-[11px] font-normal text-slate-400 truncate max-w-[170px] font-sans">{company.name}</p>
                       </th>
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-dark-border/70">
-                  <MetricRow label="Sector" companies={comparisonRows} render={(company) => <span className="inline-block rounded border border-dark-border bg-dark-bg px-2 py-0.5 text-[11px] text-slate-300">{company.sector}</span>} />
+                <tbody className="divide-y divide-charcoal-800 font-mono">
+                  <MetricRow label="Sector" companies={comparisonRows} render={(company) => <span className="inline-block rounded border border-charcoal-700 bg-charcoal-900 px-2 py-0.5 text-[11px] text-slate-300">{company.sector}</span>} />
                   <MetricRow label="Previous Close" companies={comparisonRows} render={(company) => formatPeso(company.latestClose)} />
-                  <MetricRow label="Forecasted Close" companies={comparisonRows} render={(company) => <span className="font-semibold text-white">{formatPeso(company.predictedClose)}</span>} />
-                  <MetricRow label="Expected Change" companies={comparisonRows} render={(company) => <span className={company.pctChange >= 0 ? "text-green-400 font-semibold" : "text-red-400 font-semibold"}>{formatPeso(company.pesoChange)} ({formatPct(company.pctChange)})</span>} />
-                  <MetricRow label="Selected Model" companies={comparisonRows} render={(company) => company.bestModel} />
+                  <MetricRow label="Forecasted Close" companies={comparisonRows} render={(company) => <span className="font-bold text-white">{formatPeso(company.predictedClose)}</span>} />
+                  <MetricRow label="Expected Change" companies={comparisonRows} render={(company) => <span className={company.pctChange >= 0 ? "text-accent-emerald font-semibold" : "text-accent-rose font-semibold"}>{formatPeso(company.pesoChange)} ({formatPct(company.pctChange)})</span>} />
+                  <MetricRow label="Selected Model" companies={comparisonRows} render={(company) => <span className="text-neon-400">{company.bestModel}</span>} />
                   <MetricRow label="Test RMSE (₱)" companies={comparisonRows} render={(company) => company.rmse === undefined ? "--" : formatNum(company.rmse)} />
-                  <MetricRow label="MASE (Scaled Error)" companies={comparisonRows} render={(company) => company.mase === undefined ? "--" : <span className={Number(company.mase) < 1 ? "text-green-400 font-semibold" : "text-amber-400 font-semibold"}>{formatNum(company.mase)}</span>} />
-                  <MetricRow label="Beats Naive Baseline?" companies={comparisonRows} render={(company) => company.mase === undefined ? "--" : Number(company.mase) < 1 ? <span className="text-green-400">✓ Yes (MASE &lt; 1)</span> : <span className="text-amber-400">△ No (MASE ≥ 1)</span>} />
+                  <MetricRow label="MASE (Scaled Error)" companies={comparisonRows} render={(company) => company.mase === undefined ? "--" : <span className={Number(company.mase) < 1 ? "text-accent-emerald font-semibold" : "text-accent-amber font-semibold"}>{formatNum(company.mase)}</span>} />
+                  <MetricRow label="Beats Naive Baseline?" companies={comparisonRows} render={(company) => company.mase === undefined ? "--" : Number(company.mase) < 1 ? <span className="text-accent-emerald font-semibold inline-flex items-center gap-1"><ModernIcon name="check" className="w-3.5 h-3.5" /> Yes (MASE &lt; 1)</span> : <span className="text-accent-amber font-semibold inline-flex items-center gap-1"><ModernIcon name="alertTriangle" className="w-3.5 h-3.5" /> No (MASE ≥ 1)</span>} />
                 </tbody>
               </table>
             </div>

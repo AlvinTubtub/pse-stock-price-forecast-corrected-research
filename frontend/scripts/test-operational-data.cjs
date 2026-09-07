@@ -36,7 +36,7 @@ const write = (value) => fs.writeFileSync(path.join(dest, 'operational.json'), J
   write(batch);
   const promoted = await data.getCompanyDetail('ALI');
   assert.equal(promoted.predictedClose, 21);
-  assert.deepEqual(promoted.nextClose, { lag: 21 });
+  assert.deepEqual(promoted.nextClose, { ...legacy.nextClose, lag: 21 });
   assert.equal(promoted.confidence, undefined);
   assert.deepEqual(promoted.backtestActual, legacy.backtestActual);
   assert.deepEqual(promoted.productionBacktestDates, legacy.productionBacktestDates);

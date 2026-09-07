@@ -14,9 +14,9 @@ import {
 } from "recharts";
 
 const MODEL_COLORS: Record<string, string> = {
-  Actual: "#22c55e",
-  ARIMA: "#f59e0b",
-  "Lag-Informed Regression": "#3b82f6",
+  Actual: "#00f59b",
+  ARIMA: "#ffb800",
+  "Lag-Informed Regression": "#00f0ff",
   LSTM: "#a855f7",
   "Naive baseline": "#64748b",
   "Naive Baseline": "#64748b",
@@ -85,10 +85,10 @@ export default function PredictionChart({
 
   if (data.length === 0) {
     return (
-      <div className="flex h-[360px] items-center justify-center rounded-lg border border-dashed border-dark-border bg-dark-bg/40 px-6 text-center">
+      <div className="flex h-[360px] items-center justify-center rounded-lg border border-dashed border-slate-200 dark:border-charcoal-700 bg-slate-50 dark:bg-charcoal-950/40 px-6 text-center">
         <div className="max-w-md space-y-2">
-          <p className="text-sm font-medium text-slate-200">Waiting for the first realized production forecast</p>
-          <p className="text-xs leading-relaxed text-slate-400">
+          <p className="text-sm font-medium text-slate-700 dark:text-slate-200">Waiting for the first realized production forecast</p>
+          <p className="text-xs leading-relaxed text-slate-500 dark:text-slate-400">
             ForecastPH will add a point here after a forecast is issued and the corresponding trading
             session&apos;s closing price becomes available. Historical research backtests are kept separate.
           </p>
@@ -103,8 +103,8 @@ export default function PredictionChart({
     const headerDate = point?.fullDate || point?.displayDate || point?.step;
 
     return (
-      <div className="bg-dark-card border border-dark-border rounded-xl p-3 shadow-xl text-xs space-y-1.5 min-w-[210px]">
-        <p className="font-semibold text-white border-b border-dark-border pb-1.5 mb-1.5">
+      <div className="bg-charcoal-900/95 border border-charcoal-700/80 rounded-xl p-3 shadow-card-glow text-xs space-y-1.5 min-w-[210px] backdrop-blur-md">
+        <p className="font-semibold text-white font-mono border-b border-charcoal-700 pb-1.5 mb-1.5">
           {headerDate}
         </p>
         {payload.map((entry: any) => {
@@ -124,15 +124,15 @@ export default function PredictionChart({
                 <span
                   className={`font-medium ${
                     isActual
-                      ? "text-green-400 font-semibold"
+                      ? "text-accent-emerald font-semibold"
                       : isSelected
-                      ? "text-brand-400 font-semibold"
+                      ? "text-neon-400 font-semibold"
                       : "text-slate-300"
                   }`}
                 >
                   {label}
                   {isSelected && (
-                    <span className="ml-1 text-[10px] text-brand-400 uppercase font-semibold">
+                    <span className="ml-1 text-[10px] text-neon-400 uppercase font-semibold">
                       (Selected)
                     </span>
                   )}
@@ -159,8 +159,8 @@ export default function PredictionChart({
           Showing {data.length} trading sessions &middot; Hover points to inspect prices
         </span>
         {liveStartDate && (
-          <span className="inline-flex items-center gap-1.5 rounded-md border border-teal-400/40 bg-teal-400/10 px-2 py-1 font-semibold text-teal-100">
-            <span className="h-3 border-l-2 border-dashed border-teal-300" aria-hidden="true" />
+          <span className="inline-flex items-center gap-1.5 rounded-md border border-neon-400/40 bg-neon-400/10 px-2 py-1 font-semibold text-neon-300 font-mono text-[11px]">
+            <span className="h-3 border-l-2 border-dashed border-neon-400" aria-hidden="true" />
             Live forecast begins
           </span>
         )}
@@ -172,7 +172,7 @@ export default function PredictionChart({
             data={data}
             margin={{ top: 10, right: 15, left: 10, bottom: 5 }}
           >
-            <CartesianGrid stroke="#334155" strokeDasharray="3 3" vertical={false} />
+            <CartesianGrid stroke="#22252e" strokeDasharray="3 3" vertical={false} />
             {liveStartDate && (
               <ReferenceLine
                 x={liveStartDate}

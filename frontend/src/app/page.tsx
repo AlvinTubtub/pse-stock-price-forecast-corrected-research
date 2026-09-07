@@ -1,6 +1,7 @@
 import Link from "next/link";
 import CompanyLogo from "@/components/CompanyLogo";
 import ChangeBadge from "@/components/ChangeBadge";
+import StockTickerRibbon from "@/components/StockTickerRibbon";
 import { getCompanies, getDashboard } from "@/lib/data";
 import { formatDate, formatDateTimePht, formatPeso } from "@/lib/format";
 
@@ -125,31 +126,31 @@ export default async function HomePage() {
 
         {/* Hero Content: Centered Horizontally & Vertically */}
         <div className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 text-center flex flex-col items-center justify-center">
-          <span className="inline-flex items-center px-3.5 py-1 text-xs font-semibold !text-blue-300 bg-slate-950/80 border border-brand-400/50 rounded-full mb-4 backdrop-blur-md shadow-md">
+          <span className="glass-pill px-3.5 py-1 text-xs font-semibold text-neon-400 border border-neon-400/40 mb-4 shadow-neon-sm font-mono">
             Educational Dashboard
           </span>
 
-          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold !text-white mb-4 tracking-tight leading-tight max-w-3xl drop-shadow-[0_2px_16px_rgba(0,0,0,0.95)]">
+          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white mb-4 tracking-tight leading-tight max-w-3xl drop-shadow-[0_2px_16px_rgba(0,0,0,0.95)]">
             Cross-Sector Next-Day Stock Price Forecasting
           </h1>
 
-          <p className="!text-slate-100 text-sm sm:text-base lg:text-lg max-w-2xl mx-auto leading-relaxed drop-shadow-[0_1px_8px_rgba(0,0,0,0.9)]">
+          <p className="text-slate-200 text-sm sm:text-base lg:text-lg max-w-2xl mx-auto leading-relaxed drop-shadow-[0_1px_8px_rgba(0,0,0,0.9)]">
             Explore historical Philippine stock market data, compare machine learning and statistical
             models, and understand next-day price prediction techniques.
           </p>
 
           {(dashboard?.forecastDate || dashboard?.lastRunAt) && (
-            <div className="inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 mt-6 px-4 py-2 rounded-full bg-slate-950/75 border border-white/20 text-xs !text-slate-200 backdrop-blur-md shadow-md drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]">
+            <div className="glass-pill inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 mt-6 px-4 py-2 text-xs text-slate-200 font-mono shadow-card-glow">
               {dashboard?.forecastDate && (
-                <span className="!text-blue-300 font-semibold">
+                <span className="text-neon-300 font-semibold">
                   Forecast for: {formatDate(dashboard.forecastDate)}
                 </span>
               )}
               {dashboard?.forecastDate && dashboard?.lastRunAt && (
-                <span className="!text-slate-400">&middot;</span>
+                <span className="text-slate-500">&middot;</span>
               )}
               {dashboard?.lastRunAt && (
-                <span className="!text-slate-200">
+                <span className="text-slate-300">
                   Last pipeline run: {formatDateTimePht(dashboard.lastRunAt)}
                 </span>
               )}
@@ -163,24 +164,24 @@ export default async function HomePage() {
         {/* 1. Companies Tracked (Clickable -> /companies) */}
         <Link
           href="/companies"
-          className="group bg-dark-card border border-slate-700/60 dark:border-dark-border rounded-2xl p-5 shadow-sm hover:border-brand-500/80 focus-visible:border-brand-500 hover:-translate-y-1 focus-visible:-translate-y-1 hover:shadow-lg hover:shadow-brand-500/10 focus-visible:shadow-lg transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2 focus-visible:ring-offset-dark-bg motion-reduce:transform-none flex flex-col justify-between"
+          className="group glass-card p-5 rounded-2xl shadow-card-glow hover:border-neon-400/50 hover:shadow-neon-sm transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-neon-400 motion-reduce:transform-none flex flex-col justify-between"
           aria-label={`View all ${dashboard?.totalCompanies ?? 15} tracked companies on the Companies page`}
         >
           <div className="flex items-start justify-between gap-3">
             <span className="text-xs font-semibold uppercase tracking-wider text-slate-400 group-hover:text-slate-200 transition-colors">
               Companies Tracked
             </span>
-            <div className="w-8 h-8 rounded-xl bg-brand-500/10 border border-brand-500/20 text-brand-400 flex items-center justify-center group-hover:bg-brand-500 group-hover:text-white transition-colors shrink-0 shadow-xs">
+            <div className="w-8 h-8 rounded-xl bg-neon-500/10 border border-neon-400/30 text-neon-400 flex items-center justify-center group-hover:bg-neon-500 group-hover:text-charcoal-950 transition-colors shrink-0 shadow-xs">
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
               </svg>
             </div>
           </div>
           <div className="mt-4">
-            <div className="text-2xl sm:text-3xl font-extrabold text-white group-hover:text-brand-400 transition-colors">
+            <div className="text-2xl sm:text-3xl font-black font-mono text-white group-hover:text-neon-400 transition-colors">
               {String(dashboard?.totalCompanies ?? "--")}
             </div>
-            <div className="flex items-center justify-between text-xs text-brand-400 mt-1 font-medium">
+            <div className="flex items-center justify-between text-xs text-neon-400 mt-1 font-mono font-semibold">
               <span>View all companies</span>
               <span className="transition-transform group-hover:translate-x-0.5">→</span>
             </div>
@@ -190,14 +191,14 @@ export default async function HomePage() {
         {/* 2. Sectors Represented (Clickable -> #explore-by-sector) */}
         <a
           href="#explore-by-sector"
-          className="group bg-dark-card border border-slate-700/60 dark:border-dark-border rounded-2xl p-5 shadow-sm hover:border-brand-500/80 focus-visible:border-brand-500 hover:-translate-y-1 focus-visible:-translate-y-1 hover:shadow-lg hover:shadow-brand-500/10 focus-visible:shadow-lg transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2 focus-visible:ring-offset-dark-bg motion-reduce:transform-none flex flex-col justify-between"
+          className="group glass-card p-5 rounded-2xl shadow-card-glow hover:border-neon-400/50 hover:shadow-neon-sm transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-neon-400 motion-reduce:transform-none flex flex-col justify-between"
           aria-label="Scroll to explore all 5 sectors"
         >
           <div className="flex items-start justify-between gap-3">
             <span className="text-xs font-semibold uppercase tracking-wider text-slate-400 group-hover:text-slate-200 transition-colors">
               Sectors Represented
             </span>
-            <div className="w-8 h-8 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center group-hover:bg-purple-500 group-hover:text-white transition-colors shrink-0 shadow-xs">
+            <div className="w-8 h-8 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-400 flex items-center justify-center group-hover:bg-purple-500 group-hover:text-charcoal-950 transition-colors shrink-0 shadow-xs">
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
@@ -205,10 +206,10 @@ export default async function HomePage() {
             </div>
           </div>
           <div className="mt-4">
-            <div className="text-2xl sm:text-3xl font-extrabold text-white group-hover:text-purple-300 transition-colors">
+            <div className="text-2xl sm:text-3xl font-black font-mono text-white group-hover:text-purple-300 transition-colors">
               {String(dashboard?.sectors.length ?? "--")}
             </div>
-            <div className="flex items-center justify-between text-xs text-purple-400 mt-1 font-medium">
+            <div className="flex items-center justify-between text-xs text-purple-400 mt-1 font-mono font-semibold">
               <span>Explore sectors</span>
               <span className="transition-transform group-hover:translate-y-0.5">↓</span>
             </div>
@@ -217,24 +218,24 @@ export default async function HomePage() {
 
         {/* 3. Forecasted Gainers / Losers (Informational Only - NOT clickable) */}
         <div
-          className="bg-dark-card border border-slate-700/60 dark:border-dark-border rounded-2xl p-5 shadow-sm flex flex-col justify-between"
+          className="glass-card p-5 rounded-2xl shadow-card-glow flex flex-col justify-between"
           aria-label={`Forecasted market movements: ${dashboard?.marketSummary.gainers ?? 0} gainers, ${dashboard?.marketSummary.losers ?? 0} losers`}
         >
           <div className="flex items-start justify-between gap-3">
             <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
               Forecasted Gainers / Losers
             </span>
-            <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center shrink-0 shadow-xs">
+            <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/30 text-accent-amber flex items-center justify-center shrink-0 shadow-xs">
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
               </svg>
             </div>
           </div>
           <div className="mt-4">
-            <div className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-baseline gap-2">
-              <span className="text-emerald-400">{dashboard?.marketSummary.gainers ?? 0}</span>
-              <span className="text-slate-500 text-xl font-normal">/</span>
-              <span className="text-rose-400">{dashboard?.marketSummary.losers ?? 0}</span>
+            <div className="text-2xl sm:text-3xl font-black font-mono text-white tracking-tight flex items-baseline gap-2">
+              <span className="text-accent-emerald">{dashboard?.marketSummary.gainers ?? 0}</span>
+              <span className="text-slate-600 text-xl font-normal">/</span>
+              <span className="text-accent-rose">{dashboard?.marketSummary.losers ?? 0}</span>
             </div>
             <div className="text-xs text-slate-400 mt-1">
               Next-session expectations
@@ -247,24 +248,24 @@ export default async function HomePage() {
           href="https://www.pse.com.ph/market-report/"
           target="_blank"
           rel="noopener noreferrer"
-          className="group bg-dark-card border border-slate-700/60 dark:border-dark-border rounded-2xl p-5 shadow-sm hover:border-brand-500/80 focus-visible:border-brand-500 hover:-translate-y-1 focus-visible:-translate-y-1 hover:shadow-lg hover:shadow-brand-500/10 focus-visible:shadow-lg transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2 focus-visible:ring-offset-dark-bg motion-reduce:transform-none flex flex-col justify-between"
+          className="group glass-card p-5 rounded-2xl shadow-card-glow hover:border-neon-400/50 hover:shadow-neon-sm transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-neon-400 motion-reduce:transform-none flex flex-col justify-between"
           aria-label="Official PSE Daily Quotations Reports (opens in a new tab)"
         >
           <div className="flex items-start justify-between gap-3">
             <span className="text-xs font-semibold uppercase tracking-wider text-slate-400 group-hover:text-slate-200 transition-colors">
               Data Source
             </span>
-            <div className="w-8 h-8 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center group-hover:bg-cyan-500 group-hover:text-white transition-colors shrink-0 shadow-xs">
+            <div className="w-8 h-8 rounded-xl bg-neon-400/10 border border-neon-400/30 text-neon-400 flex items-center justify-center group-hover:bg-neon-400 group-hover:text-charcoal-950 transition-colors shrink-0 shadow-xs">
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
             </div>
           </div>
           <div className="mt-4">
-            <div className="text-sm font-bold text-white group-hover:text-cyan-300 transition-colors leading-snug">
+            <div className="text-sm font-bold text-white group-hover:text-neon-300 transition-colors leading-snug">
               Official PSE Daily Reports
             </div>
-            <div className="flex items-center justify-between text-xs text-cyan-400 mt-1 font-medium">
+            <div className="flex items-center justify-between text-xs text-neon-400 mt-1 font-mono font-semibold">
               <span>View PSE Market Report</span>
               <svg className="w-3 h-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -280,14 +281,14 @@ export default async function HomePage() {
         {dashboard?.topGainer ? (
           <Link
             href={`/companies/${dashboard.topGainer.symbol}`}
-            className="group relative rounded-2xl overflow-hidden border border-slate-700/60 dark:border-dark-border bg-gradient-to-br from-dark-card to-emerald-950/25 hover:border-emerald-500/60 focus-visible:border-emerald-500 p-6 shadow-sm hover:shadow-xl hover:shadow-emerald-500/10 focus-visible:shadow-xl hover:-translate-y-1 focus-visible:-translate-y-1 transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-dark-bg motion-reduce:transform-none flex flex-col justify-between"
+            className="group relative rounded-2xl overflow-hidden glass-card border-accent-emerald/30 bg-gradient-to-br from-charcoal-900/95 via-charcoal-850/90 to-emerald-950/25 hover:border-accent-emerald/60 p-6 shadow-card-glow hover:shadow-neon-sm hover:-translate-y-1 focus-visible:-translate-y-1 transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 motion-reduce:transform-none flex flex-col justify-between"
             aria-label={`View top forecasted gainer: ${dashboard.topGainer.symbol} (${dashboard.topGainer.name})`}
           >
             <div>
               {/* Header: Spotlight Badge & Sector */}
               <div className="flex items-center justify-between gap-2 mb-4">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 shadow-xs">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold font-mono bg-accent-emerald/15 border border-accent-emerald/40 text-accent-emerald shadow-xs">
+                  <span className="w-1.5 h-1.5 rounded-full bg-accent-emerald animate-pulse" />
                   Top Forecasted Gainer
                 </span>
                 <span className="text-xs text-slate-400 font-medium">
@@ -300,7 +301,7 @@ export default async function HomePage() {
                 <div className="flex items-center gap-3.5 min-w-0">
                   <CompanyLogo symbol={dashboard.topGainer.symbol} name={dashboard.topGainer.name} size="lg" />
                   <div className="min-w-0">
-                    <div className="text-2xl sm:text-3xl font-black text-white group-hover:text-emerald-300 transition-colors leading-tight">
+                    <div className="text-2xl sm:text-3xl font-black font-mono text-white group-hover:text-emerald-300 transition-colors leading-tight">
                       {dashboard.topGainer.symbol}
                     </div>
                     <p className="text-xs sm:text-sm text-slate-300 truncate max-w-[13rem] sm:max-w-[16rem]">
@@ -310,10 +311,10 @@ export default async function HomePage() {
                 </div>
 
                 <div className="text-right shrink-0">
-                  <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">
+                  <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block font-mono">
                     Predicted Close
                   </span>
-                  <p className="text-2xl sm:text-3xl font-extrabold text-white group-hover:text-emerald-400 transition-colors">
+                  <p className="text-2xl sm:text-3xl font-black font-mono text-white group-hover:text-accent-emerald transition-colors">
                     {formatPeso(dashboard.topGainer.predictedClose)}
                   </p>
                   <div className="mt-1 flex justify-end">
@@ -324,13 +325,13 @@ export default async function HomePage() {
             </div>
 
             {/* Directional Footer Link */}
-            <div className="flex items-center justify-between pt-4 mt-5 border-t border-slate-700/50 dark:border-dark-border/80 text-xs font-semibold text-emerald-400 group-hover:text-emerald-300 transition-colors">
+            <div className="flex items-center justify-between pt-4 mt-5 border-t border-charcoal-700/60 text-xs font-semibold font-mono text-accent-emerald group-hover:text-emerald-300 transition-colors">
               <span>View company forecast</span>
               <span className="transition-transform group-hover:translate-x-1 font-bold">→</span>
             </div>
           </Link>
         ) : (
-          <div className="bg-dark-card border border-dark-border rounded-2xl p-6 text-slate-500 text-sm">
+          <div className="glass-card rounded-2xl p-6 text-slate-500 text-sm">
             No gainer data available.
           </div>
         )}
@@ -339,14 +340,14 @@ export default async function HomePage() {
         {dashboard?.topLoser ? (
           <Link
             href={`/companies/${dashboard.topLoser.symbol}`}
-            className="group relative rounded-2xl overflow-hidden border border-slate-700/60 dark:border-dark-border bg-gradient-to-br from-dark-card to-rose-950/25 hover:border-rose-500/60 focus-visible:border-rose-500 p-6 shadow-sm hover:shadow-xl hover:shadow-rose-500/10 focus-visible:shadow-xl hover:-translate-y-1 focus-visible:-translate-y-1 transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-rose-400 focus-visible:ring-offset-2 focus-visible:ring-offset-dark-bg motion-reduce:transform-none flex flex-col justify-between"
+            className="group relative rounded-2xl overflow-hidden glass-card border-accent-rose/30 bg-gradient-to-br from-charcoal-900/95 via-charcoal-850/90 to-rose-950/25 hover:border-accent-rose/60 p-6 shadow-card-glow hover:shadow-neon-sm hover:-translate-y-1 focus-visible:-translate-y-1 transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-rose-400 motion-reduce:transform-none flex flex-col justify-between"
             aria-label={`View top forecasted loser: ${dashboard.topLoser.symbol} (${dashboard.topLoser.name})`}
           >
             <div>
               {/* Header: Spotlight Badge & Sector */}
               <div className="flex items-center justify-between gap-2 mb-4">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-rose-500/15 border border-rose-500/30 text-rose-400 shadow-xs">
-                  <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-pulse" />
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold font-mono bg-accent-rose/15 border border-accent-rose/40 text-accent-rose shadow-xs">
+                  <span className="w-1.5 h-1.5 rounded-full bg-accent-rose animate-pulse" />
                   Top Forecasted Loser
                 </span>
                 <span className="text-xs text-slate-400 font-medium">
@@ -359,7 +360,7 @@ export default async function HomePage() {
                 <div className="flex items-center gap-3.5 min-w-0">
                   <CompanyLogo symbol={dashboard.topLoser.symbol} name={dashboard.topLoser.name} size="lg" />
                   <div className="min-w-0">
-                    <div className="text-2xl sm:text-3xl font-black text-white group-hover:text-rose-300 transition-colors leading-tight">
+                    <div className="text-2xl sm:text-3xl font-black font-mono text-white group-hover:text-rose-300 transition-colors leading-tight">
                       {dashboard.topLoser.symbol}
                     </div>
                     <p className="text-xs sm:text-sm text-slate-300 truncate max-w-[13rem] sm:max-w-[16rem]">
@@ -369,10 +370,10 @@ export default async function HomePage() {
                 </div>
 
                 <div className="text-right shrink-0">
-                  <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">
+                  <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block font-mono">
                     Predicted Close
                   </span>
-                  <p className="text-2xl sm:text-3xl font-extrabold text-white group-hover:text-rose-400 transition-colors">
+                  <p className="text-2xl sm:text-3xl font-black font-mono text-white group-hover:text-accent-rose transition-colors">
                     {formatPeso(dashboard.topLoser.predictedClose)}
                   </p>
                   <div className="mt-1 flex justify-end">
@@ -383,23 +384,23 @@ export default async function HomePage() {
             </div>
 
             {/* Directional Footer Link */}
-            <div className="flex items-center justify-between pt-4 mt-5 border-t border-slate-700/50 dark:border-dark-border/80 text-xs font-semibold text-rose-400 group-hover:text-rose-300 transition-colors">
+            <div className="flex items-center justify-between pt-4 mt-5 border-t border-charcoal-700/60 text-xs font-semibold font-mono text-accent-rose group-hover:text-rose-300 transition-colors">
               <span>View company forecast</span>
               <span className="transition-transform group-hover:translate-x-1 font-bold">→</span>
             </div>
           </Link>
         ) : (
-          <div className="bg-dark-card border border-dark-border rounded-2xl p-6 text-slate-500 text-sm">
+          <div className="glass-card rounded-2xl p-6 text-slate-500 text-sm">
             No loser data available.
           </div>
         )}
       </section>
 
       {/* 5. Beginner Guide Section: Image-led Learning Cards */}
-      <section className="bg-dark-card border border-dark-border rounded-2xl p-6 sm:p-7 shadow-sm space-y-6">
+      <section className="glass-card p-6 sm:p-7 rounded-2xl shadow-card-glow space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <span className="inline-block px-2.5 py-0.5 text-[11px] font-semibold text-brand-400 bg-brand-500/10 border border-brand-500/20 rounded-full mb-1">
+            <span className="inline-block px-2.5 py-0.5 text-[11px] font-semibold font-mono text-neon-400 bg-neon-500/10 border border-neon-400/30 rounded-full mb-1">
               Beginner Guide
             </span>
             <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
@@ -411,7 +412,7 @@ export default async function HomePage() {
           </div>
           <Link
             href="/learn-stocks#trading-101"
-            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs sm:text-sm font-semibold transition-all shrink-0 self-start sm:self-auto shadow-md shadow-brand-500/20 group"
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-neon-500 hover:bg-neon-400 text-charcoal-950 text-xs sm:text-sm font-bold font-mono transition-all shrink-0 self-start sm:self-auto shadow-neon-sm neon-btn-glow group"
           >
             <span>Start with Stock Trading 101</span>
             <span className="transition-transform group-hover:translate-x-0.5">→</span>
@@ -424,19 +425,19 @@ export default async function HomePage() {
             <Link
               key={card.title}
               href={card.href}
-              className="group rounded-2xl overflow-hidden border border-slate-700/60 dark:border-dark-border bg-dark-bg/70 hover:border-brand-500/80 focus-visible:border-brand-500 hover:-translate-y-1 focus-visible:-translate-y-1 hover:shadow-xl hover:shadow-brand-500/10 focus-visible:shadow-xl transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2 focus-visible:ring-offset-dark-bg motion-reduce:transform-none flex flex-col"
+              className="group glass-card rounded-2xl overflow-hidden hover:border-neon-400/60 hover:-translate-y-1 focus-visible:-translate-y-1 shadow-card-glow hover:shadow-neon-sm transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-neon-400 motion-reduce:transform-none flex flex-col"
               aria-label={`${card.badgeLabel}: ${card.title} — ${card.description}`}
             >
               {/* 16:9 Image Area with subtle zoom on hover/focus */}
-              <div className="relative aspect-video w-full overflow-hidden bg-slate-900">
+              <div className="relative aspect-video w-full overflow-hidden bg-charcoal-900">
                 <img
                   src={card.image}
                   alt={card.alt}
                   className="w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-105 group-focus-visible:scale-105 motion-reduce:transform-none"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-t from-charcoal-950/85 via-transparent to-transparent pointer-events-none" />
                 <span
-                  className={`absolute top-3 left-3 px-2.5 py-0.5 rounded-full border text-[11px] font-bold backdrop-blur-md shadow-sm ${card.accent}`}
+                  className={`absolute top-3 left-3 px-2.5 py-0.5 rounded-full border text-[11px] font-bold font-mono backdrop-blur-md shadow-sm ${card.accent}`}
                 >
                   {card.badgeLabel}
                 </span>
@@ -445,9 +446,9 @@ export default async function HomePage() {
               {/* Text Content Below Image */}
               <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
                 <div className="space-y-1.5">
-                  <h3 className="text-base font-bold text-white group-hover:text-brand-300 transition-colors flex items-center justify-between">
+                  <h3 className="text-base font-bold text-white group-hover:text-neon-300 transition-colors flex items-center justify-between">
                     <span>{card.title}</span>
-                    <span className="text-xs text-brand-400 transition-transform group-hover:translate-x-0.5">
+                    <span className="text-xs text-neon-400 transition-transform group-hover:translate-x-0.5 font-mono">
                       →
                     </span>
                   </h3>
@@ -455,7 +456,7 @@ export default async function HomePage() {
                     {card.description}
                   </p>
                 </div>
-                <div className="pt-2 border-t border-dark-border/60 text-[11px] font-medium text-brand-400 flex items-center gap-1 group-hover:underline">
+                <div className="pt-2 border-t border-charcoal-700/60 text-[11px] font-medium font-mono text-neon-400 flex items-center gap-1 group-hover:underline">
                   <span>Learn how this works</span>
                   <span className="transition-transform group-hover:translate-x-0.5">→</span>
                 </div>
@@ -476,7 +477,7 @@ export default async function HomePage() {
           </div>
           <Link
             href="/companies"
-            className="inline-flex items-center text-sm font-medium text-brand-400 hover:text-brand-300 group self-start sm:self-auto"
+            className="inline-flex items-center text-sm font-medium font-mono text-neon-400 hover:text-neon-300 group self-start sm:self-auto"
           >
             <span>View all companies</span>
             <span className="ml-1 transition-transform group-hover:translate-x-0.5">→</span>
@@ -488,7 +489,7 @@ export default async function HomePage() {
             <Link
               key={sector.name}
               href={`/companies?sector=${encodeURIComponent(sector.queryParam)}`}
-              className="group relative rounded-2xl overflow-hidden border border-slate-700/60 dark:border-dark-border bg-slate-900 aspect-[16/10] flex flex-col justify-end p-5 transition-all duration-300 hover:-translate-y-1 focus-visible:-translate-y-1 hover:border-brand-500/80 focus-visible:border-brand-500 hover:shadow-xl hover:shadow-brand-500/10 focus-visible:shadow-xl outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2 focus-visible:ring-offset-dark-bg motion-reduce:transform-none dark-surface"
+              className="group relative rounded-2xl overflow-hidden glass-card aspect-[16/10] flex flex-col justify-end p-5 transition-all duration-300 hover:-translate-y-1 focus-visible:-translate-y-1 hover:border-neon-400/80 focus-visible:border-neon-400 shadow-card-glow hover:shadow-neon-sm outline-none focus-visible:ring-2 focus-visible:ring-neon-400 motion-reduce:transform-none"
               aria-label={`Explore ${sector.name} sector: ${sector.tickers.join(", ")}`}
             >
               {/* Background image with subtle zoom out on hover/focus (scale-[1.04] to scale-100 over 300ms) */}
@@ -501,19 +502,19 @@ export default async function HomePage() {
 
               {/* Dark overlay ensuring high text readability & contrast across themes */}
               <div
-                className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/60 to-slate-950/20 group-hover:from-slate-950/90 transition-colors pointer-events-none"
+                className="absolute inset-0 bg-gradient-to-t from-charcoal-950/95 via-charcoal-950/60 to-charcoal-950/20 group-hover:from-charcoal-950/90 transition-colors pointer-events-none"
                 aria-hidden="true"
               />
 
               {/* Sector Card Content */}
               <div className="relative z-10 space-y-1.5 pointer-events-none">
                 <div className="flex items-center justify-between gap-2">
-                  <span className="inline-block text-[11px] font-semibold !text-blue-300 tracking-wider uppercase drop-shadow-sm">
+                  <span className="inline-block text-[11px] font-semibold text-neon-400 tracking-wider uppercase font-mono drop-shadow-sm">
                     Sector
                   </span>
-                  <div className="w-7 h-7 rounded-full bg-white/20 group-hover:bg-brand-500 !text-white flex items-center justify-center transition-colors shadow-sm">
+                  <div className="w-7 h-7 rounded-full bg-charcoal-900/80 border border-charcoal-700 group-hover:bg-neon-500 group-hover:text-charcoal-950 text-white flex items-center justify-center transition-colors shadow-sm">
                     <svg
-                      className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 !text-white"
+                      className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -524,30 +525,33 @@ export default async function HomePage() {
                   </div>
                 </div>
 
-                <h3 className="text-lg sm:text-xl font-bold !text-white tracking-tight group-hover:!text-blue-300 transition-colors drop-shadow-md">
+                <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight group-hover:text-neon-300 transition-colors drop-shadow-md">
                   {sector.name}
                 </h3>
 
-                <p className="text-xs !text-slate-200 line-clamp-1 drop-shadow-sm">
+                <p className="text-xs text-slate-200 line-clamp-1 drop-shadow-sm">
                   {sector.description}
                 </p>
 
-                <div className="flex flex-wrap items-center gap-1.5 pt-1 text-[11px] !text-slate-200">
+                <div className="flex flex-wrap items-center gap-1.5 pt-1 text-[11px] text-slate-200">
                   {sector.tickers.map((ticker) => (
                     <span
                       key={ticker}
-                      className="px-1.5 py-0.5 rounded bg-slate-900/90 border border-white/25 font-mono font-medium !text-white"
+                      className="px-1.5 py-0.5 rounded bg-charcoal-900/90 border border-charcoal-700 font-mono font-medium text-slate-200"
                     >
                       {ticker}
                     </span>
                   ))}
-                  <span className="!text-slate-300 ml-1">· 3 companies</span>
+                  <span className="text-slate-400 font-mono ml-1">· 3 companies</span>
                 </div>
               </div>
             </Link>
           ))}
         </div>
       </section>
+
+      {/* 7. Live Stock Ticker Ribbon (ForecastPH Trading Landing Page Feature) */}
+      <StockTickerRibbon companies={companies} />
     </div>
   );
 }
