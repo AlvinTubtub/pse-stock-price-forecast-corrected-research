@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "node scripts/test-models-page.cjs",
-    "test:all": "node scripts/test-models-page.cjs && node scripts/test-operational-data.cjs"
+    "test": "node scripts/test-models-page.cjs && node scripts/smoke-test-compare.cjs",
+    "test:all": "node scripts/test-models-page.cjs && node scripts/smoke-test-compare.cjs && node scripts/test-operational-data.cjs"
   },
   "dependencies": {
     "@google/genai": "^2.17.1",

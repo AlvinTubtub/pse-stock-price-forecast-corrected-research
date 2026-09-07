@@ -220,9 +220,7 @@ export async function buildLiveContext(): Promise<string> {
  * Builds a compact context string for Model Performance & Comparison (/compare).
  */
 export async function buildCompareContext(): Promise<string> {
-  const [formal, metrics, companies] = await Promise.all([
-    getFormalStudy(), getMetrics(), getCompanies(),
-  ]);
+  const formal = await getFormalStudy();
   if (!formal) return `[Context: Model Results]\nThe approved formal-study dataset is unavailable.`;
 
   const modelSummary = formal.methodology.models.map((model) => {
@@ -236,7 +234,6 @@ export async function buildCompareContext(): Promise<string> {
   const significant = formal.conclusion.significantVsNaive
     .map((row) => `${row.symbol}: ${formal.methodology.modelLabels[row.model]} (Holm p=${formatNum(row.adjustedPValue, 6)})`)
     .join("; ");
-  const operationalModels = companies.map((company) => `${company.symbol}: ${company.bestModel}`).join(", ");
 
   return `[Context: Formal Study Model Performance]
 Formal study:
