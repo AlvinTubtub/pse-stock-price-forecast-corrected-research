@@ -1193,7 +1193,7 @@ export default function LearnStocksPage() {
               <h4 className="font-bold text-slate-900 dark:text-slate-200 uppercase tracking-wide">Research Governance & Dual-Track Separation:</h4>
               <ul className="list-disc list-inside space-y-1 text-slate-600 dark:text-slate-300">
                 <li><strong className="text-slate-900 dark:text-white">Formal Benchmark Track:</strong> Frozen cross-validation folds (5 expanding-window folds) evaluated with non-parametric hypothesis tests (Friedman test, Wilcoxon signed-rank test with Holm correction).</li>
-                <li><strong className="text-slate-900 dark:text-white">Production Refresh Track:</strong> Approved deployment configurations are refitted monthly to serve daily live predictions without mutating formal research baselines. Retuning and promotion remain separate manual decisions.</li>
+                <li><strong className="text-slate-900 dark:text-white">Production Refresh Track:</strong> Daily forecasts load persisted models without training. The fixed Run 02 configurations have one authorized refit on November 3, 2026; later refreshes require new review and authorization. Immutable research evidence and versioned operational deployments remain separate.</li>
                 <li><strong className="text-slate-900 dark:text-white">Baseline Naive Benchmark:</strong> Every formal model is evaluated against the random-walk Naive benchmark (tomorrow&apos;s price = today&apos;s price). MASE below one is a useful scale comparison, but statistical improvement requires the declared benchmark-first test.</li>
               </ul>
             </div>

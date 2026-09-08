@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "approval_id": "RUN02_AUTH_20260908_01",
+  "formal_run_id": "FORMAL_CORRECTED_20260828_02",
+  "authorized_at": "2026-09-08T10:45:08Z",
+  "authority": "Repository owner authorization in the repair-and-release handoff received 2026-09-08",
+  "scopes": [
+    "production_inference",
+    "scheduled_refresh"
+  ],
+  "configuration_policy": "Exact fixed configurations and selected model families from FORMAL_CORRECTED_20260828_02 only",
+  "challenger_retuning_authorized": false,
+  "automatic_promotion_authorized": false,
+  "supersedes": "manual_local_operational_generation approval embedded in RUN02_OPS_20260907_01",
+  "notes": "The superseded approval remains unchanged in backend/models/deployment/current/deployment_manifest.json for auditability."
+}

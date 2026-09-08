@@ -582,8 +582,8 @@ Tuesday–Friday:
 The daily inference uses persisted deployment models and generates next-session forecasts from the latest validated OHLCV data.
 
 Scheduled Model Refresh
-Methodology cadence:
-00:00 UTC on the 1st of each month (`0 0 1 * *`). Remote push and automated deployment remain disabled during review.
+One-time authorized execution:
+November 3, 2026 at 08:00 Asia/Manila (`0 0 3 11 *`) with an explicit `2026-11-03` UTC year guard.
 
 The scheduled refresh workflow updates:
 
@@ -591,7 +591,10 @@ Lag-Informed Regression
 ARIMA
 LSTM
 
-and refreshes model evaluation and deployment-selection artifacts under the strict refresh lifecycle.
+using the fixed Run 02 selected configurations. It creates a complete immutable
+deployment version and atomically replaces the active pointer only after all 15
+artifacts pass reload, hash, configuration, lineage, and prediction checks. It
+does not change formal evidence, retune challengers, or overwrite issued forecasts.
 
 23. Data Integrity
 

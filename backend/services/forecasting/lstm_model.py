@@ -777,5 +777,8 @@ def refit_frozen_lstm(df: pd.DataFrame, frozen: dict) -> dict:
     X, y = _scale_sequences(np.stack(samples["sequence"]), samples["target_delta"].to_numpy(), scaler)
     model = _train_fixed_epochs(X, y, config, epochs=frozen["fixed_epochs"], seed=frozen["seed"])
     log.info("Frozen LSTM refit: %d sequences, %d epochs, seed=%d", len(samples), frozen["fixed_epochs"], frozen["seed"])
-    return {"artifact_version": 2, "input_design": FORMAL_INPUT_DESIGN, "state_dict": model.state_dict(),
-            "input_size": 1, "seq_len": config.lookback, "hidden_size": config.hidden_size, "delta_scaler": scaler}
+    return {"artifact_version": 3, "input_design": FORMAL_INPUT_DESIGN, "state_dict": model.state_dict(),
+            "input_size": 1, "seq_len": config.lookback, "hidden_size": config.hidden_size,
+            "learning_rate": config.learning_rate, "batch_size": config.batch_size,
+            "fixed_epochs": int(frozen["fixed_epochs"]), "training_seed": int(frozen["seed"]),
+            "delta_scaler": scaler}

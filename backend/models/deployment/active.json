@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "deployment_version": "RUN02_OPS_20260908_105811Z",
+  "manifest": "versions/RUN02_OPS_20260908_105811Z/manifest.json",
+  "manifest_sha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
+  "activated_at": "2026-09-08T18:58:11.732894+08:00",
+  "previous_deployment_version": "RUN02_OPS_20260907_01"
+}

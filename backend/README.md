@@ -1,9 +1,6 @@
-> **Run 02 operational control (September 7, 2026):** The active approved mapping is
-> `RUN02_OPS_20260907_01`. Manual operations now require the versioned manifest and
-> refit its frozen choices. Full generation remains pending; ALI/BPI smoke results
-> are development-only. Remote workflows, schedules, automatic promotion and
-> publishing are disabled. Earlier scheduling/persisted-model descriptions below
-> describe the legacy pipeline and are superseded by the promotion review.
+> **Run 02 operational control (September 8, 2026):** Daily inference uses one
+> fixed, persisted, hash-checked deployment and invokes no training. Operational
+> refreshes build immutable version directories and activate them atomically.
 >
 > See [promotion mapping, safety rules, tests and run commands](../reports/run02-promotion/REVIEW.md).
 
@@ -44,7 +41,7 @@ and runs as the last step of both GitHub Actions workflows below.
 ## Architecture
 
 ```text
-Cron-job.org (Mon–Fri, 4:00 PM PHT)         GitHub Actions cron (Sun, 8:00 AM PHT)
+Cron-job.org (Mon 17:30; Tue–Fri 16:00)     GitHub Actions (2026-11-03 08:00 PHT)
         │  POST repository_dispatch                  │  schedule trigger
         ▼                                             ▼
 .github/workflows/update_pipeline.yml       .github/workflows/train_models.yml
@@ -55,7 +52,7 @@ run_pipeline.py --no-train                  model_selector --mode deployment-ref
   2. Extract and validate PDF tables           2. Refit Lag Regression, ARIMA, and LSTM
   3. Update OHLCV datasets                        without retuning or formal evaluation
      (data/raw/<SYMBOL>.csv)                   3. Preserve approved model families and metrics
-  4. Update latest_processed.json              4. Update deployment models + operational cache
+  4. Update latest_processed.json              4. Atomically activate a versioned deployment
         │
         ▼
 Commit changed artifacts only
@@ -74,7 +71,7 @@ Commit changed artifacts only
 ```
 
 Data and inference refresh daily on trading days; approved deployment
-configurations are refitted monthly — see
+configurations have one authorized refit on November 3, 2026 — see
 "Automated Pipeline" below for why, and the runtime numbers behind that
 split.
 
@@ -156,7 +153,7 @@ dates in peso terms.
 
 Deployment refresh is decoupled from data ingestion and formal evaluation:
 `refresh_deployment_all()` is called directly by
-`.github/workflows/train_models.yml` (monthly), *not* by every run of
+`.github/workflows/train_models.yml` (one-time, year-guarded), *not* by every run of
 `services/pdf_pipeline/pipeline.py`/`run_pipeline.py` (Fast Pipeline,
 Monday-Friday — see "Automated Pipeline" below for the full split and
 why). `run_pipeline.py` still supports training inline via its
@@ -228,8 +225,8 @@ resumed run. If no reviewed registry is supplied, the formal evidence records
 that limitation rather than claiming that no events occurred.
 
 The expensive ARIMA and LSTM searches run only during explicitly requested
-manual challenger retuning or formal research. The Sunday workflow performs
-refresh only and fails if approved configuration metadata is unavailable.
+manual challenger retuning or formal research. The one-time workflow performs
+fixed-configuration refresh only and fails without scheduled-refresh authorization.
 
 ## Project Structure
 
@@ -311,12 +308,11 @@ run daily:
 | Trigger | External: [Cron-job.org](https://cron-job.org) `repository_dispatch` (no GitHub-native cron) | GitHub Actions' own `schedule: cron` |
 | Dependencies | `backend/requirements-fast.txt` (pandas/numpy/pdfplumber/requests) | `backend/requirements-pipeline.txt` (adds scikit-learn/statsmodels/torch) |
 | Typical runtime | A couple of minutes | Refit-dependent; no scheduled ARIMA/LSTM grid search |
-| Commits | `backend/data/raw/`, `backend/latest_processed.json`, `frontend/public/forecasts/` | `backend/models/deployment/current/`, `backend/prediction_cache/`, `frontend/public/forecasts/` |
+| Commits | `backend/data/raw/`, `backend/latest_processed.json`, `backend/operational/current.json`, `frontend/public/forecasts/` | `backend/models/deployment/versions/`, `backend/models/deployment/active.json`, approval record, and validated exports |
 
 Both share the `pse-pipeline` concurrency group, so they queue instead of
-racing each other if a run overlaps. Since PSE doesn't trade weekends,
-Heavy Training doesn't re-fetch PDFs itself — by Sunday, `data/raw/` is
-already current through Friday's close via the week's Fast Pipeline runs.
+racing each other if a run overlaps. The one-time refresh uses the validated
+official data already present in the checkout.
 
 ### Setting up the Cron-job.org trigger (Fast Pipeline only)
 
@@ -338,10 +334,8 @@ the Fast Pipeline needs Cron-job.org:
 
 **Never commit the PAT to this repository.** Store it only in Cron-job.org's own encrypted request-header field.
 
-GitHub Actions' own cron (used by Deployment Refresh) can be delayed by a few
-minutes during periods of high platform load — not a concern for a
-monthly, non-latency-sensitive job, which is why it is only used there and
-not for the Fast Pipeline's tighter Monday-Friday schedule.
+GitHub Actions' cron for the one-time refresh can be delayed by a few minutes.
+The explicit `2026-11-03` UTC guard prevents recurrence in later years.
 
 ### What each workflow does
 
@@ -362,7 +356,7 @@ not for the Fast Pipeline's tighter Monday-Friday schedule.
 2. Runs `python -m services.model_selector --mode deployment-refresh --strict` (from `backend/`), which refits each approved configuration and preserves existing formal metrics and model-family choices.
 3. Verifies `backend/best_models.json` and `backend/prediction_cache/` were actually populated.
 4. Runs `python backend/scripts/export_forecast_artifacts.py`, which writes `frontend/public/forecasts/*.json`.
-5. Stages `backend/models/deployment/current/`, `backend/prediction_cache/`, and `frontend/public/forecasts/`, then checks `git diff --cached` — same idempotency guarantee as the Fast Pipeline.
+5. Stages the new immutable version, manifest, active pointer, approval record, operational ledger, and validated frontend exports.
 6. If something changed, commits and pushes; Vercel redeploys automatically.
 
 Both workflows are granted only `contents: write` — nothing else.

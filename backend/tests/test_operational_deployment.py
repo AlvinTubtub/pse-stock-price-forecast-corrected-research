@@ -17,7 +17,7 @@ NOW = datetime.fromisoformat("2026-09-08T18:00:00+08:00")
 
 def test_manifest_covers_exact_frozen_mapping():
     manifest, sha = ops.load_manifest()
-    assert sha == ops.REVIEWED_MANIFEST_SHA256
+    assert sha == ops.read_json(ops.ACTIVE_POINTER)["manifest_sha256"]
     assert {s: row["model"] for s, row in manifest["companies"].items()} == {
         "ALI": "lag_reg", "APX": "lag_reg", "BPI": "arima", "GLO": "arima", "ICT": "lstm",
         "JFC": "lag_reg", "MBT": "arima", "MEG": "lag_reg", "MER": "lag_reg", "NIKL": "lag_reg",
@@ -62,7 +62,7 @@ def fast_generation(monkeypatch, tmp_path):
     """Real source validation with a mocked fitter; all writes isolated to pytest tmp."""
     fit = Mock(return_value=20.0)
     monkeypatch.setattr(ops, "refit_predict", lambda df, item, return_artifact=False: (fit(df, item), None) if return_artifact else fit(df, item))
-    monkeypatch.setattr(ops, "predict_persisted", lambda df, symbol, item: fit(df, item))
+    monkeypatch.setattr(ops, "predict_persisted", lambda df, symbol, item, **_kwargs: fit(df, item))
     return tmp_path, fit
 
 
@@ -187,7 +187,7 @@ def test_export_preserves_formal_results_and_rejects_smoke(fast_generation, monk
     formal.write_bytes(b"immutable formal")
     ops.generate(output=output, now=NOW)
     exporter.export_operational(destination)
-    assert ops.read_json(destination / "operational.json")["deploymentVersion"] == ops.PROMOTION
+    assert ops.read_json(destination / "operational.json")["deploymentVersion"] == ops.load_manifest()[0]["deployment_version"]
     before = (destination / "operational.json").read_bytes()
     invalid = ops.read_json(output / "current.json")
     invalid["developmentOnly"] = True

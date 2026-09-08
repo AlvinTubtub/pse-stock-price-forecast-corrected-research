@@ -40,6 +40,7 @@ class LagRegressionArtifact:
     pacf_selected_lags: list[int] = field(default_factory=list)
     selected_features: list[str] = field(default_factory=list)
     alpha: float = 0.0
+    training_metadata: dict = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -214,6 +215,7 @@ def refit_deployment_lag_regression(
         list(config.pacf_selected_lags),
         selected,
         config.alpha,
+        {"training_rows": int(len(features)), "scaler_fit_rows": int(len(features)), "seed": 42},
     )
 
 

@@ -215,11 +215,13 @@ def main() -> int:
 
     from services.operational_deployment import load_manifest, read_json, validate_batch
     try:
-        manifest, sha = load_manifest()
         operational = FORECASTS_DIR / "operational.json"
         if operational.exists():
-            validate_batch(read_json(operational), manifest, sha)
+            payload = read_json(operational)
+            manifest, sha = load_manifest(version=payload["deploymentVersion"])
+            validate_batch(payload, manifest, sha)
         else:
+            load_manifest(required_scope="production_inference")
             print("[validate] Approved manifest valid; full operational generation pending (legacy snapshot only).")
     except Exception as exc:
         errors.append(f"operational deployment: {exc}")

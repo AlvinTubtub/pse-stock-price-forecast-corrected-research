@@ -213,23 +213,27 @@ export default function NextDayPredictionChart({
     );
   };
 
-  const renderPredictionDot = (color: string) => (props: any) => {
-    const { cx, cy, index } = props;
-    const total = chartData.length;
-    if (index !== total - 1) return <React.Fragment key={index} />;
-    if (cx === undefined || cy === undefined || isNaN(cx) || isNaN(cy)) return <React.Fragment key={index} />;
+  const renderPredictionDot = (color: string) => {
+    const PredictionDot = (props: any) => {
+      const { cx, cy, index } = props;
+      const total = chartData.length;
+      if (index !== total - 1) return <React.Fragment key={index} />;
+      if (cx === undefined || cy === undefined || isNaN(cx) || isNaN(cy)) return <React.Fragment key={index} />;
 
-    return (
-      <circle
-        key={index}
-        cx={cx}
-        cy={cy}
-        r={5}
-        fill={color}
-        stroke="#ffffff"
-        strokeWidth={1.5}
-      />
-    );
+      return (
+        <circle
+          key={index}
+          cx={cx}
+          cy={cy}
+          r={5}
+          fill={color}
+          stroke="#ffffff"
+          strokeWidth={1.5}
+        />
+      );
+    };
+    PredictionDot.displayName = "PredictionDot";
+    return PredictionDot;
   };
 
   return (

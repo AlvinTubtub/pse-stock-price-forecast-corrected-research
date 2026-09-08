@@ -292,7 +292,9 @@ def export_legacy_snapshot() -> None:
     HISTORY_OUT_DIR.mkdir(parents=True, exist_ok=True)
     print("[export] Building frontend artifacts from audited deployment caches.")
 
-    best_models = load_json(BEST_MODELS_PATH, {})
+    # Display the approved operational family, not a stale legacy mapping.
+    from services.operational_deployment import load_manifest
+    operational_manifest, _ = load_manifest()
     latest_processed = load_json(LATEST_PROCESSED_PATH, {})
     statistical_tests = load_json(STAT_TESTS_PATH, {})
 
@@ -320,11 +322,8 @@ def export_legacy_snapshot() -> None:
         next_close = cache["next_close"]
 
         previous_close = round(float(df["Close"].iloc[-1]), 2)
-        winning_model_label = best_models.get(symbol) or MODEL_LABELS[best_model_id(metrics)]
-        winning_model_id = next(
-            (mid for mid, label in MODEL_LABELS.items() if label == winning_model_label),
-            best_model_id(metrics),
-        )
+        winning_model_id = operational_manifest["companies"][symbol]["model"]
+        winning_model_label = MODEL_LABELS[winning_model_id]
         # next_close keys are shortened ("lag" not "lag_reg") in the cache
         next_close_key = {"lag_reg": "lag", "arima": "arima", "lstm": "lstm"}.get(winning_model_id)
         predicted_close = round(float(next_close.get(next_close_key, previous_close)), 2) if next_close_key else previous_close

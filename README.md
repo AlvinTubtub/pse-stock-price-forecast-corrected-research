@@ -1,9 +1,8 @@
-> **Run 02 operational control (September 7, 2026):** The active approved mapping is
-> `RUN02_OPS_20260907_01`. Manual operations now require the versioned manifest and
-> refit its frozen choices. Full generation remains pending; ALI/BPI smoke results
-> are development-only. Remote workflows, schedules, automatic promotion and
-> publishing are disabled. Earlier scheduling/persisted-model descriptions below
-> describe the legacy pipeline and are superseded by the promotion review.
+> **Run 02 operational control (September 8, 2026):** Production uses an atomic
+> pointer to immutable deployments under `backend/models/deployment/versions/`.
+> Daily inference loads persisted, hash-checked artifacts and never trains. The
+> fixed Run 02 configurations have explicit production-inference and one-time
+> scheduled-refresh authorization; challenger retuning and promotion stay separate.
 >
 > See [promotion mapping, safety rules, tests and run commands](reports/run02-promotion/REVIEW.md).
 
@@ -540,14 +539,16 @@ the model error or price movement is large.
 
 Operational models are separate from formal research artifacts.
 
-Expected layout:
+Versioned layout:
 
 ```text
-backend/models/deployment/current/
-├── lag_regression/
-├── arima/
-├── lstm/
-└── deployment_manifest.json
+backend/models/deployment/
+├── active.json
+├── approvals/
+├── versions/<DEPLOYMENT_VERSION>/
+│   ├── artifacts/
+│   └── manifest.json
+└── current/  # superseded record retained for audit
 ```
 
 Deployment models may be retrained according to the production schedule.
@@ -926,7 +927,7 @@ The intended live forecasting workflow is:
 1. Obtain newest PSE market data
 2. Validate and preprocess data
 3. Update deployment dataset
-4. Use current deployment models or retrain when scheduled
+4. Use the single active persisted deployment for inference
 5. Generate next-session predictions
 6. Generate deployment backtests
 7. Align backtest target dates
@@ -944,12 +945,12 @@ This ensures the dashboard reflects backend-generated results rather than manual
 
 ForecastPH separates model retraining from normal daily forecasting.
 
-### Monthly Deployment Refitting
+### One-Time Deployment Refitting
 
 Scheduled:
 
 ```text
-Day 3 of each month — 8:00 AM PHT
+November 3, 2026 — 8:00 AM PHT
 ```
 
 The scheduled refresh should:
@@ -965,6 +966,8 @@ This job does not rerun the formal experiment, retune hyperparameters, or
 automatically promote challengers. Retuning is a separate researcher-initiated
 process and should normally wait for substantially more prospective evidence
 (approximately 60 new sessions unless a predeclared drift trigger is met).
+The workflow has a 2026 date guard. After that date, refreshes require a new,
+explicitly reviewed authorization and workflow change; no recurring refresh is implied.
 
 ---
 

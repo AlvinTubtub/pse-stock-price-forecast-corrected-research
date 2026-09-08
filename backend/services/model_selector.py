@@ -570,7 +570,11 @@ def refresh_deployment_all(raw_dir: Path = RAW_DIR, *, strict: bool = False) -> 
         kwargs["strict"] = True
         kwargs["mode"] = "refresh"
     payload = generate(**kwargs)
-    return {symbol: row["model"] for symbol, row in payload["forecasts"].items()}
+    if "forecasts" in payload:  # compatibility with pre-versioned refresh payloads
+        return {symbol: row["model"] for symbol, row in payload["forecasts"].items()}
+    from services.operational_deployment import load_manifest
+    manifest, _ = load_manifest(version=payload["deploymentVersion"], required_scope="scheduled_refresh")
+    return {symbol: row["model"] for symbol, row in manifest["companies"].items()}
 
 
 def _legacy_refresh_deployment_all(raw_dir: Path = RAW_DIR, *, strict: bool = False) -> dict[str, str]:
