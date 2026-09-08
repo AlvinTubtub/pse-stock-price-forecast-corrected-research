@@ -20,32 +20,35 @@
 ## Storage Policy & Retrieval
 
 > [!NOTE]
-> **Off-Repository Storage Policy**: The complete formal evidence archive containing all cross-validation fold models, full prediction series, and tuning histories is kept off the Git commit tree to prevent repository bloat and maintain git operational performance.
+> **Off-Repository Storage Policy**: The complete formal evidence archive containing all checkpoints, per-company holdout predictions, cross-validation metrics, and tuning diagnostics is kept off the Git commit tree to prevent repository bloat and maintain git operational performance.
 >
-> The compiled research results, summary metrics, statistical hypothesis test tables, and manuscript acceptance documentation are committed directly in `results/formal/FORMAL_CORRECTED_20260828_02/` and `reports/FORMAL_CORRECTED_20260828_02/`.
+> The formal evidence archive is supplied and verified through the checksum-verified GitHub Release asset [`formal-corrected-20260828-02`](https://github.com/AlvinTubtub/pse-stock-price-forecast-corrected-research/releases/tag/formal-corrected-20260828-02). The formal study summary is committed in `frontend/public/forecasts/formal/FORMAL_CORRECTED_20260828_02.json`, and research reports are in `reports/FORMAL_CORRECTED_20260828_02/`.
 >
-> **Release Availability**: The formal evidence archive is officially published as a release asset under tag [`formal-corrected-20260828-02`](https://github.com/AlvinTubtub/pse-stock-price-forecast-corrected-research/releases/tag/formal-corrected-20260828-02).
->
-> Anyone can download and independently verify this package at any time.
+> Anyone can download and independently verify the complete archive package at any time.
 
 ---
 
 ## Expected Archive Structure
 
-When retrieved, the archive package (ZIP or tarball) must have root-level or top-directory containment under the formal run identifier:
+When retrieved, the archive package (`FORMAL_CORRECTED_20260828_02_results.tar.gz`, 189 members) has top-directory containment under the formal run identifier with the following verified structure:
 
 ```text
 FORMAL_CORRECTED_20260828_02/
-├── summary.json
-├── run_manifest.json
-├── metrics.json
 ├── statistical_tests.json
-├── corporate_actions_sensitivity.json
-├── per_company/
+├── run_state.json
+├── split_manifest.json
+├── finalized.json
+├── methodology_manifest.json
+├── data_manifest.json
+├── .checkpoints/
 │   ├── ALI/
-│   │   ├── cv_results.json
+│   │   ├── metrics.json
 │   │   ├── holdout_predictions.csv
-│   │   └── diagnostics.json
+│   │   ├── source_data.json
+│   │   ├── development_close.json
+│   │   ├── complete.json
+│   │   ├── diagnostics.json
+│   │   └── plan.json
 │   ├── APX/
 │   ├── BPI/
 │   ├── GLO/
@@ -60,10 +63,25 @@ FORMAL_CORRECTED_20260828_02/
 │   ├── SECB/
 │   ├── SHLPH/
 │   └── SMPH/
-└── models/
-    ├── lag_regression/
-    ├── arima/
-    └── lstm/
+└── per_company/
+    ├── ALI/
+    │   ├── metrics.json
+    │   ├── holdout_predictions.csv
+    │   └── diagnostics.json
+    ├── APX/
+    ├── BPI/
+    ├── GLO/
+    ├── ICT/
+    ├── JFC/
+    ├── MBT/
+    ├── MEG/
+    ├── MER/
+    ├── NIKL/
+    ├── PGOLD/
+    ├── SCC/
+    ├── SECB/
+    ├── SHLPH/
+    └── SMPH/
 ```
 
 ---

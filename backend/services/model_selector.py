@@ -565,7 +565,11 @@ def train_and_select_all(raw_dir: Path = RAW_DIR, *, strict: bool = False) -> di
 def refresh_deployment_all(raw_dir: Path = RAW_DIR, *, strict: bool = False) -> dict[str, str]:
     """Approved Run 02 operational entrypoint; legacy artifact policies cannot select models."""
     from services.operational_deployment import generate
-    payload = generate(raw_dir=raw_dir)
+    kwargs = {"raw_dir": raw_dir}
+    if strict:
+        kwargs["strict"] = True
+        kwargs["mode"] = "refresh"
+    payload = generate(**kwargs)
     return {symbol: row["model"] for symbol, row in payload["forecasts"].items()}
 
 

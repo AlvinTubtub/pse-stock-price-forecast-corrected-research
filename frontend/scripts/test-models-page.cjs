@@ -308,7 +308,7 @@ require.extensions['.ts'] = function (module, filename) {
 
   // Test MASE summary (beating naive < 1.0)
   const summaryMase = calculateSummary(dashboardData.companies, 'mase', defaultVisible);
-  assert.ok(summaryMase.beatsNaiveCount > 0, 'There should be models beating naive with MASE < 1.0');
+  assert.ok(summaryMase.belowNaiveScaleCount > 0, 'There should be models beating naive with MASE < 1.0');
 
   // 11. Test safe formatting of null, undefined, NaN, and Infinity
   assert.equal(safeFormatMetric(undefined), null);

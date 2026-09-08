@@ -185,7 +185,7 @@ export function calculateSummary(
     naive: 0,
   };
   let totalEvaluated = 0;
-  let beatsNaiveCount = 0;
+  let belowNaiveScaleCount = 0;
 
   for (const c of filteredCompanies) {
     let bestVal = metricMeta.direction === "lower" ? Infinity : -Infinity;
@@ -214,17 +214,17 @@ export function calculateSummary(
       totalEvaluated += 1;
     }
 
-    // Check naive outperformance for principal models
+    // Check naive scaling / outperformance for principal models
     const naiveVal = c.metrics.naive?.[selectedMetric];
     for (const m of PRINCIPAL_MODELS) {
       if (!visibleModels[m]) continue;
       const val = c.metrics[m]?.[selectedMetric];
       if (val != null && Number.isFinite(val)) {
         if (selectedMetric === "mase") {
-          if (val < 1.0) beatsNaiveCount += 1;
+          if (val < 1.0) belowNaiveScaleCount += 1;
         } else if (naiveVal != null && Number.isFinite(naiveVal)) {
           if (metricMeta.direction === "lower" ? val < naiveVal : val > naiveVal) {
-            beatsNaiveCount += 1;
+            belowNaiveScaleCount += 1;
           }
         }
       }
@@ -244,7 +244,7 @@ export function calculateSummary(
     winnerModel: maxWins > 0 ? topModel : null,
     wins,
     totalEvaluated,
-    beatsNaiveCount,
+    belowNaiveScaleCount,
     medians: calculateMedians(filteredCompanies, selectedMetric),
   };
 }

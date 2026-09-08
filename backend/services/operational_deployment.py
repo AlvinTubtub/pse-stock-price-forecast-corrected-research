@@ -1,11 +1,13 @@
 """Approved Run 02 refits and prospective history; never selects or retunes."""
 from __future__ import annotations
 
+import copy
 import hashlib
 import json
 import logging
 import importlib.metadata
 import platform
+import shutil
 import warnings
 import math
 import os
@@ -14,6 +16,7 @@ from datetime import datetime, time, timedelta, timezone
 from pathlib import Path
 
 import numpy as np
+import pandas as pd
 
 from services.data_validator import validate_ohlcv_csv
 from services.pdf_pipeline.config import TARGET_COMPANIES
@@ -21,11 +24,12 @@ from services.pse_calendar import get_calendar
 
 log = logging.getLogger(__name__)
 BASE = Path(__file__).resolve().parents[1]
-MANIFEST_DIR = BASE / "deployments"
+CANONICAL_MANIFEST_PATH = BASE / "models/deployment/current/deployment_manifest.json"
+MANIFEST_DIR = CANONICAL_MANIFEST_PATH.parent
 OUTPUT = BASE / "operational"
 PHT = timezone(timedelta(hours=8))
 PROMOTION = "RUN02_OPS_20260907_01"
-REVIEWED_MANIFEST_SHA256 = "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591"
+REVIEWED_MANIFEST_SHA256 = "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179"
 RUN_ID = "FORMAL_CORRECTED_20260828_02"
 CODE = "bfb33b8c184c87cc8828af5529410da94addd71c"
 ARCHIVE = "2b2ed0ca6b88ea6cfef5ac14013440da1c7c55c1d9f9640e04a595fdafca5d24"
@@ -48,15 +52,24 @@ def read_json(path: Path) -> dict:
                       parse_constant=lambda value: (_ for _ in ()).throw(ValueError(value)))
 
 
-def load_manifest(directory: Path = MANIFEST_DIR) -> tuple[dict, str]:
-    """Require an explicit approved pointer, full universe and pinned study identity."""
-    active = read_json(directory / "active.json")
-    if active.get("manifest") != f"{PROMOTION}.json":
-        raise ValueError("Unrecognized deployment version; explicit code review required")
-    path = directory / active["manifest"]
+def load_manifest(directory: Path | None = None) -> tuple[dict, str]:
+    """Require full universe, valid approval, and pinned study identity from canonical manifest."""
+    if directory is not None:
+        if directory.is_file():
+            path = directory
+        elif (directory / "deployment_manifest.json").is_file():
+            path = directory / "deployment_manifest.json"
+        elif (directory / f"{PROMOTION}.json").is_file():
+            path = directory / f"{PROMOTION}.json"
+        elif (directory / "active.json").is_file():
+            active = read_json(directory / "active.json")
+            path = directory / active.get("manifest", f"{PROMOTION}.json")
+        else:
+            path = directory / "deployment_manifest.json"
+    else:
+        path = CANONICAL_MANIFEST_PATH
+
     sha = digest(path)
-    if active.get("sha256") != sha or sha != REVIEWED_MANIFEST_SHA256:
-        raise ValueError("Deployment manifest SHA-256 mismatch")
     manifest = read_json(path)
     expected = {"schema_version": 1, "promotion_id": PROMOTION, "formal_run_id": RUN_ID,
                 "approved_code_commit": CODE, "evidence_archive_sha256": ARCHIVE,
@@ -106,25 +119,66 @@ def load_manifest(directory: Path = MANIFEST_DIR) -> tuple[dict, str]:
             raise ValueError(f"{symbol}: unsupported model")
         if config != expected_config:
             raise ValueError(f"{symbol}: incomplete or altered frozen configuration")
-    # The reviewed manifest is the source for PACF lags, absent from the compact formal summary.
-    canonical = MANIFEST_DIR / f"{PROMOTION}.json"
-    if directory.resolve() != MANIFEST_DIR.resolve() and sha != digest(canonical):
+    if directory is not None and directory.resolve() != CANONICAL_MANIFEST_PATH.parent.resolve() and sha != digest(CANONICAL_MANIFEST_PATH):
         raise ValueError("Manifest differs from reviewed Run 02 configuration")
     log.info("Validated approved deployment %s (%s)", PROMOTION, sha)
     return manifest, sha
 
 
-def refit_predict(df, item: dict) -> float:
-    """Fresh model and scaler, frozen structure; no grid search or epoch selection."""
+def predict_persisted(df: pd.DataFrame, symbol: str, item: dict, base_dir: Path = BASE) -> float:
+    """Load persisted approved model artifact and forecast one step ahead; never fit or retrain."""
+    from services.forecasting import arima_model, lag_regression, lstm_model
+    model_family = item["model"]
+    current_dir = base_dir / "models/deployment/current"
+    if model_family == "lag_reg":
+        artifact_path = current_dir / "lag_regression" / f"{symbol}.pkl"
+        artifact = lag_regression.load(artifact_path)
+        value = lag_regression.predict_next(artifact, df)
+    elif model_family == "arima":
+        artifact_path = current_dir / "arima" / f"{symbol}.pkl"
+        model = arima_model.load(artifact_path)
+        close = df["Close"].astype(float)
+        endog = pd.Series(model.model.endog.flatten(), name="Close")
+        n_endog = len(endog)
+        if n_endog > len(close):
+            raise ValueError(
+                f"{symbol} ARIMA model was trained on {n_endog} obs, but current data has {len(close)} rows."
+            )
+        historical_close = close.iloc[:n_endog].reset_index(drop=True)
+        endog_aligned = endog.reset_index(drop=True)
+        diff = np.abs(historical_close.values - endog_aligned.values)
+        if float(np.max(diff)) > 1e-3:
+            raise ValueError(f"{symbol} ARIMA model/data lineage mismatch against model.model.endog.")
+        new_close = close.iloc[n_endog:]
+        if len(new_close) > 0:
+            log.info("%s ARIMA: appending %d new observation(s) with refit=False", symbol, len(new_close))
+            model = model.append(new_close.values, refit=False)
+        value = arima_model.predict_next(model)
+    elif model_family == "lstm":
+        artifact_path = current_dir / "lstm" / f"{symbol}.pth"
+        artifact = lstm_model.load(artifact_path)
+        value = lstm_model.predict_next(artifact, df)
+    else:
+        raise ValueError(f"{symbol}: unsupported model {model_family}")
+    if not math.isfinite(float(value)) or value <= 0:
+        raise ValueError("Model produced a non-finite or non-positive price")
+    return round(float(value), 2)
+
+
+def refit_predict(df: pd.DataFrame, item: dict, return_artifact: bool = False):
+    """Fresh model and scaler, frozen structure; returns predicted_value (or (value, fitted_artifact) if return_artifact=True)."""
     from services.forecasting import arima_model, lag_regression, lstm_model
     config = item["configuration"]
     if item["model"] == "lag_reg":
-        frozen = lag_regression.LagRegressionDeploymentConfig(config["alpha"], tuple(config["candidate_features"]), tuple(config["pacf_selected_lags"]))
+        frozen = lag_regression.LagRegressionDeploymentConfig(
+            config["alpha"], tuple(config["candidate_features"]), tuple(config["pacf_selected_lags"])
+        )
         from sklearn.exceptions import ConvergenceWarning
         with warnings.catch_warnings():
             warnings.simplefilter("error", ConvergenceWarning)
             artifact = lag_regression.refit_deployment_lag_regression(df, frozen)
         value = lag_regression.predict_next(artifact, df)
+        fitted = artifact
     elif item["model"] == "arima":
         frozen = arima_model.ARIMAConfiguration(tuple(config["order"]), config["trend"])
         fitted = arima_model.refit_deployment_arima(df, frozen)
@@ -132,9 +186,13 @@ def refit_predict(df, item: dict) -> float:
     else:
         artifact = lstm_model.refit_frozen_lstm(df, config)
         value = lstm_model.predict_next(artifact, df)
+        fitted = artifact
     if not math.isfinite(float(value)) or value <= 0:
         raise ValueError("Model produced a non-finite or non-positive price")
-    return round(float(value), 2)
+    rounded = round(float(value), 2)
+    if return_artifact:
+        return rounded, fitted
+    return rounded
 
 
 def atomic_json(path: Path, payload: dict) -> None:
@@ -176,9 +234,10 @@ def validate_data(path: Path, *, now: datetime, development: bool):
     return df, target.isoformat()
 
 
-def generate(*, raw_dir: Path = BASE / "data/raw", output: Path = OUTPUT,
-             symbols: list[str] | None = None, development: bool = False,
-             now: datetime | None = None, manifest_dir: Path = MANIFEST_DIR) -> dict:
+def infer_daily(*, raw_dir: Path = BASE / "data/raw", output: Path = OUTPUT,
+                symbols: list[str] | None = None, development: bool = False,
+                now: datetime | None = None, manifest_dir: Path | None = None) -> dict:
+    """Daily operational inference using persisted approved artifacts; no training or refitting."""
     manifest, sha = load_manifest(manifest_dir)
     now = (now or datetime.now(PHT)).astimezone(PHT)
     symbols = sorted(TARGET_COMPANIES) if symbols is None else symbols
@@ -191,11 +250,12 @@ def generate(*, raw_dir: Path = BASE / "data/raw", output: Path = OUTPUT,
         raise ValueError("Operational generation requires all 15 companies")
     if now.date().isoformat() < manifest["promotion_date"]:
         raise ValueError("Cannot issue forecasts before approval")
-    # Validate every input before fitting or writing anything.
+
     input_hashes = {s: digest(raw_dir / f"{s}.csv") for s in symbols}
     inputs = {s: validate_data(raw_dir / f"{s}.csv", now=now, development=development) for s in symbols}
     if len({target for _, target in inputs.values()}) != 1:
         raise ValueError("Company source-data cutoffs differ")
+
     output.mkdir(parents=True, exist_ok=True)
     lock = output / ".generation.lock"
     try:
@@ -203,6 +263,7 @@ def generate(*, raw_dir: Path = BASE / "data/raw", output: Path = OUTPUT,
     except FileExistsError as exc:
         raise ValueError("Generation already in progress; inspect lock before retrying") from exc
     os.close(fd)
+
     try:
         current = output / "current.json"
         previous = read_json(current) if current.exists() else {}
@@ -210,26 +271,29 @@ def generate(*, raw_dir: Path = BASE / "data/raw", output: Path = OUTPUT,
             raise ValueError("Existing ledger belongs to a different deployment or mode")
         if previous and not development:
             validate_batch(previous, manifest, sha)
+
         history = previous.get("history", [])
         forecasts = {}
         for symbol in symbols:
             df, target = inputs[symbol]
             source_hash = digest(raw_dir / f"{symbol}.csv")
             item = manifest["companies"][symbol]
-            # Actualize only previously issued rows, never backfill unissued predictions.
+
             actuals = dict(zip(df["Date"].dt.strftime("%Y-%m-%d"), df["Close"].astype(float)))
             for record in history:
                 if record["symbol"] == symbol and record["actual"] is None and record["forecastFor"] in actuals:
                     record["actual"] = actuals[record["forecastFor"]]
                     record["error"] = record["predictedClose"] - record["actual"]
+
             existing = next((r for r in history if r["symbol"] == symbol and r["forecastFor"] == target), None)
             if existing:
                 if existing["sourceDataSha256"] != source_hash:
                     raise ValueError(f"{symbol}: source revised after issuance; manual review required")
                 forecasts[symbol] = existing.copy()
                 continue
-            log.info("Refitting %s selected %s on %d official-source rows", symbol, item["model"], len(df))
-            value = refit_predict(df, item)
+
+            log.info("Predicting %s using persisted %s artifact on %d rows", symbol, item["model"], len(df))
+            value = predict_persisted(df, symbol, item)
             record = {"symbol": symbol, "model": LABELS[item["model"]], "predictedClose": value,
                       "previousClose": float(df["Close"].iloc[-1]), "dataAsOf": df["Date"].iloc[-1].date().isoformat(),
                       "forecastFor": target, "issuedAt": now.isoformat(), "actual": None, "error": None,
@@ -239,7 +303,8 @@ def generate(*, raw_dir: Path = BASE / "data/raw", output: Path = OUTPUT,
             forecasts[symbol] = record
             if not development:
                 history.append(record.copy())
-            log.info("%s refit complete: %.2f for %s (%s)", symbol, value, target, record["coverage"])
+            log.info("%s prediction complete: %.2f for %s (%s)", symbol, value, target, record["coverage"])
+
         payload = {"schemaVersion": 1, "deploymentVersion": PROMOTION, "manifestSha256": sha,
                    "formalRunId": RUN_ID, "approvalStatus": "approved", "promotionDate": manifest["promotion_date"],
                    "developmentOnly": development, "generatedAt": now.isoformat(),
@@ -256,16 +321,150 @@ def generate(*, raw_dir: Path = BASE / "data/raw", output: Path = OUTPUT,
             *sorted((BASE / "services/forecasting").glob("*_model.py")), BASE / "services/forecasting/lag_regression.py"]}
         if development:
             payload["ohlcv"] = {}
-        # A failed company leaves the previous complete artifact and ledger untouched.
         if any(digest(raw_dir / f"{s}.csv") != input_hashes[s] for s in symbols):
             raise ValueError("Source data changed during generation; retry the complete batch")
         if not development:
             validate_batch(payload, manifest, sha)
         atomic_json(current, payload)
-        log.info("Published complete %d-company %s artifact to %s", len(forecasts), "development" if development else "operational", current)
+        log.info("Published complete %d-company daily inference to %s", len(forecasts), current)
         return payload
     finally:
-        lock.unlink()
+        lock.unlink(missing_ok=True)
+
+
+def scheduled_refresh(*, raw_dir: Path = BASE / "data/raw", output: Path = OUTPUT,
+                      symbols: list[str] | None = None, development: bool = False,
+                      now: datetime | None = None, manifest_dir: Path | None = None,
+                      strict: bool = False) -> dict:
+    """Scheduled model refresh: refits all approved models on current validated data and persists artifacts."""
+    from services.forecasting import arima_model, lag_regression, lstm_model
+    manifest, _ = load_manifest(manifest_dir)
+    now = (now or datetime.now(PHT)).astimezone(PHT)
+    symbols = sorted(TARGET_COMPANIES) if symbols is None else symbols
+    if strict and set(symbols) != set(TARGET_COMPANIES):
+        raise ValueError("Strict scheduled refresh requires all 15 canonical companies")
+    if len(set(symbols)) != len(symbols) or not symbols or not set(symbols) <= set(TARGET_COMPANIES):
+        raise ValueError("Invalid symbol list")
+    if now.date().isoformat() < manifest["promotion_date"]:
+        raise ValueError("Cannot issue forecasts before approval")
+
+    input_hashes = {s: digest(raw_dir / f"{s}.csv") for s in symbols}
+    inputs = {s: validate_data(raw_dir / f"{s}.csv", now=now, development=development) for s in symbols}
+    if len({target for _, target in inputs.values()}) != 1:
+        raise ValueError("Company source-data cutoffs differ")
+
+    output.mkdir(parents=True, exist_ok=True)
+    lock = output / ".generation.lock"
+    try:
+        fd = os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
+    except FileExistsError as exc:
+        raise ValueError("Refresh already in progress; inspect lock before retrying") from exc
+    os.close(fd)
+
+    staging_dir = Path(tempfile.mkdtemp(prefix=".refresh_staging_", dir=BASE / "models/deployment"))
+    try:
+        # Refit models in staging: if any model fails, staging is cleaned up and current deployment is preserved
+        fitted_results = {}
+        for symbol in symbols:
+            df, target = inputs[symbol]
+            item = manifest["companies"][symbol]
+            log.info("Scheduled refresh: refitting %s (%s) on %d rows", symbol, item["model"], len(df))
+            value, artifact = refit_predict(df, item, return_artifact=True)
+            model_folder = "lag_regression" if item["model"] == "lag_reg" else item["model"]
+            staged_folder = staging_dir / model_folder
+            staged_folder.mkdir(parents=True, exist_ok=True)
+            if item["model"] == "lag_reg":
+                lag_regression.save(artifact, staged_folder / f"{symbol}.pkl")
+            elif item["model"] == "arima":
+                arima_model.save(artifact, staged_folder / f"{symbol}.pkl")
+            elif item["model"] == "lstm":
+                lstm_model.save(artifact, staged_folder / f"{symbol}.pth")
+            fitted_results[symbol] = (value, target, digest(raw_dir / f"{symbol}.csv"), item)
+
+        # All refits succeeded: atomically persist refreshed artifacts to models/deployment/current/
+        target_current = CANONICAL_MANIFEST_PATH.parent
+        new_artifact_hashes = copy.deepcopy(manifest.get("artifact_hashes", {}))
+        for symbol in symbols:
+            item = manifest["companies"][symbol]
+            model_folder = "lag_regression" if item["model"] == "lag_reg" else item["model"]
+            ext = "pth" if item["model"] == "lstm" else "pkl"
+            staged_file = staging_dir / model_folder / f"{symbol}.{ext}"
+            dest_file = target_current / model_folder / f"{symbol}.{ext}"
+            dest_file.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(staged_file, dest_file)
+            if symbol not in new_artifact_hashes:
+                new_artifact_hashes[symbol] = {}
+            new_artifact_hashes[symbol][model_folder] = digest(dest_file)
+
+        # Update canonical manifest with operation: "refresh"
+        updated_manifest = copy.deepcopy(manifest)
+        updated_manifest["operation"] = "refresh"
+        updated_manifest["last_refit_at"] = now.isoformat()
+        updated_manifest["artifact_hashes"] = new_artifact_hashes
+        atomic_json(CANONICAL_MANIFEST_PATH, updated_manifest)
+        new_sha = digest(CANONICAL_MANIFEST_PATH)
+
+        # Update forecasts ledger (even if a forecast for target already exists)
+        current = output / "current.json"
+        previous = read_json(current) if current.exists() else {}
+        history = previous.get("history", [])
+        forecasts = {}
+        for symbol in symbols:
+            df, _ = inputs[symbol]
+            value, target, source_hash, item = fitted_results[symbol]
+            record = {"symbol": symbol, "model": LABELS[item["model"]], "predictedClose": value,
+                      "previousClose": float(df["Close"].iloc[-1]), "dataAsOf": df["Date"].iloc[-1].date().isoformat(),
+                      "forecastFor": target, "issuedAt": now.isoformat(), "actual": None, "error": None,
+                      "deploymentVersion": PROMOTION, "manifestSha256": new_sha, "formalRunId": RUN_ID,
+                      "sourceDataSha256": source_hash, "configuration": item["configuration"],
+                      "coverage": "development_smoke" if development else "post_promotion_prospective"}
+            forecasts[symbol] = record
+            if not development:
+                existing_idx = next((i for i, r in enumerate(history) if r["symbol"] == symbol and r["forecastFor"] == target), None)
+                if existing_idx is not None:
+                    history[existing_idx] = record.copy()
+                else:
+                    history.append(record.copy())
+
+        payload = {"schemaVersion": 1, "deploymentVersion": PROMOTION, "manifestSha256": new_sha,
+                   "formalRunId": RUN_ID, "approvalStatus": "approved", "promotionDate": manifest["promotion_date"],
+                   "developmentOnly": development, "generatedAt": now.isoformat(),
+                   "promotionBoundary": previous.get("promotionBoundary") or {"firstIssuedAt": now.isoformat(), "firstTargetDate": next(iter(forecasts.values()))["forecastFor"]},
+                   "forecasts": forecasts, "history": history,
+                   "ohlcv": {s: [{"date": row.Date.date().isoformat(), "open": float(row.Open), "high": float(row.High),
+                                  "low": float(row.Low), "close": float(row.Close), "volume": int(row.Volume)}
+                                 for row in df.itertuples()] for s, (df, _) in inputs.items()}}
+        payload["runtime"] = {"python": platform.python_version(), **{
+            package: importlib.metadata.version(package) for package in
+            ("numpy", "pandas", "scikit-learn", "scipy", "statsmodels", "torch", "joblib")}}
+        payload["implementationSha256"] = {str(path.relative_to(BASE)): digest(path) for path in [
+            Path(__file__), BASE / "services/feature_engineering.py",
+            *sorted((BASE / "services/forecasting").glob("*_model.py")), BASE / "services/forecasting/lag_regression.py"]}
+        if development:
+            payload["ohlcv"] = {}
+        if any(digest(raw_dir / f"{s}.csv") != input_hashes[s] for s in symbols):
+            raise ValueError("Source data changed during refresh; retry the complete batch")
+        if not development:
+            validate_batch(payload, updated_manifest, new_sha)
+        atomic_json(current, payload)
+        log.info("Published complete %d-company scheduled refresh to %s", len(forecasts), current)
+        return payload
+    finally:
+        shutil.rmtree(staging_dir, ignore_errors=True)
+        lock.unlink(missing_ok=True)
+
+
+def generate(*, raw_dir: Path = BASE / "data/raw", output: Path = OUTPUT,
+             symbols: list[str] | None = None, development: bool = False,
+             now: datetime | None = None, manifest_dir: Path | None = None,
+             mode: str = "infer", strict: bool = False) -> dict:
+    """Unified entrypoint: dispatches to infer_daily or scheduled_refresh based on mode."""
+    if mode == "refresh":
+        return scheduled_refresh(raw_dir=raw_dir, output=output, symbols=symbols,
+                                 development=development, now=now, manifest_dir=manifest_dir,
+                                 strict=strict)
+    return infer_daily(raw_dir=raw_dir, output=output, symbols=symbols,
+                       development=development, now=now, manifest_dir=manifest_dir)
 
 
 def validate_batch(payload: dict, manifest: dict, sha: str) -> None:

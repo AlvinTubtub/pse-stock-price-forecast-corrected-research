@@ -147,8 +147,8 @@ def _parse_args() -> argparse.Namespace:
 
 
 def main() -> int:
-    """Ingest official reports, then refit only the approved operational mapping."""
-    from services.operational_deployment import load_manifest, generate
+    """Ingest official reports, then run inference with approved persisted models."""
+    from services.operational_deployment import load_manifest, infer_daily
     args = _parse_args()
     load_manifest()  # fail before ingestion if approval is missing or invalid
     result = run_pipeline(download=args.download, start_date=args.start_date,
@@ -158,9 +158,9 @@ def main() -> int:
         return 1
     if args.run_inference:
         try:
-            generate()
+            infer_daily()
         except Exception as exc:
-            print(f"[pipeline] Approved generation stopped: {exc}")
+            print(f"[pipeline] Approved daily inference stopped: {exc}")
             return 1
     print("[pipeline] Completed; automatic selection and promotion are disabled.")
     return 0

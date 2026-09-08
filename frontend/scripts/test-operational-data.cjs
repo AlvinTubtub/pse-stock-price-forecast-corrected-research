@@ -17,6 +17,7 @@ const data = require(path.join(temp, 'data.cjs'));
 const manifest = JSON.parse(fs.readFileSync(path.join(dest, 'deployment.json')));
 const write = (value) => fs.writeFileSync(path.join(dest, 'operational.json'), JSON.stringify(value));
 (async () => {
+  write({ approvalStatus: 'pending' });
   assert.equal(await data.getOperationalBatch(), null);
   const legacy = await data.getCompanyDetail('ALI');
   const batch = { manifestSha256: require('node:crypto').createHash('sha256').update(fs.readFileSync(path.join(dest, 'deployment.json'))).digest('hex'), deploymentVersion: manifest.promotion_id, developmentOnly: false, approvalStatus: 'approved',

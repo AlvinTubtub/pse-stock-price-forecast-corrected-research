@@ -82,10 +82,15 @@ export async function getCompanyDetail(symbol: string): Promise<CompanyDetail | 
   const row = operational?.forecasts[symbol.toUpperCase()];
   if (!company || !row) return company;
   const key = { "Lag-Informed Regression": "lag", ARIMA: "arima", LSTM: "lstm" }[row.model];
+  const modelKey = { "Lag-Informed Regression": "lag_reg", ARIMA: "arima", LSTM: "lstm" }[row.model];
+  const matchedComparison = (company.naiveComparisons && modelKey)
+    ? (company.naiveComparisons[modelKey] ?? null)
+    : (company.naiveComparison?.model_a === modelKey ? company.naiveComparison : null);
   const pesoChange = row.predictedClose - row.previousClose;
   return { ...company, model: row.model, predictedClose: row.predictedClose,
     previousClose: row.previousClose, pesoChange, pctChange: pesoChange / row.previousClose * 100,
     direction: pesoChange >= 0 ? "bullish" : "bearish", confidence: undefined,
+    naiveComparison: matchedComparison,
     nextClose: key ? { ...(company.nextClose ?? {}), [key]: row.predictedClose } : (company.nextClose ?? {}),
     ohlcv: operational?.ohlcv[symbol.toUpperCase()] ?? company.ohlcv,
     forecastDate: row.forecastFor, dataAsOf: row.dataAsOf, inferenceAt: row.issuedAt };

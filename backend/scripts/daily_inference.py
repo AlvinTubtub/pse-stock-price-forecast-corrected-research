@@ -363,7 +363,7 @@ def _legacy_run_daily_inference(
 
 
 def run_daily_inference(raw_dir: Path = RAW_DIR, symbols=None, enforce_universe=None):
-    """Operational entrypoint: only approved fixed-configuration refits."""
+    """Operational entrypoint: persisted approved artifacts, no refitting."""
     from services.operational_deployment import generate
     payload = generate(raw_dir=raw_dir, symbols=symbols)
     return {"status": "ok", "symbols_processed": list(payload["forecasts"]), "symbols_failed": {}}

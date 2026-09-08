@@ -101,6 +101,6 @@ export interface SummaryData {
   winnerModel: FormalModelId | null;
   wins: Record<FormalModelId, number>;
   totalEvaluated: number;
-  beatsNaiveCount: number;
+  belowNaiveScaleCount: number;
   medians: Record<FormalModelId, number | null>;
 }

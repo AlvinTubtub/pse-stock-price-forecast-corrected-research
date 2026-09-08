@@ -166,6 +166,34 @@ def extract_naive_comparison(statistical_tests: dict, symbol: str, winning_model
     return None
 
 
+def extract_all_naive_comparisons(statistical_tests: dict, symbol: str) -> dict[str, dict]:
+    """Extract all DM/Holm naive comparisons (by model_a) for a company."""
+    if not isinstance(statistical_tests, dict):
+        return {}
+    per_company = statistical_tests.get("per_company")
+    if not isinstance(per_company, dict):
+        return {}
+    company_stats = per_company.get(symbol)
+    if not isinstance(company_stats, dict):
+        return {}
+    dm_squared = company_stats.get("dm_squared_error")
+    if not isinstance(dm_squared, dict):
+        return {}
+    stage1_vs_naive = dm_squared.get("stage1_vs_naive")
+    if not isinstance(stage1_vs_naive, list):
+        return {}
+    results = {}
+    for entry in stage1_vs_naive:
+        if isinstance(entry, dict) and entry.get("model_a"):
+            record = {}
+            for field in NAIVE_COMPARISON_FIELDS:
+                if field in entry:
+                    record[field] = entry[field]
+            if record:
+                results[entry["model_a"]] = record
+    return results
+
+
 def best_model_id(metrics: dict) -> str:
     """Lowest MASE wins (matches services/model_selector.py convention)."""
     candidates = [(mid, float(m["mase"])) for mid, m in metrics.items() if mid != "naive"]
@@ -325,6 +353,7 @@ def export_legacy_snapshot() -> None:
         forecast_dates.append(forecast_date)
 
         naive_comparison = extract_naive_comparison(statistical_tests, symbol, winning_model_id)
+        naive_comparisons = extract_all_naive_comparisons(statistical_tests, symbol)
 
         company_detail = {
             "symbol": symbol,
@@ -340,6 +369,7 @@ def export_legacy_snapshot() -> None:
             "metrics": metrics,
             "nextClose": next_close,
             "naiveComparison": naive_comparison,
+            "naiveComparisons": naive_comparisons,
             "ohlcv": history,
             "backtestDates": backtest_dates_60,
             "backtestActual": backtest_actual_60,
@@ -363,6 +393,7 @@ def export_legacy_snapshot() -> None:
             "metrics": metrics,
             "bestModel": winning_model_label,
             "naiveComparison": naive_comparison,
+            "naiveComparisons": naive_comparisons,
         }
 
         companies_out.append({

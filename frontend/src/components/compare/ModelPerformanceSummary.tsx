@@ -144,7 +144,7 @@ export default function ModelPerformanceSummary({
           </span>
           <div className="flex items-baseline gap-2">
             <span className="text-2xl font-bold font-mono text-cyan-600 dark:text-neon-400">
-              {summary.beatsNaiveCount}
+              {summary.belowNaiveScaleCount}
             </span>
             <span className="text-xs text-slate-500 dark:text-slate-400">
               evaluations

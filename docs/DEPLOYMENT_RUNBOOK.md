@@ -17,6 +17,27 @@ The deployment lifecycle enforces a strict separation between immutable formal r
 
 ---
 
+## Operational Execution Schedules
+
+ForecastPH operates under two distinct, controlled operational schedules:
+
+### 1. Daily Ingestion and Inference Schedule
+- **Trigger**: External HTTP dispatch from Cron-job.org targeting GitHub repository dispatch event `update-pse-data`.
+- **Timing**:
+  - **Mondays**: 17:30 Asia/Manila (allows for PSE trading session completion and weekly dividend/corporate announcements).
+  - **Tuesdays through Fridays**: 16:00 Asia/Manila (immediately following the 15:30 official market close and report settlement).
+- **Execution**: Runs `python run_pipeline.py --no-train` followed by artifact export and validation.
+- **Inference Guarantee**: Uses persisted approved model artifacts (`infer_daily()`). Zero training, zero refitting, zero CV search, and zero model changes. ARIMA updates state via `append(..., refit=False)`.
+- **Note on Token Expiry**: The Cron-job.org dispatch token is valid and scheduled to expire on September 8, 2027.
+
+### 2. Scheduled Model Refresh (One-Time)
+- **Timing**: Scheduled for **November 3, 2026 at 08:00 Asia/Manila** (00:00 UTC) via `.github/workflows/train_models.yml`.
+- **Enforcement Guard**: A strict bash date guard (`[ "$(date -u +'%Y-%m-%d')" = "2026-11-03" ]`) permits execution only on that exact date.
+- **Execution**: Runs `python -m services.model_selector --mode deployment-refresh --strict`.
+- **Subsequent Cadence**: After November 3, 2026, the cron job will skip any future annual runs. Any subsequent model refresh requires an explicitly reviewed manual operation or workflow pull request.
+
+---
+
 ## Step-by-Step Operational Lifecycle
 
 ### Step 1: Retune One Ticker at a Time (Challenger-Only)
@@ -25,7 +46,7 @@ Run the retuning CLI for a single ticker to generate a candidate challenger:
 
 ```bash
 cd backend
-python -m services.model_selector --mode deployment-retune --symbol BPI
+python -m services.model_selector --mode deployment-retune --symbols BPI
 ```
 
 This generates:
@@ -59,7 +80,7 @@ Verify:
 Once verified by a human reviewer, promote the challenger configurations into `models/deployment/current/`:
 
 ```bash
-python -m services.model_selector --mode deployment-approve --challenger-id <CHALLENGER_ID> --symbols BPI --confirm-approved
+python -m services.model_selector --mode deployment-approve --challenger-run-id <CHALLENGER_ID> --symbols BPI --confirm-approved
 ```
 
 Approval enforces:

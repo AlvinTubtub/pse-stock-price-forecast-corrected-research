@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "deploymentVersion": "RUN02_OPS_20260907_01",
-  "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+  "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
   "formalRunId": "FORMAL_CORRECTED_20260828_02",
   "approvalStatus": "approved",
   "promotionDate": "2026-09-07",
   "developmentOnly": false,
-  "generatedAt": "2026-09-08T16:01:51.474465+08:00",
+  "generatedAt": "2026-09-08T16:52:56.593873+08:00",
   "promotionBoundary": {
     "firstIssuedAt": "2026-09-07T20:53:45.931578+08:00",
     "firstTargetDate": "2026-09-08"
@@ -23,7 +23,7 @@
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "e7664bf76624367858e94036d2c07be2311283487104ed72501734aff3ce7509",
       "configuration": {
@@ -84,7 +84,7 @@
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "84b5a83c9838ce21c86c913161e0dc77e6eae3dff734006953cbd4f399c320c6",
       "configuration": {
@@ -151,7 +151,7 @@
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "acd0df00a5a00547b72a103e0c25ec2d824c29f6dd9b62ea0aa40322ddb1cbd4",
       "configuration": {
@@ -178,7 +178,7 @@
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "7bad2b80c136af15377065e1566c2fa3e2c71f5dca49c20d9d95d6cd644493e8",
       "configuration": {
@@ -205,7 +205,7 @@
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "6b4378f214f2a140efe6cc8e832b3a5636cf6924c612f9134b6516a50abc2c02",
       "configuration": {
@@ -233,7 +233,7 @@
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "f466432f8b07357fca1c225e6c31c07f17e94f99219b56119589c71c8e93c09b",
       "configuration": {
@@ -300,7 +300,7 @@
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "319039b3b4cf9a2fa2a3ffe3302a6b5481708c61247d74ecefb77cabfc71852f",
       "configuration": {
@@ -327,7 +327,7 @@
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "8d03132c9b5f36e0af97e7f156b5c1734fbaf80fd5d849d79a7bc9c471f93d70",
       "configuration": {
@@ -388,7 +388,7 @@
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "8a0920402a98833b188d808cc087a3f458d8e7806202762483dcf0f3e67cfe73",
       "configuration": {
@@ -457,7 +457,7 @@
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "2875e7b01540aebce3ef3330932e82083d0ab30c87e11ff6659fd31f9eb5534b",
       "configuration": {
@@ -518,7 +518,7 @@
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "575bba54368d2f7b159a5e6d294b7970d9cc750b17575f935ca88671f85cc46d",
       "configuration": {
@@ -545,7 +545,7 @@
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "86bd18eb4a46f39bf433f8de2ce4bfbf4295d4cb4680dd7a7b9d670fadb9fd57",
       "configuration": {
@@ -572,7 +572,7 @@
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "fbd6598343d6730127ebcffdfa98caa8e3d66e4f0a1cc60aae3c48a189d79bf0",
       "configuration": {
@@ -599,7 +599,7 @@
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "9c850aa2844ba2e6d548d0711770a7127774d9932c5744a63c27a334b1924c50",
       "configuration": {
@@ -626,7 +626,7 @@
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "f2dbf24470793748d4547b5f0f143635f873a992f393527231103965ba7d7d70",
       "configuration": {
@@ -691,7 +691,7 @@
       "actual": 14.94,
       "error": 0.14000000000000057,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "fb8e8ec7590102419fec50d23d2894f379317a41cffb094a37e5cd379e2c7d5e",
       "configuration": {
@@ -752,7 +752,7 @@
       "actual": 16.8,
       "error": 0.5799999999999983,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "221e064aa57b89d4c36431982beb493c8c8da0483d8cacdcf4dbf5308bf33665",
       "configuration": {
@@ -819,7 +819,7 @@
       "actual": 103.9,
       "error": 1.259999999999991,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "bb61ea55a2e1138d7d0ae2e7301cefa399db852ed0ade4bcbb23ee9afeb003d0",
       "configuration": {
@@ -846,7 +846,7 @@
       "actual": 1583.0,
       "error": 26.0,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "62541ddfeda0ec73560eae00029af1fcdd8a5c55fbd41ef87f405aae7e834f83",
       "configuration": {
@@ -873,7 +873,7 @@
       "actual": 957.0,
       "error": -23.17999999999995,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "1539a724b13ee3160d14abd70bae57f331eb098573d0ae6c82c0cfdc0c477108",
       "configuration": {
@@ -901,7 +901,7 @@
       "actual": 152.0,
       "error": -1.0300000000000011,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "8073417dd20cbec2fba72908796fe0d4368abcc8dac92f0abc8480d1a42d41d4",
       "configuration": {
@@ -968,7 +968,7 @@
       "actual": 64.5,
       "error": 1.3900000000000006,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "237377da8c57b1e695508f95a37993f561f49b93ca26bc3a5d62e61a02a3af2f",
       "configuration": {
@@ -995,7 +995,7 @@
       "actual": 2.24,
       "error": 0.019999999999999574,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "76a8ce11169098269d2087c99841f64c15c45e2e6697863c3ad6d449ae1a0023",
       "configuration": {
@@ -1056,7 +1056,7 @@
       "actual": 478.2,
       "error": -0.3199999999999932,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "e2de6192e59f3d101e053f1a97e3a862ce328f4fd6551aab37f876742dec8592",
       "configuration": {
@@ -1125,7 +1125,7 @@
       "actual": 4.72,
       "error": -0.1299999999999999,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "31dc41f944a017e5220a36535e919688fdea0faa8a5d65c9adc19ff8bef72a72",
       "configuration": {
@@ -1186,7 +1186,7 @@
       "actual": 40.75,
       "error": -0.5700000000000003,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "a6de0dbbda174e384d1701a3cb7fc424e4605204608f626be758165ace2c79a4",
       "configuration": {
@@ -1213,7 +1213,7 @@
       "actual": 17.78,
       "error": -0.08000000000000185,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "3dc87bc418408da4f8e59af0ce8bbf8e7a0ec3d6f3ac58000fe30c995af79f93",
       "configuration": {
@@ -1240,7 +1240,7 @@
       "actual": 64.0,
       "error": 0.6400000000000006,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "50e91dc2ef894da29aef85525407fe59577c8969385931733c9f2fbc2d76b80b",
       "configuration": {
@@ -1267,7 +1267,7 @@
       "actual": 8.12,
       "error": 0.02000000000000135,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "a8782a41665efa886cd4aa4a91853f1073ab9c326753f3bd5c4d10a7df4b2b77",
       "configuration": {
@@ -1294,7 +1294,7 @@
       "actual": 18.4,
       "error": -0.16999999999999815,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "6add0a4a21f844c3b77df1e2a63be7ab5c69d7be516331522f216d957f0703bd",
       "configuration": {
@@ -1357,7 +1357,7 @@
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "e7664bf76624367858e94036d2c07be2311283487104ed72501734aff3ce7509",
       "configuration": {
@@ -1418,7 +1418,7 @@
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "84b5a83c9838ce21c86c913161e0dc77e6eae3dff734006953cbd4f399c320c6",
       "configuration": {
@@ -1485,7 +1485,7 @@
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "acd0df00a5a00547b72a103e0c25ec2d824c29f6dd9b62ea0aa40322ddb1cbd4",
       "configuration": {
@@ -1512,7 +1512,7 @@
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "7bad2b80c136af15377065e1566c2fa3e2c71f5dca49c20d9d95d6cd644493e8",
       "configuration": {
@@ -1539,7 +1539,7 @@
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "6b4378f214f2a140efe6cc8e832b3a5636cf6924c612f9134b6516a50abc2c02",
       "configuration": {
@@ -1567,7 +1567,7 @@
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "f466432f8b07357fca1c225e6c31c07f17e94f99219b56119589c71c8e93c09b",
       "configuration": {
@@ -1634,7 +1634,7 @@
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "319039b3b4cf9a2fa2a3ffe3302a6b5481708c61247d74ecefb77cabfc71852f",
       "configuration": {
@@ -1661,7 +1661,7 @@
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "8d03132c9b5f36e0af97e7f156b5c1734fbaf80fd5d849d79a7bc9c471f93d70",
       "configuration": {
@@ -1722,7 +1722,7 @@
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "8a0920402a98833b188d808cc087a3f458d8e7806202762483dcf0f3e67cfe73",
       "configuration": {
@@ -1791,7 +1791,7 @@
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "2875e7b01540aebce3ef3330932e82083d0ab30c87e11ff6659fd31f9eb5534b",
       "configuration": {
@@ -1852,7 +1852,7 @@
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "575bba54368d2f7b159a5e6d294b7970d9cc750b17575f935ca88671f85cc46d",
       "configuration": {
@@ -1879,7 +1879,7 @@
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "86bd18eb4a46f39bf433f8de2ce4bfbf4295d4cb4680dd7a7b9d670fadb9fd57",
       "configuration": {
@@ -1906,7 +1906,7 @@
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "fbd6598343d6730127ebcffdfa98caa8e3d66e4f0a1cc60aae3c48a189d79bf0",
       "configuration": {
@@ -1933,7 +1933,7 @@
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "9c850aa2844ba2e6d548d0711770a7127774d9932c5744a63c27a334b1924c50",
       "configuration": {
@@ -1960,7 +1960,7 @@
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260907_01",
-      "manifestSha256": "16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591",
+      "manifestSha256": "1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
       "sourceDataSha256": "f2dbf24470793748d4547b5f0f143635f873a992f393527231103965ba7d7d70",
       "configuration": {
@@ -197656,7 +197656,7 @@
     "joblib": "1.5.3"
   },
   "implementationSha256": {
-    "services/operational_deployment.py": "a54be35449b07727ae0546b88b87e4604d85151ec3798c03fdb6170ed42b16ab",
+    "services/operational_deployment.py": "991d1a02802951f9a44c7490620b0d6b824549deb360385ca11b56f7a976fa1d",
     "services/feature_engineering.py": "cdd682edbd175c62ab92aede565f306dc90ffec58d7a6d0e144442a35d0a1d99",
     "services/forecasting/arima_model.py": "1992b4f13cf927f0dc0985a94828291c60ed401f9c89b41ef147621ddbcdf989",
     "services/forecasting/lstm_model.py": "b521958b86e321ed2445b221fcb41e0b08f87d353cd4e6df8f02dbbe8ee8f234",

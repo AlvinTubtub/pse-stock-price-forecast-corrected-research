@@ -61,6 +61,7 @@ export interface CompanyDetail {
   metrics: Record<string, ModelMetric>;
   nextClose: Record<string, number>;
   naiveComparison?: NaiveComparison | null;
+  naiveComparisons?: Record<string, NaiveComparison>;
   ohlcv: OhlcvPoint[];
   backtestDates?: string[];
   backtestActual: number[];
@@ -193,6 +194,7 @@ export interface MetricsData {
       metrics: Record<string, ModelMetric>;
       bestModel: string;
       naiveComparison?: NaiveComparison | null;
+      naiveComparisons?: Record<string, NaiveComparison>;
     }
   >;
   statisticalTests: StatisticalTestsData;

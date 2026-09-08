@@ -12,7 +12,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from services import operational_deployment as ops
 
-NOW = datetime.fromisoformat("2026-09-07T18:00:00+08:00")
+NOW = datetime.fromisoformat("2026-09-08T18:00:00+08:00")
 
 
 def test_manifest_covers_exact_frozen_mapping():
@@ -54,14 +54,15 @@ def test_incomplete_or_unsafe_generation_rejected(kwargs):
 
 def test_stale_data_cannot_be_issued_live():
     with pytest.raises(ValueError, match="stale"):
-        ops.validate_data(ops.BASE / "data/raw/ALI.csv", now=datetime.fromisoformat("2026-09-09T18:00:00+08:00"), development=False)
+        ops.validate_data(ops.BASE / "data/raw/ALI.csv", now=datetime.fromisoformat("2026-09-10T18:00:00+08:00"), development=False)
 
 
 @pytest.fixture
 def fast_generation(monkeypatch, tmp_path):
     """Real source validation with a mocked fitter; all writes isolated to pytest tmp."""
     fit = Mock(return_value=20.0)
-    monkeypatch.setattr(ops, "refit_predict", fit)
+    monkeypatch.setattr(ops, "refit_predict", lambda df, item, return_artifact=False: (fit(df, item), None) if return_artifact else fit(df, item))
+    monkeypatch.setattr(ops, "predict_persisted", lambda df, symbol, item: fit(df, item))
     return tmp_path, fit
 
 
@@ -104,11 +105,11 @@ def test_reconcile_only_previously_issued_rows_and_preserve_failure(fast_generat
     def next_session(path, **kwargs):
         df, _ = original_validate(path, now=NOW, development=False)
         row = df.iloc[-1].copy()
-        row["Date"] = pd.Timestamp("2026-09-08")
-        return pd.concat([df, row.to_frame().T], ignore_index=True).astype({"Date": "datetime64[ns]"}), "2026-09-09"
+        row["Date"] = pd.Timestamp("2026-09-09")
+        return pd.concat([df, row.to_frame().T], ignore_index=True).astype({"Date": "datetime64[ns]"}), "2026-09-10"
     monkeypatch.setattr(ops, "validate_data", next_session)
     fit.side_effect = RuntimeError("failed fit")
-    later = datetime.fromisoformat("2026-09-08T18:00:00+08:00")
+    later = datetime.fromisoformat("2026-09-09T18:00:00+08:00")
     with pytest.raises(RuntimeError): ops.generate(output=output, now=later)
     assert (output / "current.json").read_bytes() == original
     fit.side_effect = None
@@ -122,7 +123,7 @@ def test_reconcile_only_previously_issued_rows_and_preserve_failure(fast_generat
 def test_malformed_history_rejected(fast_generation):
     output, _ = fast_generation
     batch = ops.generate(output=output, now=NOW)
-    batch["history"][0]["issuedAt"] = "2026-09-08T18:00:00+08:00"
+    batch["history"][0]["issuedAt"] = "2026-09-09T18:00:00+08:00"
     manifest, sha = ops.load_manifest()
     with pytest.raises(ValueError): ops.validate_batch(batch, manifest, sha)
 
