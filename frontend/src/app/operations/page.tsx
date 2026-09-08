@@ -1,37 +1,60 @@
-import { getDeploymentManifest, getOperationalBatch } from "@/lib/data";
+import { deploymentVersion, getDeploymentManifest, getIssuingDeploymentManifest, getOperationalBatch } from "@/lib/data";
 import OperationalHistory from "@/components/OperationalHistory";
 import { formatPeso } from "@/lib/format";
 
 const labels: Record<string, string> = { lag_reg: "Lag-Informed Regression", arima: "ARIMA", lstm: "LSTM" };
 
 export default async function OperationsPage() {
-  const [manifest, batch] = await Promise.all([getDeploymentManifest(), getOperationalBatch()]);
+  const [manifest, issuingManifest, batch] = await Promise.all([
+    getDeploymentManifest(), getIssuingDeploymentManifest(), getOperationalBatch(),
+  ]);
   if (!manifest) return <p>Deployment manifest unavailable. Operational forecasts are disabled.</p>;
+  const activeVersion = deploymentVersion(manifest);
+  const issuedVersion = batch?.deploymentVersion ?? (issuingManifest ? deploymentVersion(issuingManifest) : null);
+  const isV1 = manifest.schema_version === 1;
+  const status = isV1 ? manifest.approval.status : manifest.status;
+  const authorization = isV1
+    ? manifest.approval.scope
+    : manifest.approval.scopes.join(", ");
+  const primaryDateLabel = isV1 ? "Promoted" : "Created";
+  const primaryDate = isV1 ? manifest.promotion_date : manifest.created_at;
+  const authorizationDate = isV1 ? manifest.approval.date : manifest.approval.authorized_at;
   return (
     <div className="space-y-8">
       <div>
         <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight mb-2">Operational Deployment</h1>
         <div className="glass-panel p-4 rounded-xl flex flex-wrap items-center gap-3 text-xs font-mono text-slate-300">
           <span className="rounded-md border border-accent-emerald/30 bg-accent-emerald/10 px-2 py-0.5 font-semibold uppercase tracking-wide text-accent-emerald">
-            {manifest.promotion_id}
+            {activeVersion}
           </span>
           <span className="text-slate-500">•</span>
-          <span>Status: <strong className="text-white font-semibold">{manifest.approval.status}</strong></span>
+          <span>Status: <strong className="text-white font-semibold">{status}</strong></span>
           <span className="text-slate-500">•</span>
-          <span>Promoted: {manifest.promotion_date}</span>
+          <span>{primaryDateLabel}: {primaryDate}</span>
           <span className="text-slate-500">•</span>
-          <span className="text-slate-400">manual local generation</span>
+          <span>Authorization: <strong className="text-white font-semibold">{authorization}</strong></span>
+          {authorizationDate && <><span className="text-slate-500">•</span><span>Authorized: {authorizationDate}</span></>}
+          <span className="text-slate-500">•</span>
+          <span className="text-slate-400">manifest schema v{manifest.schema_version}</span>
         </div>
       </div>
 
       <div className="glass-card p-5 rounded-xl shadow-card-glow text-xs sm:text-sm text-slate-300 space-y-2 leading-relaxed">
         <p>
-          Frozen configurations from <code className="text-neon-300 font-mono">{manifest.formal_run_id}</code>. Each run refits on the latest validated official data without model selection or retuning.
+          Active deployment <code className="text-neon-300 font-mono">{activeVersion}</code> uses frozen configurations from <code className="text-neon-300 font-mono">{manifest.formal_run_id}</code>. Daily inference loads its persisted, validated artifacts and performs no training or refitting.
         </p>
         <p>
           {batch
-            ? `First issue: ${batch.promotionBoundary.firstIssuedAt}; first target session: ${batch.promotionBoundary.firstTargetDate}.`
+            ? `The forecasts displayed below were issued by ${batch.deploymentVersion}, manifest ${batch.manifestSha256}. First issue: ${batch.promotionBoundary.firstIssuedAt}; first target session: ${batch.promotionBoundary.firstTargetDate}.`
             : "No full operational batch has been generated. No post-promotion forecast accuracy is available."}
+        </p>
+        {issuedVersion && issuedVersion !== activeVersion && (
+          <p className="rounded-lg border border-amber-400/30 bg-amber-400/10 px-3 py-2 text-amber-100">
+            The forecast-issuing deployment differs from the active deployment. Existing issued forecasts remain immutable; the active deployment will be used for the next eligible issuance after new validated official data arrives.
+          </p>
+        )}
+        <p>
+          Operational refitting is a separately authorized, fixed-configuration process. It does not run during daily inference, retune challengers, or alter the immutable formal study.
         </p>
         <p className="text-xs text-slate-400 pt-1 border-t border-charcoal-700/60">
           Legacy predictions remain on company pages with their original provenance. Study holdout predictions never become live operational history.
@@ -41,13 +64,14 @@ export default async function OperationsPage() {
 
       <div className="glass-card p-6 rounded-xl shadow-card-glow overflow-x-auto">
         <h3 className="text-base sm:text-lg font-semibold text-white mb-3">
-          All 15 approved configurations and latest issued next-session forecasts
+          Active configurations and latest issued next-session forecasts
         </h3>
         <table className="w-full text-left text-sm">
           <thead className="text-xs text-slate-400 uppercase font-mono bg-charcoal-900/90 border-b border-charcoal-700">
             <tr>
               <th className="py-2.5 px-3">Company</th>
-              <th className="py-2.5 px-3">Selected model</th>
+              <th className="py-2.5 px-3">Active model</th>
+              <th className="py-2.5 px-3">Forecast model</th>
               <th className="py-2.5 px-3 text-right">Next close</th>
               <th className="py-2.5 px-3">Target session</th>
               <th className="py-2.5 px-3">Data through</th>
@@ -64,6 +88,7 @@ export default async function OperationsPage() {
                     </a>
                   </th>
                   <td className="py-2.5 px-3 text-slate-300 text-xs">{labels[item.model]}</td>
+                  <td className="py-2.5 px-3 text-slate-300 text-xs">{forecast?.model ?? "—"}</td>
                   <td className="py-2.5 px-3 text-right font-bold text-white">
                     {forecast ? formatPeso(forecast.predictedClose) : <span className="text-slate-500 font-normal">Awaiting generation</span>}
                   </td>

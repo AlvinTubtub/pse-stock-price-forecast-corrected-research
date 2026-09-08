@@ -329,13 +329,50 @@ export interface LatestData {
   status: string;
 }
 
-export interface DeploymentManifest {
+export interface DeploymentCompanyConfiguration {
+  model: "lag_reg" | "arima" | "lstm";
+  configuration: Record<string, unknown>;
+}
+
+export interface DeploymentManifestV1 {
+  schema_version: 1;
   promotion_id: string;
   promotion_date: string;
   formal_run_id: string;
-  approval: { status: string; scope: string };
-  companies: Record<string, { model: string; configuration: Record<string, unknown> }>;
+  approval: {
+    status: string;
+    scope: string;
+    authority?: string;
+    date?: string;
+  };
+  companies: Record<string, DeploymentCompanyConfiguration>;
 }
+
+export interface DeploymentManifestV2 {
+  schema_version: 2;
+  deployment_version: string;
+  status: "verified";
+  formal_run_id: string;
+  operation: string;
+  created_at: string;
+  approval: {
+    approval_id: string;
+    authorized_at: string;
+    scopes: string[];
+    record_sha256: string;
+  };
+  companies: Record<string, DeploymentCompanyConfiguration & {
+    artifact: {
+      path: string;
+      sha256: string;
+      configuration_sha256: string;
+      model_family: string;
+      training_cutoff: string;
+    };
+  }>;
+}
+
+export type DeploymentManifest = DeploymentManifestV1 | DeploymentManifestV2;
 export interface OperationalForecast {
   symbol: string;
   model: string;

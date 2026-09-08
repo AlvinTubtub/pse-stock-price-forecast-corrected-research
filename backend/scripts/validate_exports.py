@@ -215,6 +215,9 @@ def main() -> int:
 
     from services.operational_deployment import load_manifest, read_json, validate_batch
     try:
+        active_manifest, _ = load_manifest(required_scope="production_inference")
+        if _load(FORECASTS_DIR / "active-deployment.json") != active_manifest:
+            errors.append("operational deployment: active-deployment.json does not match the active backend manifest")
         operational = FORECASTS_DIR / "operational.json"
         if operational.exists():
             payload = read_json(operational)

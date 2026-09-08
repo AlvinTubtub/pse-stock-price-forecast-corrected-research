@@ -1,0 +1,977 @@
+{
+  "schema_version": 2,
+  "deployment_version": "RUN02_OPS_20260908_105811Z",
+  "status": "verified",
+  "formal_run_id": "FORMAL_CORRECTED_20260828_02",
+  "formal_summary_sha256": "c0a5962709be16a82e5f5eeb634424ef0cad93a05d08db5c8af02e1d90ff5a6e",
+  "evidence_archive_sha256": "2b2ed0ca6b88ea6cfef5ac14013440da1c7c55c1d9f9640e04a595fdafca5d24",
+  "approved_code_commit": "bfb33b8c184c87cc8828af5529410da94addd71c",
+  "approved_configuration_source": "RUN02_OPS_20260907_01:1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
+  "operation": "fixed_configuration_refit",
+  "created_at": "2026-09-08T18:58:11.732894+08:00",
+  "approval": {
+    "approval_id": "RUN02_AUTH_20260908_01",
+    "authorized_at": "2026-09-08T10:45:08Z",
+    "scopes": [
+      "production_inference",
+      "scheduled_refresh"
+    ],
+    "record_sha256": "85c43a1e88b98f0f86d712892cb03bcfee6fc83a918064a92064c11a425a7f0c"
+  },
+  "runtime": {
+    "python": "3.11.16",
+    "platform": "macOS-26.6.2-arm64-arm-64bit",
+    "numpy": "1.26.4",
+    "pandas": "3.0.5",
+    "scikit-learn": "1.9.0",
+    "scipy": "1.17.1",
+    "statsmodels": "0.14.6",
+    "torch": "2.13.0",
+    "joblib": "1.5.3"
+  },
+  "code_revision": {
+    "git_head": "e5b4de1aa13c78a27f22e2b84e6f38f4493bf86c",
+    "working_tree_diff_sha256": "1004c587c15b1b46cd386ae59f67eaddd5ddafab301ed67399212bc6d76869d9",
+    "working_tree_clean": false
+  },
+  "companies": {
+    "ALI": {
+      "model": "lag_reg",
+      "configuration": {
+        "alpha": 0.1,
+        "candidate_features": [
+          "lag_1",
+          "lag_2",
+          "lag_3",
+          "lag_5",
+          "ma_5",
+          "ma_10",
+          "volume_ma_5",
+          "ema_10",
+          "ema_20",
+          "rsi_14",
+          "macd",
+          "macd_signal",
+          "bb_upper",
+          "bb_lower",
+          "daily_return",
+          "rolling_volatility",
+          "hl_range_pct",
+          "oc_return_pct",
+          "ema_gap_pct",
+          "macd_pct",
+          "bb_width_pct",
+          "bb_percent_b",
+          "return_lag_5",
+          "return_mean_5",
+          "return_mean_10",
+          "return_mean_20",
+          "return_vol_5",
+          "return_vol_10",
+          "return_vol_20",
+          "log_volume",
+          "volume_mean_10",
+          "volume_mean_20"
+        ],
+        "pacf_selected_lags": [
+          5
+        ],
+        "max_iter": 50000,
+        "tol": 0.001,
+        "seed": 42,
+        "target": "next_close_delta",
+        "scaler": "StandardScaler"
+      },
+      "source_data_cutoff": "2026-08-28",
+      "source_data_sha256": "1f9c704de669276a9c9e3f000166a66a4c38678b735db2294c30dbcbf950caca",
+      "artifact": {
+        "path": "artifacts/lag_regression/ALI.pkl",
+        "sha256": "b47b9f54dffe7acb1f033058585061829be5638b76d26bca1af60e7e81981fc5",
+        "configuration_sha256": "fcef3c66a6c1b1691b97557f6f40542a3d58d54fda7cbce626c2369b290fb783",
+        "model_family": "lag_reg",
+        "training_cutoff": "2026-09-08",
+        "training_rows": 1630,
+        "source_data_sha256": "e7664bf76624367858e94036d2c07be2311283487104ed72501734aff3ce7509",
+        "runtime": {
+          "python": "3.11.16",
+          "platform": "macOS-26.6.2-arm64-arm-64bit",
+          "numpy": "1.26.4",
+          "pandas": "3.0.5",
+          "scikit-learn": "1.9.0",
+          "scipy": "1.17.1",
+          "statsmodels": "0.14.6",
+          "torch": "2.13.0",
+          "joblib": "1.5.3"
+        },
+        "code_revision": {
+          "git_head": "e5b4de1aa13c78a27f22e2b84e6f38f4493bf86c",
+          "working_tree_diff_sha256": "1004c587c15b1b46cd386ae59f67eaddd5ddafab301ed67399212bc6d76869d9",
+          "working_tree_clean": false
+        }
+      }
+    },
+    "APX": {
+      "model": "lag_reg",
+      "configuration": {
+        "alpha": 0.01,
+        "candidate_features": [
+          "lag_1",
+          "lag_2",
+          "lag_3",
+          "lag_5",
+          "ma_5",
+          "ma_10",
+          "volume_ma_5",
+          "ema_10",
+          "ema_20",
+          "rsi_14",
+          "macd",
+          "macd_signal",
+          "bb_upper",
+          "bb_lower",
+          "daily_return",
+          "rolling_volatility",
+          "hl_range_pct",
+          "oc_return_pct",
+          "ema_gap_pct",
+          "macd_pct",
+          "bb_width_pct",
+          "bb_percent_b",
+          "return_lag_1",
+          "return_lag_4",
+          "return_lag_6",
+          "return_lag_16",
+          "return_mean_5",
+          "return_mean_10",
+          "return_mean_20",
+          "return_vol_5",
+          "return_vol_10",
+          "return_vol_20",
+          "log_volume",
+          "volume_mean_10",
+          "volume_mean_20"
+        ],
+        "pacf_selected_lags": [
+          1,
+          4,
+          6,
+          16
+        ],
+        "max_iter": 50000,
+        "tol": 0.001,
+        "seed": 42,
+        "target": "next_close_delta",
+        "scaler": "StandardScaler"
+      },
+      "source_data_cutoff": "2026-08-28",
+      "source_data_sha256": "6d85622c0e3d8ed6d7f2d928063c5b83a8580af46c6b971566403e11fb9ec8f7",
+      "artifact": {
+        "path": "artifacts/lag_regression/APX.pkl",
+        "sha256": "3ca4ada9bc234518672391f6e2a740d0be0414c0b984e4f67d7d4f42050bd459",
+        "configuration_sha256": "a6134dbc9c09a66e51afe68a3b84c188a42fd4f8578a7467e4b0abfc1ee89940",
+        "model_family": "lag_reg",
+        "training_cutoff": "2026-09-08",
+        "training_rows": 1630,
+        "source_data_sha256": "84b5a83c9838ce21c86c913161e0dc77e6eae3dff734006953cbd4f399c320c6",
+        "runtime": {
+          "python": "3.11.16",
+          "platform": "macOS-26.6.2-arm64-arm-64bit",
+          "numpy": "1.26.4",
+          "pandas": "3.0.5",
+          "scikit-learn": "1.9.0",
+          "scipy": "1.17.1",
+          "statsmodels": "0.14.6",
+          "torch": "2.13.0",
+          "joblib": "1.5.3"
+        },
+        "code_revision": {
+          "git_head": "e5b4de1aa13c78a27f22e2b84e6f38f4493bf86c",
+          "working_tree_diff_sha256": "1004c587c15b1b46cd386ae59f67eaddd5ddafab301ed67399212bc6d76869d9",
+          "working_tree_clean": false
+        }
+      }
+    },
+    "BPI": {
+      "model": "arima",
+      "configuration": {
+        "order": [
+          1,
+          1,
+          1
+        ],
+        "trend": "n",
+        "method": "statespace",
+        "maxiter": 2000,
+        "target": "Close"
+      },
+      "source_data_cutoff": "2026-08-28",
+      "source_data_sha256": "358a40a3cd371e3158de4770552d7fd676355c9d15831c96f928434d42740456",
+      "artifact": {
+        "path": "artifacts/arima/BPI.pkl",
+        "sha256": "a40aee64054f431a981b8364b065183b24653e64f50243cd5a46c646cd363196",
+        "configuration_sha256": "026fe051e7cd437d59028c543ee43703b732e9ca6b1e97842e170a0a7a30afae",
+        "model_family": "arima",
+        "training_cutoff": "2026-09-08",
+        "training_rows": 1630,
+        "source_data_sha256": "acd0df00a5a00547b72a103e0c25ec2d824c29f6dd9b62ea0aa40322ddb1cbd4",
+        "runtime": {
+          "python": "3.11.16",
+          "platform": "macOS-26.6.2-arm64-arm-64bit",
+          "numpy": "1.26.4",
+          "pandas": "3.0.5",
+          "scikit-learn": "1.9.0",
+          "scipy": "1.17.1",
+          "statsmodels": "0.14.6",
+          "torch": "2.13.0",
+          "joblib": "1.5.3"
+        },
+        "code_revision": {
+          "git_head": "e5b4de1aa13c78a27f22e2b84e6f38f4493bf86c",
+          "working_tree_diff_sha256": "1004c587c15b1b46cd386ae59f67eaddd5ddafab301ed67399212bc6d76869d9",
+          "working_tree_clean": false
+        }
+      }
+    },
+    "GLO": {
+      "model": "arima",
+      "configuration": {
+        "order": [
+          0,
+          1,
+          0
+        ],
+        "trend": "n",
+        "method": "statespace",
+        "maxiter": 2000,
+        "target": "Close"
+      },
+      "source_data_cutoff": "2026-08-28",
+      "source_data_sha256": "7ca266cb2a98261cd85d46635591cea1b3c565db840dd5dfce04bf56ca979478",
+      "artifact": {
+        "path": "artifacts/arima/GLO.pkl",
+        "sha256": "f9a123b0eef5169a4271d8a1ac68e754fe440b8f099d7ccbbc4d4bd55c5d4d94",
+        "configuration_sha256": "683650fe40d1ec06923a32e1421bf3eac4575ddc2b1cec26f58277e2e9a26edb",
+        "model_family": "arima",
+        "training_cutoff": "2026-09-08",
+        "training_rows": 1630,
+        "source_data_sha256": "7bad2b80c136af15377065e1566c2fa3e2c71f5dca49c20d9d95d6cd644493e8",
+        "runtime": {
+          "python": "3.11.16",
+          "platform": "macOS-26.6.2-arm64-arm-64bit",
+          "numpy": "1.26.4",
+          "pandas": "3.0.5",
+          "scikit-learn": "1.9.0",
+          "scipy": "1.17.1",
+          "statsmodels": "0.14.6",
+          "torch": "2.13.0",
+          "joblib": "1.5.3"
+        },
+        "code_revision": {
+          "git_head": "e5b4de1aa13c78a27f22e2b84e6f38f4493bf86c",
+          "working_tree_diff_sha256": "1004c587c15b1b46cd386ae59f67eaddd5ddafab301ed67399212bc6d76869d9",
+          "working_tree_clean": false
+        }
+      }
+    },
+    "ICT": {
+      "model": "lstm",
+      "configuration": {
+        "lookback": 30,
+        "hidden_size": 25,
+        "learning_rate": 0.001,
+        "batch_size": 16,
+        "fixed_epochs": 47,
+        "seed": 42,
+        "input_design": "univariate_close_delta",
+        "scaler": "MinMaxScaler",
+        "optimizer": "Adam",
+        "loss": "MSELoss"
+      },
+      "source_data_cutoff": "2026-08-28",
+      "source_data_sha256": "a0b261565c4cf3a4141a9f0e8c07d20349cbaef978f64b8551d48d4c555a3efb",
+      "artifact": {
+        "path": "artifacts/lstm/ICT.pth",
+        "sha256": "14b4c3b77665ba0af753f0807f6128622dbdc7341de7c596e7fb20e2d4b6c10d",
+        "configuration_sha256": "b5b9a40fe70a4338e7d0171f5561b12de0e3c406228fb4731cb0d84b0c69e24a",
+        "model_family": "lstm",
+        "training_cutoff": "2026-09-08",
+        "training_rows": 1630,
+        "source_data_sha256": "6b4378f214f2a140efe6cc8e832b3a5636cf6924c612f9134b6516a50abc2c02",
+        "runtime": {
+          "python": "3.11.16",
+          "platform": "macOS-26.6.2-arm64-arm-64bit",
+          "numpy": "1.26.4",
+          "pandas": "3.0.5",
+          "scikit-learn": "1.9.0",
+          "scipy": "1.17.1",
+          "statsmodels": "0.14.6",
+          "torch": "2.13.0",
+          "joblib": "1.5.3"
+        },
+        "code_revision": {
+          "git_head": "e5b4de1aa13c78a27f22e2b84e6f38f4493bf86c",
+          "working_tree_diff_sha256": "1004c587c15b1b46cd386ae59f67eaddd5ddafab301ed67399212bc6d76869d9",
+          "working_tree_clean": false
+        }
+      }
+    },
+    "JFC": {
+      "model": "lag_reg",
+      "configuration": {
+        "alpha": 1.584893192461114,
+        "candidate_features": [
+          "lag_1",
+          "lag_2",
+          "lag_3",
+          "lag_5",
+          "ma_5",
+          "ma_10",
+          "volume_ma_5",
+          "ema_10",
+          "ema_20",
+          "rsi_14",
+          "macd",
+          "macd_signal",
+          "bb_upper",
+          "bb_lower",
+          "daily_return",
+          "rolling_volatility",
+          "hl_range_pct",
+          "oc_return_pct",
+          "ema_gap_pct",
+          "macd_pct",
+          "bb_width_pct",
+          "bb_percent_b",
+          "return_lag_4",
+          "return_lag_9",
+          "return_lag_16",
+          "return_lag_20",
+          "return_mean_5",
+          "return_mean_10",
+          "return_mean_20",
+          "return_vol_5",
+          "return_vol_10",
+          "return_vol_20",
+          "log_volume",
+          "volume_mean_10",
+          "volume_mean_20"
+        ],
+        "pacf_selected_lags": [
+          4,
+          9,
+          16,
+          20
+        ],
+        "max_iter": 50000,
+        "tol": 0.001,
+        "seed": 42,
+        "target": "next_close_delta",
+        "scaler": "StandardScaler"
+      },
+      "source_data_cutoff": "2026-08-28",
+      "source_data_sha256": "b31864b078c1d51b31ca952165700da7da432104a20135635db1645e141d1d5e",
+      "artifact": {
+        "path": "artifacts/lag_regression/JFC.pkl",
+        "sha256": "298a8492fff526969096db846585f2ab7a1e6edcf5251ad2ca6d5da6509f43a7",
+        "configuration_sha256": "f0dc948185c9936c3143ad2e6faea62155a5f44553f591f7809789bc62997c9e",
+        "model_family": "lag_reg",
+        "training_cutoff": "2026-09-08",
+        "training_rows": 1630,
+        "source_data_sha256": "f466432f8b07357fca1c225e6c31c07f17e94f99219b56119589c71c8e93c09b",
+        "runtime": {
+          "python": "3.11.16",
+          "platform": "macOS-26.6.2-arm64-arm-64bit",
+          "numpy": "1.26.4",
+          "pandas": "3.0.5",
+          "scikit-learn": "1.9.0",
+          "scipy": "1.17.1",
+          "statsmodels": "0.14.6",
+          "torch": "2.13.0",
+          "joblib": "1.5.3"
+        },
+        "code_revision": {
+          "git_head": "e5b4de1aa13c78a27f22e2b84e6f38f4493bf86c",
+          "working_tree_diff_sha256": "1004c587c15b1b46cd386ae59f67eaddd5ddafab301ed67399212bc6d76869d9",
+          "working_tree_clean": false
+        }
+      }
+    },
+    "MBT": {
+      "model": "arima",
+      "configuration": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "trend": "n",
+        "method": "statespace",
+        "maxiter": 2000,
+        "target": "Close"
+      },
+      "source_data_cutoff": "2026-08-28",
+      "source_data_sha256": "d47c6a963317f7cbabcae0cf6c2714e2805edc4ec7b5f6f55b804c01e779e7e5",
+      "artifact": {
+        "path": "artifacts/arima/MBT.pkl",
+        "sha256": "173d3496c62e676e489f2453c1e1d3ee5828c0e92b286538053dd4703ade3f7e",
+        "configuration_sha256": "3601aa41367e8bd350acb12e255045e93ff7bf331ddf347db21103787ec77304",
+        "model_family": "arima",
+        "training_cutoff": "2026-09-08",
+        "training_rows": 1630,
+        "source_data_sha256": "319039b3b4cf9a2fa2a3ffe3302a6b5481708c61247d74ecefb77cabfc71852f",
+        "runtime": {
+          "python": "3.11.16",
+          "platform": "macOS-26.6.2-arm64-arm-64bit",
+          "numpy": "1.26.4",
+          "pandas": "3.0.5",
+          "scikit-learn": "1.9.0",
+          "scipy": "1.17.1",
+          "statsmodels": "0.14.6",
+          "torch": "2.13.0",
+          "joblib": "1.5.3"
+        },
+        "code_revision": {
+          "git_head": "e5b4de1aa13c78a27f22e2b84e6f38f4493bf86c",
+          "working_tree_diff_sha256": "1004c587c15b1b46cd386ae59f67eaddd5ddafab301ed67399212bc6d76869d9",
+          "working_tree_clean": false
+        }
+      }
+    },
+    "MEG": {
+      "model": "lag_reg",
+      "configuration": {
+        "alpha": 0.01584893192461114,
+        "candidate_features": [
+          "lag_1",
+          "lag_2",
+          "lag_3",
+          "lag_5",
+          "ma_5",
+          "ma_10",
+          "volume_ma_5",
+          "ema_10",
+          "ema_20",
+          "rsi_14",
+          "macd",
+          "macd_signal",
+          "bb_upper",
+          "bb_lower",
+          "daily_return",
+          "rolling_volatility",
+          "hl_range_pct",
+          "oc_return_pct",
+          "ema_gap_pct",
+          "macd_pct",
+          "bb_width_pct",
+          "bb_percent_b",
+          "return_lag_1",
+          "return_mean_5",
+          "return_mean_10",
+          "return_mean_20",
+          "return_vol_5",
+          "return_vol_10",
+          "return_vol_20",
+          "log_volume",
+          "volume_mean_10",
+          "volume_mean_20"
+        ],
+        "pacf_selected_lags": [
+          1
+        ],
+        "max_iter": 50000,
+        "tol": 0.001,
+        "seed": 42,
+        "target": "next_close_delta",
+        "scaler": "StandardScaler"
+      },
+      "source_data_cutoff": "2026-08-28",
+      "source_data_sha256": "48637122865abf299ebdc46c0aa3091de114d165b1e60ef50dc96bc31f347a5b",
+      "artifact": {
+        "path": "artifacts/lag_regression/MEG.pkl",
+        "sha256": "b8654bc1f4eeadf772e9664988a286f7bc2ca256558ded4999d3a63a2c5e605d",
+        "configuration_sha256": "023a5c80e256e770cb70e2edd1dfc3722193a087320e2e2575f9c52f7f3f25ba",
+        "model_family": "lag_reg",
+        "training_cutoff": "2026-09-08",
+        "training_rows": 1630,
+        "source_data_sha256": "8d03132c9b5f36e0af97e7f156b5c1734fbaf80fd5d849d79a7bc9c471f93d70",
+        "runtime": {
+          "python": "3.11.16",
+          "platform": "macOS-26.6.2-arm64-arm-64bit",
+          "numpy": "1.26.4",
+          "pandas": "3.0.5",
+          "scikit-learn": "1.9.0",
+          "scipy": "1.17.1",
+          "statsmodels": "0.14.6",
+          "torch": "2.13.0",
+          "joblib": "1.5.3"
+        },
+        "code_revision": {
+          "git_head": "e5b4de1aa13c78a27f22e2b84e6f38f4493bf86c",
+          "working_tree_diff_sha256": "1004c587c15b1b46cd386ae59f67eaddd5ddafab301ed67399212bc6d76869d9",
+          "working_tree_clean": false
+        }
+      }
+    },
+    "MER": {
+      "model": "lag_reg",
+      "configuration": {
+        "alpha": 0.3981071705534973,
+        "candidate_features": [
+          "lag_1",
+          "lag_2",
+          "lag_3",
+          "lag_5",
+          "ma_5",
+          "ma_10",
+          "volume_ma_5",
+          "ema_10",
+          "ema_20",
+          "rsi_14",
+          "macd",
+          "macd_signal",
+          "bb_upper",
+          "bb_lower",
+          "daily_return",
+          "rolling_volatility",
+          "hl_range_pct",
+          "oc_return_pct",
+          "ema_gap_pct",
+          "macd_pct",
+          "bb_width_pct",
+          "bb_percent_b",
+          "return_lag_1",
+          "return_lag_2",
+          "return_lag_8",
+          "return_lag_9",
+          "return_lag_11",
+          "return_mean_5",
+          "return_mean_10",
+          "return_mean_20",
+          "return_vol_5",
+          "return_vol_10",
+          "return_vol_20",
+          "log_volume",
+          "volume_mean_10",
+          "volume_mean_20"
+        ],
+        "pacf_selected_lags": [
+          1,
+          2,
+          8,
+          9,
+          11
+        ],
+        "max_iter": 50000,
+        "tol": 0.001,
+        "seed": 42,
+        "target": "next_close_delta",
+        "scaler": "StandardScaler"
+      },
+      "source_data_cutoff": "2026-08-28",
+      "source_data_sha256": "21ec655cd47ad5b79475523f0cc693d65436af438ee6c58d8ef1940e9b9aff99",
+      "artifact": {
+        "path": "artifacts/lag_regression/MER.pkl",
+        "sha256": "b7a7b1f50b870b9f236c9d05656e2a06e84c92af7628824fe7421fd75c5b8cdf",
+        "configuration_sha256": "1ce46c0b20ce5cc6f46ad4a27c6438c516fbdfe2498f1d0d12f830258a9b3a94",
+        "model_family": "lag_reg",
+        "training_cutoff": "2026-09-08",
+        "training_rows": 1630,
+        "source_data_sha256": "8a0920402a98833b188d808cc087a3f458d8e7806202762483dcf0f3e67cfe73",
+        "runtime": {
+          "python": "3.11.16",
+          "platform": "macOS-26.6.2-arm64-arm-64bit",
+          "numpy": "1.26.4",
+          "pandas": "3.0.5",
+          "scikit-learn": "1.9.0",
+          "scipy": "1.17.1",
+          "statsmodels": "0.14.6",
+          "torch": "2.13.0",
+          "joblib": "1.5.3"
+        },
+        "code_revision": {
+          "git_head": "e5b4de1aa13c78a27f22e2b84e6f38f4493bf86c",
+          "working_tree_diff_sha256": "1004c587c15b1b46cd386ae59f67eaddd5ddafab301ed67399212bc6d76869d9",
+          "working_tree_clean": false
+        }
+      }
+    },
+    "NIKL": {
+      "model": "lag_reg",
+      "configuration": {
+        "alpha": 0.025118864315095822,
+        "candidate_features": [
+          "lag_1",
+          "lag_2",
+          "lag_3",
+          "lag_5",
+          "ma_5",
+          "ma_10",
+          "volume_ma_5",
+          "ema_10",
+          "ema_20",
+          "rsi_14",
+          "macd",
+          "macd_signal",
+          "bb_upper",
+          "bb_lower",
+          "daily_return",
+          "rolling_volatility",
+          "hl_range_pct",
+          "oc_return_pct",
+          "ema_gap_pct",
+          "macd_pct",
+          "bb_width_pct",
+          "bb_percent_b",
+          "return_lag_13",
+          "return_mean_5",
+          "return_mean_10",
+          "return_mean_20",
+          "return_vol_5",
+          "return_vol_10",
+          "return_vol_20",
+          "log_volume",
+          "volume_mean_10",
+          "volume_mean_20"
+        ],
+        "pacf_selected_lags": [
+          13
+        ],
+        "max_iter": 50000,
+        "tol": 0.001,
+        "seed": 42,
+        "target": "next_close_delta",
+        "scaler": "StandardScaler"
+      },
+      "source_data_cutoff": "2026-08-28",
+      "source_data_sha256": "f8de815ea0e4ac757614ad75dd0a26754359468807e17dd8fb67d7ff906c28cd",
+      "artifact": {
+        "path": "artifacts/lag_regression/NIKL.pkl",
+        "sha256": "b2aba624a2ca8c1efeca8440a61ee351e7b35464ea0b21cea79f0b823b78f3aa",
+        "configuration_sha256": "5f81972a113683046b8676f65cd9153fedb70afd252dc68b5dc93a10f57c6b85",
+        "model_family": "lag_reg",
+        "training_cutoff": "2026-09-08",
+        "training_rows": 1630,
+        "source_data_sha256": "2875e7b01540aebce3ef3330932e82083d0ab30c87e11ff6659fd31f9eb5534b",
+        "runtime": {
+          "python": "3.11.16",
+          "platform": "macOS-26.6.2-arm64-arm-64bit",
+          "numpy": "1.26.4",
+          "pandas": "3.0.5",
+          "scikit-learn": "1.9.0",
+          "scipy": "1.17.1",
+          "statsmodels": "0.14.6",
+          "torch": "2.13.0",
+          "joblib": "1.5.3"
+        },
+        "code_revision": {
+          "git_head": "e5b4de1aa13c78a27f22e2b84e6f38f4493bf86c",
+          "working_tree_diff_sha256": "1004c587c15b1b46cd386ae59f67eaddd5ddafab301ed67399212bc6d76869d9",
+          "working_tree_clean": false
+        }
+      }
+    },
+    "PGOLD": {
+      "model": "arima",
+      "configuration": {
+        "order": [
+          1,
+          1,
+          0
+        ],
+        "trend": "n",
+        "method": "statespace",
+        "maxiter": 2000,
+        "target": "Close"
+      },
+      "source_data_cutoff": "2026-08-28",
+      "source_data_sha256": "b2f8dfa3e2c9574bd426cd00c4549a1fe9edecbf608b90eb43a1c0de1ee6d1da",
+      "artifact": {
+        "path": "artifacts/arima/PGOLD.pkl",
+        "sha256": "2d274924835f7ea4075e46345c0674bacbe31c982c31c1121a8c8e71c9e321ae",
+        "configuration_sha256": "2f850ba4e450a46c356aec6c3e011c17a0eda8324db8d68a06f67f97bd1f76a1",
+        "model_family": "arima",
+        "training_cutoff": "2026-09-08",
+        "training_rows": 1630,
+        "source_data_sha256": "575bba54368d2f7b159a5e6d294b7970d9cc750b17575f935ca88671f85cc46d",
+        "runtime": {
+          "python": "3.11.16",
+          "platform": "macOS-26.6.2-arm64-arm-64bit",
+          "numpy": "1.26.4",
+          "pandas": "3.0.5",
+          "scikit-learn": "1.9.0",
+          "scipy": "1.17.1",
+          "statsmodels": "0.14.6",
+          "torch": "2.13.0",
+          "joblib": "1.5.3"
+        },
+        "code_revision": {
+          "git_head": "e5b4de1aa13c78a27f22e2b84e6f38f4493bf86c",
+          "working_tree_diff_sha256": "1004c587c15b1b46cd386ae59f67eaddd5ddafab301ed67399212bc6d76869d9",
+          "working_tree_clean": false
+        }
+      }
+    },
+    "SCC": {
+      "model": "arima",
+      "configuration": {
+        "order": [
+          0,
+          1,
+          0
+        ],
+        "trend": "n",
+        "method": "statespace",
+        "maxiter": 2000,
+        "target": "Close"
+      },
+      "source_data_cutoff": "2026-08-28",
+      "source_data_sha256": "65ef821e6a0cc6b2bf02b5d2c1fa45ca380f9a4cbabf027bda3e16c3a85cfffb",
+      "artifact": {
+        "path": "artifacts/arima/SCC.pkl",
+        "sha256": "3781ba318930f9a03dc4f349dbe0e609b16122d83166d48cc557f22b7e8f5fb3",
+        "configuration_sha256": "683650fe40d1ec06923a32e1421bf3eac4575ddc2b1cec26f58277e2e9a26edb",
+        "model_family": "arima",
+        "training_cutoff": "2026-09-08",
+        "training_rows": 1630,
+        "source_data_sha256": "86bd18eb4a46f39bf433f8de2ce4bfbf4295d4cb4680dd7a7b9d670fadb9fd57",
+        "runtime": {
+          "python": "3.11.16",
+          "platform": "macOS-26.6.2-arm64-arm-64bit",
+          "numpy": "1.26.4",
+          "pandas": "3.0.5",
+          "scikit-learn": "1.9.0",
+          "scipy": "1.17.1",
+          "statsmodels": "0.14.6",
+          "torch": "2.13.0",
+          "joblib": "1.5.3"
+        },
+        "code_revision": {
+          "git_head": "e5b4de1aa13c78a27f22e2b84e6f38f4493bf86c",
+          "working_tree_diff_sha256": "1004c587c15b1b46cd386ae59f67eaddd5ddafab301ed67399212bc6d76869d9",
+          "working_tree_clean": false
+        }
+      }
+    },
+    "SECB": {
+      "model": "arima",
+      "configuration": {
+        "order": [
+          1,
+          0,
+          0
+        ],
+        "trend": "n",
+        "method": "statespace",
+        "maxiter": 2000,
+        "target": "Close"
+      },
+      "source_data_cutoff": "2026-08-28",
+      "source_data_sha256": "e4015b1da572c292ade95c7911d24b62f87d2599683ed827836cce2c5ff80d7b",
+      "artifact": {
+        "path": "artifacts/arima/SECB.pkl",
+        "sha256": "0c253bae89abd30c64d8c799fe017226a9aebcb2dfaa3b80aca4b8a090942fa5",
+        "configuration_sha256": "32a261614074fdae97eeea4129761d645f3adad9496aff3f79f9c94e07f4ad0b",
+        "model_family": "arima",
+        "training_cutoff": "2026-09-08",
+        "training_rows": 1630,
+        "source_data_sha256": "fbd6598343d6730127ebcffdfa98caa8e3d66e4f0a1cc60aae3c48a189d79bf0",
+        "runtime": {
+          "python": "3.11.16",
+          "platform": "macOS-26.6.2-arm64-arm-64bit",
+          "numpy": "1.26.4",
+          "pandas": "3.0.5",
+          "scikit-learn": "1.9.0",
+          "scipy": "1.17.1",
+          "statsmodels": "0.14.6",
+          "torch": "2.13.0",
+          "joblib": "1.5.3"
+        },
+        "code_revision": {
+          "git_head": "e5b4de1aa13c78a27f22e2b84e6f38f4493bf86c",
+          "working_tree_diff_sha256": "1004c587c15b1b46cd386ae59f67eaddd5ddafab301ed67399212bc6d76869d9",
+          "working_tree_clean": false
+        }
+      }
+    },
+    "SHLPH": {
+      "model": "arima",
+      "configuration": {
+        "order": [
+          0,
+          1,
+          3
+        ],
+        "trend": "t",
+        "method": "statespace",
+        "maxiter": 2000,
+        "target": "Close"
+      },
+      "source_data_cutoff": "2026-08-28",
+      "source_data_sha256": "6f8fc34f631e6c81e5a21552c085efd48b8042675fab228666158ae7fe6fe4f9",
+      "artifact": {
+        "path": "artifacts/arima/SHLPH.pkl",
+        "sha256": "7346ba12ffb15d5438487726d35530e44252cb50ba5e6c3d1ffb3c9980b28279",
+        "configuration_sha256": "6a003806732db247b9825cd1989abae894061ea232c29d6d5950add1443db773",
+        "model_family": "arima",
+        "training_cutoff": "2026-09-08",
+        "training_rows": 1630,
+        "source_data_sha256": "9c850aa2844ba2e6d548d0711770a7127774d9932c5744a63c27a334b1924c50",
+        "runtime": {
+          "python": "3.11.16",
+          "platform": "macOS-26.6.2-arm64-arm-64bit",
+          "numpy": "1.26.4",
+          "pandas": "3.0.5",
+          "scikit-learn": "1.9.0",
+          "scipy": "1.17.1",
+          "statsmodels": "0.14.6",
+          "torch": "2.13.0",
+          "joblib": "1.5.3"
+        },
+        "code_revision": {
+          "git_head": "e5b4de1aa13c78a27f22e2b84e6f38f4493bf86c",
+          "working_tree_diff_sha256": "1004c587c15b1b46cd386ae59f67eaddd5ddafab301ed67399212bc6d76869d9",
+          "working_tree_clean": false
+        }
+      }
+    },
+    "SMPH": {
+      "model": "lag_reg",
+      "configuration": {
+        "alpha": 0.039810717055349734,
+        "candidate_features": [
+          "lag_1",
+          "lag_2",
+          "lag_3",
+          "lag_5",
+          "ma_5",
+          "ma_10",
+          "volume_ma_5",
+          "ema_10",
+          "ema_20",
+          "rsi_14",
+          "macd",
+          "macd_signal",
+          "bb_upper",
+          "bb_lower",
+          "daily_return",
+          "rolling_volatility",
+          "hl_range_pct",
+          "oc_return_pct",
+          "ema_gap_pct",
+          "macd_pct",
+          "bb_width_pct",
+          "bb_percent_b",
+          "return_lag_1",
+          "return_lag_2",
+          "return_mean_5",
+          "return_mean_10",
+          "return_mean_20",
+          "return_vol_5",
+          "return_vol_10",
+          "return_vol_20",
+          "log_volume",
+          "volume_mean_10",
+          "volume_mean_20"
+        ],
+        "pacf_selected_lags": [
+          1,
+          2
+        ],
+        "max_iter": 50000,
+        "tol": 0.001,
+        "seed": 42,
+        "target": "next_close_delta",
+        "scaler": "StandardScaler"
+      },
+      "source_data_cutoff": "2026-08-28",
+      "source_data_sha256": "0608a5a1948e045b1c6903155f26b1626f3b62efdbdfe79d522b58c623f3ac4a",
+      "artifact": {
+        "path": "artifacts/lag_regression/SMPH.pkl",
+        "sha256": "cc791c805d667dd832cc33e3e3417f22d23a63257bd24b98f963385c0fecea92",
+        "configuration_sha256": "42cbd66f0200b1f7a19efcf67eea11a3d93de6121ad8f32427a00c0e1ddc4f39",
+        "model_family": "lag_reg",
+        "training_cutoff": "2026-09-08",
+        "training_rows": 1630,
+        "source_data_sha256": "f2dbf24470793748d4547b5f0f143635f873a992f393527231103965ba7d7d70",
+        "runtime": {
+          "python": "3.11.16",
+          "platform": "macOS-26.6.2-arm64-arm-64bit",
+          "numpy": "1.26.4",
+          "pandas": "3.0.5",
+          "scikit-learn": "1.9.0",
+          "scipy": "1.17.1",
+          "statsmodels": "0.14.6",
+          "torch": "2.13.0",
+          "joblib": "1.5.3"
+        },
+        "code_revision": {
+          "git_head": "e5b4de1aa13c78a27f22e2b84e6f38f4493bf86c",
+          "working_tree_diff_sha256": "1004c587c15b1b46cd386ae59f67eaddd5ddafab301ed67399212bc6d76869d9",
+          "working_tree_clean": false
+        }
+      }
+    }
+  },
+  "test_predictions": {
+    "ALI": {
+      "predicted_close": 14.92,
+      "forecast_for": "2026-09-09"
+    },
+    "APX": {
+      "predicted_close": 16.85,
+      "forecast_for": "2026-09-09"
+    },
+    "BPI": {
+      "predicted_close": 104.11,
+      "forecast_for": "2026-09-09"
+    },
+    "GLO": {
+      "predicted_close": 1583.0,
+      "forecast_for": "2026-09-09"
+    },
+    "ICT": {
+      "predicted_close": 953.57,
+      "forecast_for": "2026-09-09"
+    },
+    "JFC": {
+      "predicted_close": 151.97,
+      "forecast_for": "2026-09-09"
+    },
+    "MBT": {
+      "predicted_close": 64.68,
+      "forecast_for": "2026-09-09"
+    },
+    "MEG": {
+      "predicted_close": 2.24,
+      "forecast_for": "2026-09-09"
+    },
+    "MER": {
+      "predicted_close": 478.21,
+      "forecast_for": "2026-09-09"
+    },
+    "NIKL": {
+      "predicted_close": 4.72,
+      "forecast_for": "2026-09-09"
+    },
+    "PGOLD": {
+      "predicted_close": 40.71,
+      "forecast_for": "2026-09-09"
+    },
+    "SCC": {
+      "predicted_close": 17.78,
+      "forecast_for": "2026-09-09"
+    },
+    "SECB": {
+      "predicted_close": 63.99,
+      "forecast_for": "2026-09-09"
+    },
+    "SHLPH": {
+      "predicted_close": 8.1,
+      "forecast_for": "2026-09-09"
+    },
+    "SMPH": {
+      "predicted_close": 18.35,
+      "forecast_for": "2026-09-09"
+    }
+  }
+}

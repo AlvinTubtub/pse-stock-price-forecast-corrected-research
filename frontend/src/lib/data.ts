@@ -21,6 +21,11 @@ import type {
 // produces the JSON runs entirely inside GitHub Actions, never on Vercel.
 const FORECASTS_DIR = path.join(process.cwd(), "public", "forecasts");
 const APPROVED_FORMAL_RUN_ID = "FORMAL_CORRECTED_20260828_02";
+const MODEL_LABELS: Record<string, string> = {
+  lag_reg: "Lag-Informed Regression",
+  arima: "ARIMA",
+  lstm: "LSTM",
+};
 
 async function readJson<T>(relativePath: string): Promise<T | null> {
   try {
@@ -102,22 +107,85 @@ export async function getAllSymbols(): Promise<string[]> {
   return companies.map((c) => c.symbol);
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function hasValidCompanies(value: unknown, requireArtifacts: boolean): boolean {
+  if (!isRecord(value) || Object.keys(value).length === 0) return false;
+  return Object.values(value).every((company) => {
+    if (!isRecord(company) || !Object.prototype.hasOwnProperty.call(MODEL_LABELS, String(company.model))
+        || !isRecord(company.configuration)) return false;
+    if (!requireArtifacts) return true;
+    const artifact = company.artifact;
+    return isRecord(artifact)
+      && typeof artifact.path === "string" && artifact.path.length > 0
+      && typeof artifact.sha256 === "string" && /^[a-f0-9]{64}$/.test(artifact.sha256)
+      && typeof artifact.configuration_sha256 === "string"
+      && /^[a-f0-9]{64}$/.test(artifact.configuration_sha256)
+      && artifact.model_family === company.model
+      && typeof artifact.training_cutoff === "string";
+  });
+}
+
+export function isDeploymentManifestV1(value: unknown): value is Extract<DeploymentManifest, { schema_version: 1 }> {
+  if (!isRecord(value) || value.schema_version !== 1 || typeof value.promotion_id !== "string"
+      || value.promotion_id.length === 0 || typeof value.promotion_date !== "string"
+      || !/^\d{4}-\d{2}-\d{2}$/.test(value.promotion_date)
+      || typeof value.formal_run_id !== "string" || !isRecord(value.approval)) return false;
+  return value.approval.status === "approved" && typeof value.approval.scope === "string"
+    && hasValidCompanies(value.companies, false);
+}
+
+export function isDeploymentManifestV2(value: unknown): value is Extract<DeploymentManifest, { schema_version: 2 }> {
+  if (!isRecord(value) || value.schema_version !== 2 || typeof value.deployment_version !== "string"
+      || value.deployment_version.length === 0 || value.status !== "verified"
+      || typeof value.formal_run_id !== "string" || typeof value.operation !== "string"
+      || typeof value.created_at !== "string" || !Number.isFinite(Date.parse(value.created_at))
+      || !isRecord(value.approval)
+      || typeof value.approval.approval_id !== "string"
+      || typeof value.approval.authorized_at !== "string"
+      || !Number.isFinite(Date.parse(value.approval.authorized_at))
+      || typeof value.approval.record_sha256 !== "string"
+      || !/^[a-f0-9]{64}$/.test(value.approval.record_sha256)
+      || !Array.isArray(value.approval.scopes)
+      || !value.approval.scopes.includes("production_inference")) return false;
+  return hasValidCompanies(value.companies, true);
+}
+
+export function deploymentVersion(manifest: DeploymentManifest): string {
+  return manifest.schema_version === 1 ? manifest.promotion_id : manifest.deployment_version;
+}
+
+async function readDeploymentManifest(relativePath: string): Promise<DeploymentManifest | null> {
+  const manifest = await readJson<unknown>(relativePath);
+  return isDeploymentManifestV1(manifest) || isDeploymentManifestV2(manifest) ? manifest : null;
+}
+
 export async function getDeploymentManifest(): Promise<DeploymentManifest | null> {
-  return readJson<DeploymentManifest>("deployment.json");
+  try {
+    await fs.access(path.join(FORECASTS_DIR, "active-deployment.json"));
+    return readDeploymentManifest("active-deployment.json");
+  } catch {
+    return readDeploymentManifest("deployment.json");
+  }
+}
+
+export async function getIssuingDeploymentManifest(): Promise<DeploymentManifest | null> {
+  return readDeploymentManifest("deployment.json");
 }
 
 export async function getOperationalBatch(): Promise<OperationalBatch | null> {
   const [batch, manifest] = await Promise.all([
-    readJson<OperationalBatch>("operational.json"), getDeploymentManifest(),
+    readJson<OperationalBatch>("operational.json"), getIssuingDeploymentManifest(),
   ]);
   if (!batch || !manifest || batch.developmentOnly !== false || batch.approvalStatus !== "approved"
-      || batch.deploymentVersion !== manifest.promotion_id
+      || batch.deploymentVersion !== deploymentVersion(manifest)
       || Object.keys(batch.forecasts ?? {}).sort().join() !== Object.keys(manifest.companies).sort().join()) return null;
-  const labels: Record<string, string> = { lag_reg: "Lag-Informed Regression", arima: "ARIMA", lstm: "LSTM" };
   const manifestBytes = await fs.readFile(path.join(FORECASTS_DIR, "deployment.json"));
   if (batch.manifestSha256 !== createHash("sha256").update(manifestBytes).digest("hex")) return null;
   if (Object.entries(batch.forecasts).some(([symbol, row]) => row.symbol !== symbol
-      || row.model !== labels[manifest.companies[symbol].model] || row.coverage !== "post_promotion_prospective"
+      || row.model !== MODEL_LABELS[manifest.companies[symbol].model] || row.coverage !== "post_promotion_prospective"
       || !Number.isFinite(row.predictedClose) || row.predictedClose <= 0
       || !Number.isFinite(row.previousClose) || row.previousClose <= 0)) return null;
   return batch;
