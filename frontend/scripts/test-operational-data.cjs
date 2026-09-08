@@ -14,9 +14,14 @@ const compiled = ts.transpileModule(fs.readFileSync(path.join(root, 'src/lib/dat
   compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2017, esModuleInterop: true },
 }).outputText;
 fs.writeFileSync(path.join(temp, 'data.cjs'), compiled);
+const chartDataCompiled = ts.transpileModule(fs.readFileSync(path.join(root, 'src/lib/chartData.ts'), 'utf8'), {
+  compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020, esModuleInterop: true },
+}).outputText;
+fs.writeFileSync(path.join(temp, 'chart-data.cjs'), chartDataCompiled);
 process.chdir(temp);
 
 const data = require(path.join(temp, 'data.cjs'));
+const chartData = require(path.join(temp, 'chart-data.cjs'));
 const manifestPath = path.join(dest, 'deployment.json');
 const activeManifestPath = path.join(dest, 'active-deployment.json');
 const historicalManifest = JSON.parse(fs.readFileSync(manifestPath));
@@ -81,14 +86,16 @@ function makeBatch(manifest, predictedClose, targetDate) {
   // artifact/configuration hashes, and an exact hash of the issuing manifest bytes.
   writeManifest(activeManifest);
   const versionedBatch = makeBatch(activeManifest, 22, '2026-09-09');
-  versionedBatch.history.push({
-    ...versionedBatch.forecasts.ALI,
-    predictedClose: 21.5,
-    forecastFor: '2026-09-08',
-    dataAsOf: '2026-09-07',
-    actual: 21,
-    error: 0.5,
-  });
+  for (const symbol of Object.keys(activeManifest.companies)) {
+    versionedBatch.history.push({
+      ...versionedBatch.forecasts[symbol],
+      predictedClose: 21.5,
+      forecastFor: '2026-09-08',
+      dataAsOf: '2026-09-07',
+      actual: 21,
+      error: 0.5,
+    });
+  }
   writeBatch(versionedBatch);
   const acceptedV2 = await data.getOperationalBatch();
   assert.equal(acceptedV2.deploymentVersion, activeManifest.deployment_version);
@@ -98,6 +105,17 @@ function makeBatch(manifest, predictedClose, targetDate) {
     companyDetail.operationalHistory.map((row) => [row.forecastFor, row.predictedClose, row.actual]),
     [['2026-09-08', 21.5, 21], ['2026-09-09', 22, null]],
   );
+  for (const symbol of Object.keys(activeManifest.companies)) {
+    const detail = await data.getCompanyDetail(symbol);
+    const graph = chartData.buildCompanyChartData(detail);
+    assert.equal(graph.dates.length, 60, `${symbol}: graph must contain 60 realized sessions`);
+    assert.equal(graph.dates.at(-1), '2026-09-08', `${symbol}: graph must end on today's realized session`);
+    assert.equal(graph.dates.includes('2026-09-09'), false, `${symbol}: graph must exclude tomorrow's forecast`);
+    assert.equal(graph.actual.at(-1), 21, `${symbol}: graph must use today's official close`);
+    for (const model of ['Lag-Informed Regression', 'ARIMA', 'LSTM']) {
+      assert.equal(Number.isFinite(graph.byModel[model].at(-1)), true, `${symbol}: ${model} must be present today`);
+    }
+  }
   assert.equal((await data.getCompanies()).find((row) => row.symbol === 'ALI').predictedClose, 22);
   assert.equal((await data.getDashboard()).forecastDate, '2026-09-09');
   assert.equal((await data.getDashboard()).marketSummary.gainers, 15);
@@ -129,7 +147,7 @@ function makeBatch(manifest, predictedClose, targetDate) {
   assert.equal(await data.getDeploymentManifest(), null);
   fs.writeFileSync(activeManifestPath, JSON.stringify(activeManifest));
 
-  console.log('[frontend-test] PASS: schema-v1 compatibility, schema-v2 acceptance, manifest hashing, invalid-manifest rejection, company/dashboard overlays, and realized/pending graph history');
+  console.log('[frontend-test] PASS: schema-v1/v2 validation, company/dashboard overlays, and realized-only three-model graph history');
 })().catch((error) => {
   console.error(error);
   process.exitCode = 1;

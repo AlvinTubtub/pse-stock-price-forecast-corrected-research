@@ -70,6 +70,8 @@ export interface CompanyDetail {
   productionBacktestActual?: number[];
   productionBacktestByModel?: Record<string, number[]>;
   operationalHistory?: OperationalForecast[];
+  comparisonForecastDate?: string;
+  comparisonNextClose?: Record<string, number>;
   forecastDate?: string;
   dataAsOf?: string | null;
   inferenceAt?: string | null;

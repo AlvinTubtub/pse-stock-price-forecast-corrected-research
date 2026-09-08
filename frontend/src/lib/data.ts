@@ -96,6 +96,8 @@ export async function getCompanyDetail(symbol: string): Promise<CompanyDetail | 
     previousClose: row.previousClose, pesoChange, pctChange: pesoChange / row.previousClose * 100,
     direction: pesoChange >= 0 ? "bullish" : "bearish", confidence: undefined,
     naiveComparison: matchedComparison,
+    comparisonForecastDate: company.forecastDate,
+    comparisonNextClose: company.nextClose,
     nextClose: key ? { ...(company.nextClose ?? {}), [key]: row.predictedClose } : (company.nextClose ?? {}),
     ohlcv: operational?.ohlcv[symbol.toUpperCase()] ?? company.ohlcv,
     operationalHistory: (operational.history ?? [])

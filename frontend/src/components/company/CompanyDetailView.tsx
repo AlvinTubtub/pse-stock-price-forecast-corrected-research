@@ -11,6 +11,7 @@ import StatCard from "@/components/StatCard";
 import WatchlistStar from "@/components/watchlist/WatchlistStar";
 import ModernIcon from "@/components/ModernIcon";
 import { getCompanyProfile } from "@/lib/companyProfiles";
+import { buildCompanyChartData } from "@/lib/chartData";
 import { formatDate, formatNum, formatPeso } from "@/lib/format";
 import type { CompanyDetail } from "@/lib/types";
 
@@ -108,54 +109,8 @@ export default function CompanyDetailView({ company }: CompanyDetailViewProps) {
     }
   }
 
-  type ChartPoint = { date: string; actual: number | null; forecasts: Record<string, number> };
-  const chartPoints = new Map<string, ChartPoint>();
-  const addStoredSeries = (
-    dates: string[], actual: number[], byModel: Record<string, number[]>
-  ) => dates.forEach((date, index) => {
-    const forecasts = Object.fromEntries(
-      Object.entries(byModel)
-        .filter(([, values]) => Number.isFinite(values[index]))
-        .map(([model, values]) => [model, values[index]])
-    );
-    chartPoints.set(date, { date, actual: actual[index] ?? null, forecasts });
-  });
-
-  addStoredSeries(company.backtestDates ?? [], company.backtestActual, company.backtestByModel);
-  addStoredSeries(
-    company.productionBacktestDates ?? [],
-    company.productionBacktestActual ?? [],
-    company.productionBacktestByModel ?? {}
-  );
-  for (const row of company.operationalHistory ?? []) {
-    const point = chartPoints.get(row.forecastFor) ?? {
-      date: row.forecastFor,
-      actual: null,
-      forecasts: {},
-    };
-    point.actual = row.actual;
-    point.forecasts[row.model] = row.predictedClose;
-    chartPoints.set(row.forecastFor, point);
-  }
-
-  const allChartPoints = [...chartPoints.values()].sort((a, b) => a.date.localeCompare(b.date));
-  const predictionPoints = allChartPoints.slice(-60);
-  const errorPoints = allChartPoints
-    .filter((point): point is ChartPoint & { actual: number } => point.actual !== null)
-    .slice(-60);
-  const modelNames = [...new Set(allChartPoints.flatMap((point) => Object.keys(point.forecasts)))];
-  const seriesFor = (points: ChartPoint[]) => Object.fromEntries(
-    modelNames.map((model) => [model, points.map((point) => point.forecasts[model] ?? null)])
-  );
-  const predictionByModel = seriesFor(predictionPoints);
-  const errorByModel = seriesFor(errorPoints);
-  const realizedOperationalDates = (company.operationalHistory ?? [])
-    .filter((row) => row.actual !== null)
-    .map((row) => row.forecastFor);
-  const productionDates = company.productionBacktestDates ?? [];
-  const liveStartDate = [...productionDates, ...(company.operationalHistory ?? []).map((row) => row.forecastFor)]
-    .sort()[0];
-  const hasRealizedProductionHistory = productionDates.length > 0 || realizedOperationalDates.length > 0;
+  const chartData = buildCompanyChartData(company);
+  const hasRealizedProductionHistory = Boolean(chartData.liveStartDate);
 
   return (
     <div className="space-y-8">
@@ -479,16 +434,15 @@ export default function CompanyDetailView({ company }: CompanyDetailViewProps) {
           )}
         </div>
         <p className="text-sm text-slate-400 mb-4">
-          The latest 60 target sessions combine the stored evaluation with immutable issued
-          forecasts. A forecast awaiting its official close appears without an Actual value. The
-          vertical marker shows where prospective production coverage begins.
+          The latest 60 realized target sessions combine the stored evaluation with immutable
+          issued forecasts. The vertical marker shows where prospective production coverage begins.
         </p>
         <PredictionChart
-          dates={predictionPoints.map((point) => point.date)}
-          actual={predictionPoints.map((point) => point.actual)}
-          byModel={predictionByModel}
+          dates={chartData.dates}
+          actual={chartData.actual}
+          byModel={chartData.byModel}
           selectedModel={company.model}
-          liveStartDate={liveStartDate}
+          liveStartDate={chartData.liveStartDate}
         />
       </section>
 
@@ -512,11 +466,11 @@ export default function CompanyDetailView({ company }: CompanyDetailViewProps) {
             the vertical marker shows where prospective production coverage begins.
           </p>
           <ErrorChart
-            dates={errorPoints.map((point) => point.date)}
-            actual={errorPoints.map((point) => point.actual)}
-            byModel={errorByModel}
+            dates={chartData.dates}
+            actual={chartData.actual}
+            byModel={chartData.byModel}
             selectedModel={company.model}
-            liveStartDate={liveStartDate}
+            liveStartDate={chartData.liveStartDate}
           />
         </section>
       )}
