@@ -6,7 +6,7 @@
   "approvalStatus": "approved",
   "promotionDate": "2026-09-07",
   "developmentOnly": false,
-  "generatedAt": "2026-09-08T16:52:56.593873+08:00",
+  "generatedAt": "2026-09-08T17:08:19.145383+08:00",
   "promotionBoundary": {
     "firstIssuedAt": "2026-09-07T20:53:45.931578+08:00",
     "firstTargetDate": "2026-09-08"
@@ -197656,7 +197656,7 @@
     "joblib": "1.5.3"
   },
   "implementationSha256": {
-    "services/operational_deployment.py": "991d1a02802951f9a44c7490620b0d6b824549deb360385ca11b56f7a976fa1d",
+    "services/operational_deployment.py": "83e4b0143221c86094189638484c9b004a63295bb60996918300a583f261e6c4",
     "services/feature_engineering.py": "cdd682edbd175c62ab92aede565f306dc90ffec58d7a6d0e144442a35d0a1d99",
     "services/forecasting/arima_model.py": "1992b4f13cf927f0dc0985a94828291c60ed401f9c89b41ef147621ddbcdf989",
     "services/forecasting/lstm_model.py": "b521958b86e321ed2445b221fcb41e0b08f87d353cd4e6df8f02dbbe8ee8f234",
