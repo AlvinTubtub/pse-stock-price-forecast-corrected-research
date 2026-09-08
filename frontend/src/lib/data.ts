@@ -98,6 +98,9 @@ export async function getCompanyDetail(symbol: string): Promise<CompanyDetail | 
     naiveComparison: matchedComparison,
     nextClose: key ? { ...(company.nextClose ?? {}), [key]: row.predictedClose } : (company.nextClose ?? {}),
     ohlcv: operational?.ohlcv[symbol.toUpperCase()] ?? company.ohlcv,
+    operationalHistory: (operational.history ?? [])
+      .filter((record) => record.symbol === symbol.toUpperCase())
+      .sort((a, b) => a.forecastFor.localeCompare(b.forecastFor)),
     forecastDate: row.forecastFor, dataAsOf: row.dataAsOf, inferenceAt: row.issuedAt };
 
 }

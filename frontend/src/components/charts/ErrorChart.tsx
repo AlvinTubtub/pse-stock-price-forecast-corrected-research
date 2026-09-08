@@ -54,7 +54,7 @@ function formatFullDate(dateStr: string): string {
 export interface ErrorChartProps {
   dates?: string[];
   actual: number[];
-  byModel: Record<string, number[]>;
+  byModel: Record<string, Array<number | null>>;
   selectedModel?: string;
   liveStartDate?: string;
 }
@@ -69,9 +69,9 @@ export default function ErrorChart({ dates, actual, byModel, selectedModel, live
         fullDate: dates?.[i] ? formatFullDate(rawDate) : `Day ${i + 1}`,
       };
       for (const [model, series] of Object.entries(byModel)) {
-        if (series[i] !== undefined) {
+        if (typeof series[i] === "number" && Number.isFinite(series[i])) {
           // Forecast Error = Predicted Price - Actual Price
-          row[model] = Number((series[i] - value).toFixed(4));
+          row[model] = Number(((series[i] as number) - value).toFixed(4));
         }
       }
       return row;

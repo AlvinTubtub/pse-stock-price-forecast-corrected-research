@@ -54,8 +54,8 @@ function formatFullDate(dateStr: string): string {
 
 export interface PredictionChartProps {
   dates?: string[];
-  actual: number[];
-  byModel: Record<string, number[]>;
+  actual: Array<number | null>;
+  byModel: Record<string, Array<number | null>>;
   selectedModel?: string;
   liveStartDate?: string;
 }
@@ -73,10 +73,10 @@ export default function PredictionChart({
       step: rawDate,
       displayDate: dates?.[i] ? formatShortDate(rawDate) : `Day ${i + 1}`,
       fullDate: dates?.[i] ? formatFullDate(rawDate) : `Day ${i + 1}`,
-      Actual: value,
     };
+    if (typeof value === "number" && Number.isFinite(value)) row.Actual = value;
     for (const [model, series] of Object.entries(byModel)) {
-      if (series[i] !== undefined) row[model] = series[i];
+      if (typeof series[i] === "number" && Number.isFinite(series[i])) row[model] = series[i];
     }
     return row;
   });

@@ -50,9 +50,13 @@ function makeBatch(manifest, predictedClose, targetDate) {
       forecastFor: targetDate,
       dataAsOf: '2026-09-08',
       issuedAt: '2026-09-08T16:00:00+08:00',
+      actual: null,
+      error: null,
+      deploymentVersion: versionOf(manifest),
     };
     batch.ohlcv[symbol] = [{ date: '2026-09-08', close: 20, open: 20, high: 21, low: 19, volume: 100 }];
   }
+  batch.history = Object.values(batch.forecasts);
   return batch;
 }
 
@@ -77,10 +81,23 @@ function makeBatch(manifest, predictedClose, targetDate) {
   // artifact/configuration hashes, and an exact hash of the issuing manifest bytes.
   writeManifest(activeManifest);
   const versionedBatch = makeBatch(activeManifest, 22, '2026-09-09');
+  versionedBatch.history.push({
+    ...versionedBatch.forecasts.ALI,
+    predictedClose: 21.5,
+    forecastFor: '2026-09-08',
+    dataAsOf: '2026-09-07',
+    actual: 21,
+    error: 0.5,
+  });
   writeBatch(versionedBatch);
   const acceptedV2 = await data.getOperationalBatch();
   assert.equal(acceptedV2.deploymentVersion, activeManifest.deployment_version);
-  assert.equal((await data.getCompanyDetail('ALI')).predictedClose, 22);
+  const companyDetail = await data.getCompanyDetail('ALI');
+  assert.equal(companyDetail.predictedClose, 22);
+  assert.deepEqual(
+    companyDetail.operationalHistory.map((row) => [row.forecastFor, row.predictedClose, row.actual]),
+    [['2026-09-08', 21.5, 21], ['2026-09-09', 22, null]],
+  );
   assert.equal((await data.getCompanies()).find((row) => row.symbol === 'ALI').predictedClose, 22);
   assert.equal((await data.getDashboard()).forecastDate, '2026-09-09');
   assert.equal((await data.getDashboard()).marketSummary.gainers, 15);
@@ -112,7 +129,7 @@ function makeBatch(manifest, predictedClose, targetDate) {
   assert.equal(await data.getDeploymentManifest(), null);
   fs.writeFileSync(activeManifestPath, JSON.stringify(activeManifest));
 
-  console.log('[frontend-test] PASS: schema-v1 compatibility, schema-v2 acceptance, manifest hashing, invalid-manifest rejection, and company/dashboard overlays');
+  console.log('[frontend-test] PASS: schema-v1 compatibility, schema-v2 acceptance, manifest hashing, invalid-manifest rejection, company/dashboard overlays, and realized/pending graph history');
 })().catch((error) => {
   console.error(error);
   process.exitCode = 1;
