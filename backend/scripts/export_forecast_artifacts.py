@@ -119,6 +119,53 @@ def ohlcv_records(df: pd.DataFrame) -> list[dict]:
     ]
 
 
+NAIVE_COMPARISON_FIELDS = (
+    "model_a",
+    "model_b",
+    "direction",
+    "beats_naive_rmse",
+    "significantly_beats_naive",
+    "raw_p_value",
+    "holm_adjusted_p_value",
+    "mean_loss_differential",
+    "dm_statistic",
+    "hln_statistic",
+    "hac_bandwidth",
+    "n_observations",
+    "loss",
+    "alpha",
+)
+
+
+def extract_naive_comparison(statistical_tests: dict, symbol: str, winning_model_id: str) -> dict | None:
+    """Extract DM/Holm naive comparison evidence for the winning model of a company.
+
+    Returns None safely if evidence is missing or uncomputable; never infers a result.
+    """
+    if not isinstance(statistical_tests, dict):
+        return None
+    per_company = statistical_tests.get("per_company")
+    if not isinstance(per_company, dict):
+        return None
+    company_stats = per_company.get(symbol)
+    if not isinstance(company_stats, dict):
+        return None
+    dm_squared = company_stats.get("dm_squared_error")
+    if not isinstance(dm_squared, dict):
+        return None
+    stage1_vs_naive = dm_squared.get("stage1_vs_naive")
+    if not isinstance(stage1_vs_naive, list):
+        return None
+    for entry in stage1_vs_naive:
+        if isinstance(entry, dict) and entry.get("model_a") == winning_model_id:
+            record = {}
+            for field in NAIVE_COMPARISON_FIELDS:
+                if field in entry:
+                    record[field] = entry[field]
+            return record if record else None
+    return None
+
+
 def best_model_id(metrics: dict) -> str:
     """Lowest MASE wins (matches services/model_selector.py convention)."""
     candidates = [(mid, float(m["mase"])) for mid, m in metrics.items() if mid != "naive"]
@@ -277,6 +324,8 @@ def export_legacy_snapshot() -> None:
         forecast_date = _get_forecast_date(cache, latest_processed)
         forecast_dates.append(forecast_date)
 
+        naive_comparison = extract_naive_comparison(statistical_tests, symbol, winning_model_id)
+
         company_detail = {
             "symbol": symbol,
             "name": meta["name"],
@@ -290,6 +339,7 @@ def export_legacy_snapshot() -> None:
             "confidence": confidence,
             "metrics": metrics,
             "nextClose": next_close,
+            "naiveComparison": naive_comparison,
             "ohlcv": history,
             "backtestDates": backtest_dates_60,
             "backtestActual": backtest_actual_60,
@@ -309,7 +359,11 @@ def export_legacy_snapshot() -> None:
         (COMPANY_OUT_DIR / f"{symbol}.json").write_text(json.dumps(company_detail, indent=2))
         (HISTORY_OUT_DIR / f"{symbol}.json").write_text(json.dumps({"symbol": symbol, "ohlcv": history}, indent=2))
 
-        per_company_metrics[symbol] = {"metrics": metrics, "bestModel": winning_model_label}
+        per_company_metrics[symbol] = {
+            "metrics": metrics,
+            "bestModel": winning_model_label,
+            "naiveComparison": naive_comparison,
+        }
 
         companies_out.append({
             "symbol": symbol,
@@ -398,6 +452,7 @@ def export_legacy_snapshot() -> None:
 
 
 def main() -> None:
+    export_legacy_snapshot()
     from scripts.export_operational import export_operational
     export_operational()
 

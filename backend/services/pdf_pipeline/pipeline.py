@@ -16,8 +16,8 @@ from run_pipeline.py (headless, no UI framework dependency). In production,
 run_pipeline.py is only ever invoked by the Fast Pipeline
 (.github/workflows/update_pipeline.yml, Monday-Friday, triggered
 externally by Cron-job.org) with train_models=False — step 7 above never
-runs there. Model retraining is instead handled weekly, on GitHub
-Actions' own cron, by .github/workflows/train_models.yml calling
+runs there. Model refresh is instead handled via scheduled workflow, on GitHub
+Actions, by .github/workflows/train_models.yml calling
 services/model_selector.py directly (bypassing this module entirely,
 since there's nothing to ingest on that schedule). The frontend never
 calls either — it's a pure read-only presentation layer over

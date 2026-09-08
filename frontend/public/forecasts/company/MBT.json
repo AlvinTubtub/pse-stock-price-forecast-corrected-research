@@ -41,6 +41,22 @@
     "arima": 65.86,
     "lstm": 65.87
   },
+  "naiveComparison": {
+    "model_a": "arima",
+    "model_b": "naive",
+    "direction": "model_a_lower_loss",
+    "beats_naive_rmse": true,
+    "significantly_beats_naive": false,
+    "raw_p_value": 0.047655455968913074,
+    "holm_adjusted_p_value": 0.05760312575234039,
+    "mean_loss_differential": -0.04457147570499189,
+    "dm_statistic": -1.9905485478114535,
+    "hln_statistic": -1.9905485478114535,
+    "hac_bandwidth": 4,
+    "n_observations": 243,
+    "loss": "squared_error",
+    "alpha": 0.05
+  },
   "ohlcv": [
     {
       "date": "2020-01-02",

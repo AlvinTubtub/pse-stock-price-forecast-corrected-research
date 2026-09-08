@@ -712,13 +712,14 @@ def retune_deployment_lstm(
         maximum_lookback=max(LOOKBACK_GRID),
         fold_count=5,
     )
-    config, mean_rmse, rmse_std, folds = _select_formal_config(df, cv_plan)
+    config, mean_rmse, rmse_std, folds, configuration_results = _select_formal_config(df, cv_plan)
     log.info("Deployment retuning LSTM challenger for %s selected %s.", symbol, config)
     artifact = train_deployment_lstm(df, config)
     return artifact, config, {
         "mean_validation_rmse": mean_rmse,
         "validation_rmse_std": rmse_std,
         "folds": folds,
+        "configuration_results": configuration_results,
         "target_start": cv_plan.common_target_dates[0],
         "target_end": cv_plan.common_target_dates[-1],
     }

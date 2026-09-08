@@ -30,6 +30,23 @@ export interface ModelMetric {
   ljung_box_pvalue?: string | number;
 }
 
+export interface NaiveComparison {
+  model_a: string;
+  model_b: string;
+  direction: string;
+  beats_naive_rmse: boolean;
+  significantly_beats_naive: boolean;
+  raw_p_value: number;
+  holm_adjusted_p_value: number;
+  mean_loss_differential: number;
+  dm_statistic: number;
+  hln_statistic: number;
+  hac_bandwidth: number;
+  n_observations: number;
+  loss: string;
+  alpha: number;
+}
+
 export interface CompanyDetail {
   symbol: string;
   name: string;
@@ -43,6 +60,7 @@ export interface CompanyDetail {
   confidence?: number;
   metrics: Record<string, ModelMetric>;
   nextClose: Record<string, number>;
+  naiveComparison?: NaiveComparison | null;
   ohlcv: OhlcvPoint[];
   backtestDates?: string[];
   backtestActual: number[];
@@ -68,6 +86,99 @@ export interface DashboardData {
   topLoser: CompanySummary | null;
 }
 
+export interface FriedmanMaseTest {
+  statistic: number;
+  p_value: number;
+  permutation_p_value: number;
+  permutation_count: number;
+  n_companies: number;
+  model_order?: string[];
+  seed?: number;
+}
+
+export interface RmseConsistencyCheck {
+  counts: Record<string, number>;
+  dominant_count: number;
+  dominant_model: string | null;
+  min_required: number;
+  pass: boolean;
+  tie?: boolean;
+  tied_models?: string[];
+  total_companies?: number;
+}
+
+export interface WilcoxonPosthocComparison {
+  p_value: number;
+  holm_p_value: number;
+  statistic: number;
+}
+
+export interface WilcoxonPosthocTest {
+  posthoc_executed: boolean;
+  results: Record<string, WilcoxonPosthocComparison>;
+}
+
+export interface CompanyDmTestRecord {
+  alpha: number;
+  beats_naive_rmse: boolean;
+  direction: string;
+  dm_statistic: number;
+  hac_bandwidth: number;
+  hln_statistic: number;
+  holm_adjusted_p_value: number;
+  loss: string;
+  mean_loss_differential: number;
+  model_a: string;
+  model_b: string;
+  n_observations: number;
+  raw_p_value: number;
+  significantly_beats_naive: boolean;
+}
+
+export interface CompanyDmTestFamily {
+  eligible_principal_models?: string[];
+  reason?: string;
+  stage1_vs_naive: CompanyDmTestRecord[];
+  stage2_executed?: boolean;
+  stage2_principal?: unknown[];
+}
+
+export interface CompanyDiagnosticMetric {
+  computable: boolean;
+  diagnostic: string;
+  diagnostic_target: string;
+  n: number;
+  p_value?: number;
+  statistic?: number;
+  lm_statistic?: number;
+  lm_p_value?: number;
+  f_statistic?: number;
+  f_p_value?: number;
+  lags?: number[];
+}
+
+export interface CompanyDiagnostics {
+  [model: string]: {
+    arch_lm?: CompanyDiagnosticMetric;
+    shapiro_wilk?: CompanyDiagnosticMetric;
+  };
+}
+
+export interface PerCompanyStatisticalTests {
+  diagnostics?: CompanyDiagnostics;
+  dm_absolute_error?: CompanyDmTestFamily;
+  dm_squared_error?: CompanyDmTestFamily;
+}
+
+export interface StatisticalTestsData {
+  across_company: {
+    friedman_mase: FriedmanMaseTest;
+    rmse_consistency: RmseConsistencyCheck;
+    wilcoxon_posthoc: WilcoxonPosthocTest;
+  };
+  per_company: Record<string, PerCompanyStatisticalTests>;
+}
+
 export interface MetricsData {
   generatedAt: string;
   forecastDate?: string;
@@ -76,8 +187,15 @@ export interface MetricsData {
   aggregate: Record<string, { rmse: number; mae: number; mase: number; r2: number }>;
   bestModel: string;
   worstModel: string;
-  perCompany: Record<string, { metrics: Record<string, ModelMetric>; bestModel: string }>;
-  statisticalTests: Record<string, unknown>;
+  perCompany: Record<
+    string,
+    {
+      metrics: Record<string, ModelMetric>;
+      bestModel: string;
+      naiveComparison?: NaiveComparison | null;
+    }
+  >;
+  statisticalTests: StatisticalTestsData;
 }
 
 export type FormalModelId = "lag_reg" | "arima" | "lstm" | "naive";

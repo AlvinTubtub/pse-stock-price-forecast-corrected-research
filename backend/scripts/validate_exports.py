@@ -154,6 +154,15 @@ def main() -> int:
     metrics = _load(FORECASTS_DIR / "metrics.json")
     if metrics is None:
         errors.append(f"Missing {FORECASTS_DIR / 'metrics.json'}")
+    elif isinstance(metrics, dict):
+        per_company = metrics.get("perCompany", {})
+        for symbol in EXPECTED_TICKERS:
+            if symbol in per_company:
+                comp_metric = per_company[symbol]
+                if "naiveComparison" not in comp_metric:
+                    errors.append(f"metrics.json: {symbol} missing naiveComparison")
+                elif comp_metric["naiveComparison"] is not None and not isinstance(comp_metric["naiveComparison"], dict):
+                    errors.append(f"metrics.json: {symbol} naiveComparison must be dict or null")
 
     _validate_formal_study(errors)
 
@@ -167,6 +176,16 @@ def main() -> int:
         detail = _load(company_path)
         if not isinstance(detail, dict):
             continue
+        if "naiveComparison" not in detail:
+            errors.append(f"{symbol}: missing naiveComparison in company detail")
+        elif detail["naiveComparison"] is not None:
+            nc = detail["naiveComparison"]
+            if not isinstance(nc, dict):
+                errors.append(f"{symbol}: naiveComparison must be a dict or null")
+            else:
+                for req_key in ("model_a", "model_b", "direction", "beats_naive_rmse", "significantly_beats_naive", "holm_adjusted_p_value"):
+                    if req_key not in nc:
+                        errors.append(f"{symbol}: naiveComparison missing {req_key}")
         dates = detail.get("backtestDates")
         actual = detail.get("backtestActual")
         by_model = detail.get("backtestByModel")

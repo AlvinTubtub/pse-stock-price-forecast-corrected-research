@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-07T18:29:17.647951+08:00",
+  "generatedAt": "2026-09-08T13:29:36.540954+08:00",
   "forecastDate": "2026-09-08",
   "lastRunAt": "2026-09-07T10:29:12+00:00",
   "status": "ok",
@@ -60,7 +60,23 @@
           "r2": 0.8994935963776131
         }
       },
-      "bestModel": "ARIMA"
+      "bestModel": "ARIMA",
+      "naiveComparison": {
+        "model_a": "arima",
+        "model_b": "naive",
+        "direction": "model_b_lower_loss",
+        "beats_naive_rmse": false,
+        "significantly_beats_naive": false,
+        "raw_p_value": 0.7164607899681523,
+        "holm_adjusted_p_value": 1.0,
+        "mean_loss_differential": 0.003865730204643879,
+        "dm_statistic": 0.3636179278160534,
+        "hln_statistic": 0.3636179278160534,
+        "hac_bandwidth": 4,
+        "n_observations": 243,
+        "loss": "squared_error",
+        "alpha": 0.05
+      }
     },
     "BPI": {
       "metrics": {
@@ -90,7 +106,23 @@
           "r2": 0.935873120641183
         }
       },
-      "bestModel": "ARIMA"
+      "bestModel": "ARIMA",
+      "naiveComparison": {
+        "model_a": "arima",
+        "model_b": "naive",
+        "direction": "model_a_lower_loss",
+        "beats_naive_rmse": true,
+        "significantly_beats_naive": false,
+        "raw_p_value": 0.1448911676275011,
+        "holm_adjusted_p_value": 0.26285588775153723,
+        "mean_loss_differential": -0.2280514575696946,
+        "dm_statistic": -1.462538468335081,
+        "hln_statistic": -1.462538468335081,
+        "hac_bandwidth": 4,
+        "n_observations": 243,
+        "loss": "squared_error",
+        "alpha": 0.05
+      }
     },
     "MBT": {
       "metrics": {
@@ -120,7 +152,23 @@
           "r2": 0.8577465608591308
         }
       },
-      "bestModel": "ARIMA"
+      "bestModel": "ARIMA",
+      "naiveComparison": {
+        "model_a": "arima",
+        "model_b": "naive",
+        "direction": "model_a_lower_loss",
+        "beats_naive_rmse": true,
+        "significantly_beats_naive": false,
+        "raw_p_value": 0.047655455968913074,
+        "holm_adjusted_p_value": 0.05760312575234039,
+        "mean_loss_differential": -0.04457147570499189,
+        "dm_statistic": -1.9905485478114535,
+        "hln_statistic": -1.9905485478114535,
+        "hac_bandwidth": 4,
+        "n_observations": 243,
+        "loss": "squared_error",
+        "alpha": 0.05
+      }
     },
     "MER": {
       "metrics": {
@@ -150,7 +198,23 @@
           "r2": 0.9376198554215952
         }
       },
-      "bestModel": "Lag-Informed Regression"
+      "bestModel": "Lag-Informed Regression",
+      "naiveComparison": {
+        "model_a": "lag_reg",
+        "model_b": "naive",
+        "direction": "model_a_lower_loss",
+        "beats_naive_rmse": true,
+        "significantly_beats_naive": false,
+        "raw_p_value": 0.5063246305591691,
+        "holm_adjusted_p_value": 1.0,
+        "mean_loss_differential": -1.3202994634832679,
+        "dm_statistic": -0.6655625168219156,
+        "hln_statistic": -0.6655625168219156,
+        "hac_bandwidth": 4,
+        "n_observations": 243,
+        "loss": "squared_error",
+        "alpha": 0.05
+      }
     },
     "JFC": {
       "metrics": {
@@ -180,7 +244,23 @@
           "r2": 0.9826689341616817
         }
       },
-      "bestModel": "LSTM"
+      "bestModel": "LSTM",
+      "naiveComparison": {
+        "model_a": "lstm",
+        "model_b": "naive",
+        "direction": "model_a_lower_loss",
+        "beats_naive_rmse": true,
+        "significantly_beats_naive": false,
+        "raw_p_value": 0.653642038007749,
+        "holm_adjusted_p_value": 0.8654602566143335,
+        "mean_loss_differential": -0.022382923528800565,
+        "dm_statistic": -0.4492657636182891,
+        "hln_statistic": -0.4492657636182891,
+        "hac_bandwidth": 4,
+        "n_observations": 243,
+        "loss": "squared_error",
+        "alpha": 0.05
+      }
     },
     "SHLPH": {
       "metrics": {
@@ -210,7 +290,23 @@
           "r2": 0.9765983972619336
         }
       },
-      "bestModel": "ARIMA"
+      "bestModel": "ARIMA",
+      "naiveComparison": {
+        "model_a": "arima",
+        "model_b": "naive",
+        "direction": "model_a_lower_loss",
+        "beats_naive_rmse": true,
+        "significantly_beats_naive": false,
+        "raw_p_value": 0.726628267221539,
+        "holm_adjusted_p_value": 1.0,
+        "mean_loss_differential": -0.0006148910603213403,
+        "dm_statistic": -0.350019810293468,
+        "hln_statistic": -0.350019810293468,
+        "hac_bandwidth": 4,
+        "n_observations": 243,
+        "loss": "squared_error",
+        "alpha": 0.05
+      }
     },
     "MEG": {
       "metrics": {
@@ -240,7 +336,23 @@
           "r2": 0.9225450216255535
         }
       },
-      "bestModel": "Lag-Informed Regression"
+      "bestModel": "Lag-Informed Regression",
+      "naiveComparison": {
+        "model_a": "lag_reg",
+        "model_b": "naive",
+        "direction": "model_b_lower_loss",
+        "beats_naive_rmse": false,
+        "significantly_beats_naive": false,
+        "raw_p_value": 0.3917333694049012,
+        "holm_adjusted_p_value": 0.635337482114696,
+        "mean_loss_differential": 3.360975732720282e-06,
+        "dm_statistic": 0.8580146123260884,
+        "hln_statistic": 0.8580146123260884,
+        "hac_bandwidth": 4,
+        "n_observations": 243,
+        "loss": "squared_error",
+        "alpha": 0.05
+      }
     },
     "ALI": {
       "metrics": {
@@ -270,7 +382,23 @@
           "r2": 0.9858811868793967
         }
       },
-      "bestModel": "ARIMA"
+      "bestModel": "ARIMA",
+      "naiveComparison": {
+        "model_a": "arima",
+        "model_b": "naive",
+        "direction": "model_a_lower_loss",
+        "beats_naive_rmse": true,
+        "significantly_beats_naive": false,
+        "raw_p_value": 0.1821511197225174,
+        "holm_adjusted_p_value": 0.3643022394450348,
+        "mean_loss_differential": -0.0012408352531760682,
+        "dm_statistic": -1.3380037434008223,
+        "hln_statistic": -1.3380037434008223,
+        "hac_bandwidth": 4,
+        "n_observations": 243,
+        "loss": "squared_error",
+        "alpha": 0.05
+      }
     },
     "SMPH": {
       "metrics": {
@@ -300,7 +428,23 @@
           "r2": 0.9543754692579289
         }
       },
-      "bestModel": "Lag-Informed Regression"
+      "bestModel": "Lag-Informed Regression",
+      "naiveComparison": {
+        "model_a": "lag_reg",
+        "model_b": "naive",
+        "direction": "model_a_lower_loss",
+        "beats_naive_rmse": true,
+        "significantly_beats_naive": false,
+        "raw_p_value": 0.053984501763410186,
+        "holm_adjusted_p_value": 0.16195350529023056,
+        "mean_loss_differential": -0.005346967358813063,
+        "dm_statistic": -1.9363884385652608,
+        "hln_statistic": -1.9363884385652608,
+        "hac_bandwidth": 4,
+        "n_observations": 243,
+        "loss": "squared_error",
+        "alpha": 0.05
+      }
     },
     "GLO": {
       "metrics": {
@@ -330,7 +474,23 @@
           "r2": 0.9430646649086529
         }
       },
-      "bestModel": "Lag-Informed Regression"
+      "bestModel": "Lag-Informed Regression",
+      "naiveComparison": {
+        "model_a": "lag_reg",
+        "model_b": "naive",
+        "direction": "model_b_lower_loss",
+        "beats_naive_rmse": false,
+        "significantly_beats_naive": false,
+        "raw_p_value": 0.6825022648942405,
+        "holm_adjusted_p_value": 0.7439571983627775,
+        "mean_loss_differential": 0.383507935009803,
+        "dm_statistic": 0.4095446603326553,
+        "hln_statistic": 0.4095446603326553,
+        "hac_bandwidth": 4,
+        "n_observations": 243,
+        "loss": "squared_error",
+        "alpha": 0.05
+      }
     },
     "PGOLD": {
       "metrics": {
@@ -360,7 +520,23 @@
           "r2": 0.8979305336326274
         }
       },
-      "bestModel": "ARIMA"
+      "bestModel": "ARIMA",
+      "naiveComparison": {
+        "model_a": "arima",
+        "model_b": "naive",
+        "direction": "model_a_lower_loss",
+        "beats_naive_rmse": true,
+        "significantly_beats_naive": false,
+        "raw_p_value": 0.7484453761217686,
+        "holm_adjusted_p_value": 1.0,
+        "mean_loss_differential": -0.0025060582079903465,
+        "dm_statistic": -0.32105556329210166,
+        "hln_statistic": -0.32105556329210166,
+        "hac_bandwidth": 4,
+        "n_observations": 243,
+        "loss": "squared_error",
+        "alpha": 0.05
+      }
     },
     "ICT": {
       "metrics": {
@@ -390,7 +566,23 @@
           "r2": 0.9881807178658929
         }
       },
-      "bestModel": "LSTM"
+      "bestModel": "LSTM",
+      "naiveComparison": {
+        "model_a": "lstm",
+        "model_b": "naive",
+        "direction": "model_a_lower_loss",
+        "beats_naive_rmse": true,
+        "significantly_beats_naive": false,
+        "raw_p_value": 0.0871681665732551,
+        "holm_adjusted_p_value": 0.1743363331465102,
+        "mean_loss_differential": -9.119953383227138,
+        "dm_statistic": -1.7174942546970955,
+        "hln_statistic": -1.7174942546970955,
+        "hac_bandwidth": 4,
+        "n_observations": 243,
+        "loss": "squared_error",
+        "alpha": 0.05
+      }
     },
     "APX": {
       "metrics": {
@@ -420,7 +612,23 @@
           "r2": 0.9630816077616031
         }
       },
-      "bestModel": "Lag-Informed Regression"
+      "bestModel": "Lag-Informed Regression",
+      "naiveComparison": {
+        "model_a": "lag_reg",
+        "model_b": "naive",
+        "direction": "model_a_lower_loss",
+        "beats_naive_rmse": true,
+        "significantly_beats_naive": false,
+        "raw_p_value": 0.2859927939172018,
+        "holm_adjusted_p_value": 0.6944998689865007,
+        "mean_loss_differential": -0.00031529645766957304,
+        "dm_statistic": -1.0693158379073584,
+        "hln_statistic": -1.0693158379073584,
+        "hac_bandwidth": 4,
+        "n_observations": 243,
+        "loss": "squared_error",
+        "alpha": 0.05
+      }
     },
     "NIKL": {
       "metrics": {
@@ -450,7 +658,23 @@
           "r2": 0.9444349366927998
         }
       },
-      "bestModel": "ARIMA"
+      "bestModel": "ARIMA",
+      "naiveComparison": {
+        "model_a": "arima",
+        "model_b": "naive",
+        "direction": "model_a_lower_loss",
+        "beats_naive_rmse": true,
+        "significantly_beats_naive": false,
+        "raw_p_value": 0.7656004353445383,
+        "holm_adjusted_p_value": 1.0,
+        "mean_loss_differential": -1.3139146097041975e-05,
+        "dm_statistic": -0.298470200749555,
+        "hln_statistic": -0.298470200749555,
+        "hac_bandwidth": 4,
+        "n_observations": 243,
+        "loss": "squared_error",
+        "alpha": 0.05
+      }
     },
     "SCC": {
       "metrics": {
@@ -480,7 +704,23 @@
           "r2": 0.9708922579549277
         }
       },
-      "bestModel": "ARIMA"
+      "bestModel": "ARIMA",
+      "naiveComparison": {
+        "model_a": "arima",
+        "model_b": "naive",
+        "direction": "model_a_lower_loss",
+        "beats_naive_rmse": true,
+        "significantly_beats_naive": false,
+        "raw_p_value": 0.9208380881793969,
+        "holm_adjusted_p_value": 0.9208380881793969,
+        "mean_loss_differential": -0.0005234232822232179,
+        "dm_statistic": -0.09948181030334986,
+        "hln_statistic": -0.09948181030334986,
+        "hac_bandwidth": 4,
+        "n_observations": 243,
+        "loss": "squared_error",
+        "alpha": 0.05
+      }
     }
   },
   "statisticalTests": {

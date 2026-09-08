@@ -227,3 +227,37 @@ def test_versioned_univariate_artifact_predicts_without_legacy_features():
     artifact = {"artifact_version": 2, "input_design": "univariate_delta_close", "state_dict": model.state_dict(), "input_size": 1, "seq_len": 5, "hidden_size": 25, "delta_scaler": scaler}
     expected_delta = scaler.inverse_transform([[0.0]])[0, 0]
     assert lstm.predict_next(artifact, df) == pytest.approx(df["Close"].iloc[-1] + expected_delta)
+
+
+def test_retune_deployment_lstm_unpacks_five_values(monkeypatch):
+    """Direct regression test: retune_deployment_lstm must unpack 5 values from _select_formal_config."""
+    df = _df(100)
+    config = lstm.LSTMConfig(lookback=5, hidden_size=25, learning_rate=0.01, batch_size=16)
+    winning_folds = [{"mean_rmse": 0.123456}] * 5
+    configuration_results = [
+        {
+            "configuration": config.__dict__,
+            "status": "complete",
+            "mean_validation_rmse": 0.123456,
+            "validation_rmse_std": 0.0123,
+            "fold_results": winning_folds,
+        }
+    ]
+    # Return all 5 values as defined by _select_formal_config
+    mock_select = lambda _df, _cv: (config, 0.123456, 0.0123, winning_folds, configuration_results)
+    mock_train = lambda _df, _cfg: {"artifact_version": 2, "config": _cfg}
+
+    monkeypatch.setattr(lstm, "_select_formal_config", mock_select)
+    monkeypatch.setattr(lstm, "train_deployment_lstm", mock_train)
+
+    # Must not raise ValueError: too many values to unpack
+    artifact, selected_config, diagnostics = lstm.retune_deployment_lstm(df, "BPI")
+
+    assert artifact == {"artifact_version": 2, "config": config}
+    assert selected_config == config
+    assert diagnostics["mean_validation_rmse"] == 0.123456
+    assert diagnostics["validation_rmse_std"] == 0.0123
+    assert diagnostics["folds"] == winning_folds
+    assert diagnostics["configuration_results"] == configuration_results
+    assert "target_start" in diagnostics
+    assert "target_end" in diagnostics

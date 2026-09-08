@@ -120,14 +120,16 @@ The forecasting models are evaluated using:
 Metric	Purpose
 RMSE	Measures overall magnitude of prediction errors, penalizing larger errors more heavily
 MAE	Measures average absolute prediction error
-MASE	Compares model error against the naive baseline
+MASE	Evaluates forecast error relative to in-sample naive error scale
 R²	Measures explained variance on the evaluation/test set
 
 MASE interpretation:
 
-MASE < 1.0  → better than Naive baseline
-MASE = 1.0  → approximately equal to Naive baseline
-MASE > 1.0  → worse than Naive baseline
+MASE < 1.0  → test-set MAE is lower than in-sample naive error scale
+MASE = 1.0  → test-set MAE is approximately equal to in-sample naive scale
+MASE > 1.0  → test-set MAE is larger than in-sample naive scale
+
+Note: MASE < 1.0 indicates error below the in-sample naive scale; formal outperformance over the holdout Naive baseline requires Diebold-Mariano testing.
 
 R² is treated as a supplementary evaluation metric and is not interpreted as forecast confidence or probability.
 
@@ -528,9 +530,11 @@ The assistant uses supplied dashboard JSON artifacts as its source of truth for 
 
 It also correctly explains:
 
-MASE < 1.0 → better than Naive
-MASE = 1.0 → approximately equal to Naive
-MASE > 1.0 → worse than Naive
+MASE < 1.0 → holdout MAE is lower than in-sample naive error scale
+MASE = 1.0 → holdout MAE is approximately equal to in-sample naive scale
+MASE > 1.0 → holdout MAE is larger than in-sample naive scale
+
+Note: Formal outperformance over holdout Naive requires Diebold-Mariano testing with family-wise error rate control.
 
 R² is not presented as confidence or probability.
 
@@ -564,7 +568,7 @@ Vercel redeployment
 
 The Fast Pipeline does not retrain models.
 
-Weekly model training remains a separate workflow.
+Model refresh remains a separate scheduled workflow.
 
 22. Automated Schedules
 Daily Inference
@@ -575,19 +579,19 @@ Monday:
 Tuesday–Friday:
 4:00 PM Philippine Time
 
-The daily inference uses persisted weekly models and generates next-session forecasts from the latest validated OHLCV data.
+The daily inference uses persisted deployment models and generates next-session forecasts from the latest validated OHLCV data.
 
-Weekly Training
-Sunday:
-8:00 AM Philippine Time
+Scheduled Model Refresh
+Methodology cadence:
+00:00 UTC on the 1st of each month (`0 0 1 * *`). Remote push and automated deployment remain disabled during review.
 
-The weekly training workflow retrains:
+The scheduled refresh workflow updates:
 
 Lag-Informed Regression
 ARIMA
 LSTM
 
-and refreshes model evaluation and model-selection artifacts.
+and refreshes model evaluation and deployment-selection artifacts under the strict refresh lifecycle.
 
 23. Data Integrity
 
@@ -729,7 +733,7 @@ The completed ForecastPH system now provides:
 Automated PSE data processing
 PSE holiday-aware data updates
 Automated daily inference
-Weekly model training
+Scheduled model refresh
 Cross-model evaluation
 Statistical significance testing
 Interactive historical OHLCV exploration
@@ -768,7 +772,7 @@ Core components validated:
 ✅ PSE trading calendar
 ✅ Holiday-aware automation
 ✅ Daily inference
-✅ Weekly model training
+✅ Scheduled model refresh
 ✅ Forecast generation
 ✅ Model evaluation
 ✅ Statistical testing

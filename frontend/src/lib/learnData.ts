@@ -279,8 +279,8 @@ export const GLOSSARY_TERMS: TermDefinition[] = [
   {
     term: "MASE (Mean Absolute Scaled Error)",
     category: "forecastph",
-    shortDef: "Benchmark comparison (< 1.0 beats the naive baseline).",
-    detailedDef: "Scale-free metric comparing model error against a naive 'tomorrow equals today' baseline. Values below 1.0 indicate the model outperformed the naive benchmark.",
+    shortDef: "Scale-free metric relative to in-sample one-step random walk MAE.",
+    detailedDef: "Evaluates forecast error relative to the in-sample one-step naive mean absolute error. Values below 1.0 indicate average test-set errors smaller than the in-sample naive scale; formal outperformance over the holdout naive baseline requires Diebold-Mariano testing.",
   },
   {
     term: "R² (Goodness-of-Fit)",

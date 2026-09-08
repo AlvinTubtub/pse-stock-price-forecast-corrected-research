@@ -50,7 +50,7 @@ export default function ModelPerformanceSummary({
               MASE
             </strong>
             <span className="text-slate-600 dark:text-slate-400">
-              Lower is better. A value below 1.0 indicates lower average absolute error than the Naive persistence benchmark; it does not by itself establish statistical significance.
+              Lower is better. A value below 1.0 indicates lower holdout MAE than the in-sample Naive scaling error; it does not by itself establish statistical significance over holdout Naive forecasts.
             </span>
           </div>
         </div>
@@ -135,23 +135,25 @@ export default function ModelPerformanceSummary({
           </p>
         </div>
 
-        {/* Card 3: Beating Naive Baseline */}
+        {/* Card 3: Descriptive Benchmark Comparison */}
         <div className="p-4 rounded-2xl bg-white dark:bg-charcoal-900 border border-slate-200 dark:border-charcoal-800 shadow-sm space-y-2">
           <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
-            Beating Naive Persistence
+            {selectedMetric === "mase"
+              ? "Lower MAE than In-sample Scale"
+              : `Lower Holdout ${meta.shortName} Than Naive`}
           </span>
           <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold font-mono text-emerald-600 dark:text-emerald-400">
+            <span className="text-2xl font-bold font-mono text-cyan-600 dark:text-neon-400">
               {summary.beatsNaiveCount}
             </span>
             <span className="text-xs text-slate-500 dark:text-slate-400">
-              instances
+              evaluations
             </span>
           </div>
           <p className="text-xs text-slate-600 dark:text-slate-400">
             {selectedMetric === "mase"
-              ? "< 1.0 has lower MAE than Naive."
-              : `Evaluations with lower ${meta.shortName} than Naive.`}
+              ? "Evaluations with MASE < 1.0 (lower MAE than in-sample scaling error)."
+              : `Evaluations with descriptively lower holdout ${meta.shortName} than Naive.`}
           </p>
         </div>
 

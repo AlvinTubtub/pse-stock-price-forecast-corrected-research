@@ -230,7 +230,7 @@ export default function LearnStocksPage() {
                 Check Historical Accuracy
               </h3>
               <p className="text-xs text-slate-600 dark:text-slate-400 mt-1.5 leading-relaxed">
-                Evaluate out-of-sample backtests, RMSE, MAE, and the benchmark naive baseline (MASE &lt; 1.0).
+                Evaluate out-of-sample backtests, RMSE, MAE, and scale comparisons against in-sample Naive error (MASE).
               </p>
             </div>
             <div className="pt-4 mt-3 border-t border-slate-100 dark:border-charcoal-800 flex items-center justify-between text-xs font-semibold text-brand-500 dark:text-brand-400 group-hover:text-neon-500 dark:group-hover:text-neon-300">
@@ -745,7 +745,7 @@ export default function LearnStocksPage() {
                   Rigorous Out-of-Sample Empirical Evaluation
                 </h3>
                 <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                  ForecastPH enforces strict chronological train/validation/test splits with zero lookahead bias. We compare all candidate models against the random-walk Naive Baseline (predicting tomorrow equals today). A model must achieve MASE &lt; 1.0 to prove genuine predictive utility over simple persistence.
+                  ForecastPH enforces strict chronological train/validation/test splits with zero lookahead bias. We evaluate all candidate models against the random-walk Naive Baseline. MASE below 1.0 indicates lower holdout MAE than the in-sample Naive error scale, while formal Diebold–Mariano testing determines whether improvement over holdout Naive is statistically significant.
                 </p>
               </div>
             </div>
@@ -763,9 +763,9 @@ export default function LearnStocksPage() {
                 <p className="text-xs text-slate-600 dark:text-slate-400">Mean Absolute Error. Average magnitude of forecast errors in Philippine Pesos.</p>
               </div>
               <div className="bg-slate-50 dark:bg-charcoal-950/80 border border-slate-200 dark:border-charcoal-800 p-4 rounded-xl space-y-1">
-                <span className="text-[11px] font-bold text-emerald-500 dark:text-emerald-400 uppercase tracking-wide">Key Benchmark</span>
+                <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Error Scaling</span>
                 <h4 className="font-bold text-slate-900 dark:text-white text-sm">MASE</h4>
-                <p className="text-xs text-slate-600 dark:text-slate-400">Mean Absolute Scaled Error. Values below 1.0 indicate better performance than the naive baseline.</p>
+                <p className="text-xs text-slate-600 dark:text-slate-400">Mean Absolute Scaled Error. Values below 1.0 indicate lower holdout MAE than the development-period in-sample Naive scaling error.</p>
               </div>
               <div className="bg-slate-50 dark:bg-charcoal-950/80 border border-slate-200 dark:border-charcoal-800 p-4 rounded-xl space-y-1">
                 <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Goodness-of-Fit</span>

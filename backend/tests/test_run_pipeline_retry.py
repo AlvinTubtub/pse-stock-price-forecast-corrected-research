@@ -69,7 +69,7 @@ class TestTickersNeedingInference(unittest.TestCase):
                 "forecast_for": "2026-08-10",
                 "inference_at": "2026-08-07T16:00:00+08:00",
                 "models_retrained": False,
-                "model_source": "weekly_persisted_artifacts",
+                "model_source": "persisted_deployment_artifacts",
             }
         (self.cache_dir / f"{symbol}.json").write_text(json.dumps(payload))
 

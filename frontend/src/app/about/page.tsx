@@ -243,7 +243,7 @@ export default async function AboutPage() {
                 Backtest & Evaluation
               </h3>
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                Continuous out-of-sample backtesting calculating RMSE, MAE, MASE (&lt; 1.0 threshold), and non-parametric hypothesis tests.
+                Continuous out-of-sample backtesting calculating RMSE, MAE, MASE (scaling vs in-sample Naive error), and non-parametric hypothesis tests.
               </p>
             </div>
             <div className="text-[11px] font-semibold text-amber-400 pt-2 border-t border-slate-200 dark:border-charcoal-800 flex items-center justify-between">
@@ -507,15 +507,15 @@ export default async function AboutPage() {
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-brand-500 dark:text-brand-400 uppercase tracking-wider">Metric 3</span>
               <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-brand-500/20 text-brand-600 dark:text-brand-300 border border-brand-500/30">
-                &lt; 1.0 = Beats Naïve
+                &lt; 1.0 = Lower than in-sample scale
               </span>
             </div>
             <h4 className="font-bold text-slate-900 dark:text-white text-base">MASE</h4>
             <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Mean Absolute Scaled Error</p>
             <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-              The gold-standard benchmark comparing model MAE against a <strong className="text-slate-900 dark:text-white">Naïve Persistence Baseline</strong> (predicting tomorrow equals today).
-              <span className="block mt-1 text-emerald-600 dark:text-emerald-300 font-semibold">
-                MASE &lt; 1.0 confirms genuine statistical skill over a random-walk guess.
+              Scale-free metric comparing holdout MAE against the development-period in-sample Naive scaling error.
+              <span className="block mt-1 text-slate-700 dark:text-slate-300">
+                MASE below 1 means the model&apos;s holdout MAE is lower than the development-period in-sample Naive scaling error. Whether it significantly beats the holdout Naive forecast is determined separately using the benchmark-first Diebold–Mariano test and Holm-adjusted p-value.
               </span>
             </p>
           </div>

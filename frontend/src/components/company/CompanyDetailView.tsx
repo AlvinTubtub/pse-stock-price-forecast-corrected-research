@@ -91,7 +91,23 @@ export default function CompanyDetailView({ company }: CompanyDetailViewProps) {
   };
 
   const maseVal = parseFloat(String(selectedMetrics.mase));
-  const beatsNaive = !isNaN(maseVal) && maseVal < 1.0;
+  const naiveComp = company.naiveComparison;
+  let naiveSignificanceLabel = "Naive significance evidence unavailable";
+  let naiveBadgeStyle = "bg-charcoal-800/80 text-slate-400 border-charcoal-700";
+  let naiveBadgeIcon: "check" | "alertTriangle" = "alertTriangle";
+
+  if (naiveComp) {
+    if (naiveComp.significantly_beats_naive) {
+      naiveSignificanceLabel = `Statistically significant improvement over Naive (Holm p = ${naiveComp.holm_adjusted_p_value.toFixed(4)})`;
+      naiveBadgeStyle = "bg-accent-emerald/15 text-accent-emerald border-accent-emerald/30";
+      naiveBadgeIcon = "check";
+    } else {
+      naiveSignificanceLabel = `No statistically significant improvement over Naive (Holm p = ${naiveComp.holm_adjusted_p_value.toFixed(4)})`;
+      naiveBadgeStyle = "bg-charcoal-800/80 text-slate-300 border-charcoal-700";
+      naiveBadgeIcon = "alertTriangle";
+    }
+  }
+
   const productionDates = company.productionBacktestDates ?? [];
   const productionActual = company.productionBacktestActual ?? [];
   const productionByModel = company.productionBacktestByModel ?? {};
@@ -347,23 +363,10 @@ export default function CompanyDetailView({ company }: CompanyDetailViewProps) {
             </div>
             <div className="flex items-center gap-2">
               <span
-                className={`inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full font-semibold font-mono border ${
-                  beatsNaive
-                    ? "bg-accent-emerald/15 text-accent-emerald border-accent-emerald/30"
-                    : "bg-accent-amber/15 text-accent-amber border-accent-amber/30"
-                }`}
+                className={`inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full font-semibold font-mono border ${naiveBadgeStyle}`}
               >
-                {beatsNaive ? (
-                  <>
-                    <ModernIcon name="check" className="w-3.5 h-3.5" />
-                    Beats Naive Baseline (MASE &lt; 1.0)
-                  </>
-                ) : (
-                  <>
-                    <ModernIcon name="alertTriangle" className="w-3.5 h-3.5" />
-                    Worse Than Naive (MASE ≥ 1.0)
-                  </>
-                )}
+                <ModernIcon name={naiveBadgeIcon} className="w-3.5 h-3.5" />
+                {naiveSignificanceLabel}
               </span>
             </div>
           </div>
@@ -385,14 +388,10 @@ export default function CompanyDetailView({ company }: CompanyDetailViewProps) {
             </div>
             <div className="bg-charcoal-900/80 border border-charcoal-800 rounded-lg p-3.5">
               <p className="text-xs text-slate-400 mb-0.5">MASE</p>
-              <p
-                className={`text-lg font-bold font-mono ${
-                  beatsNaive ? "text-accent-emerald" : "text-accent-amber"
-                }`}
-              >
+              <p className="text-lg font-bold font-mono text-white">
                 {formatNum(selectedMetrics.mase, 4)}
               </p>
-              <p className="text-[11px] text-slate-500 mt-0.5">&lt; 1.0 beats naive</p>
+              <p className="text-[11px] text-slate-500 mt-0.5">&lt; 1.0 lower than in-sample scale</p>
             </div>
             <div className="bg-charcoal-900/80 border border-charcoal-800 rounded-lg p-3.5">
               <p className="text-xs text-slate-400 mb-0.5">Goodness-of-Fit (R²)</p>
@@ -404,10 +403,8 @@ export default function CompanyDetailView({ company }: CompanyDetailViewProps) {
           </div>
 
           <p className="text-xs text-slate-400 mt-3.5 leading-relaxed">
-            <strong className="text-slate-300">Note: </strong>
-            MASE below 1.0 indicates lower forecast error than the naive baseline (predicting
-            tomorrow&apos;s close equals today&apos;s close). R² is a supplementary goodness-of-fit
-            metric and is not a forecast confidence probability.
+            <strong className="text-slate-300">Methodology Note: </strong>
+            MASE below 1 means the model&apos;s holdout MAE is lower than the development-period in-sample Naive scaling error. Whether it significantly beats the holdout Naive forecast is determined separately using the benchmark-first Diebold–Mariano test and Holm-adjusted p-value. R² is a supplementary goodness-of-fit metric and is not a forecast confidence probability.
           </p>
         </section>
       )}

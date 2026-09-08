@@ -76,3 +76,76 @@ def test_production_export_includes_only_realized_issued_forecasts_and_keeps_the
     assert dates == ["2026-09-01"]
     assert actual == [10.0]
     assert by_model == {key: [value] for key, value in predictions.items()}
+
+
+def test_extract_naive_comparison_returns_matching_record():
+    stat_tests = {
+        "per_company": {
+            "BPI": {
+                "dm_squared_error": {
+                    "stage1_vs_naive": [
+                        {
+                            "model_a": "lag_reg",
+                            "model_b": "naive",
+                            "direction": "model_a_lower_loss",
+                            "beats_naive_rmse": True,
+                            "significantly_beats_naive": True,
+                            "raw_p_value": 0.012,
+                            "holm_adjusted_p_value": 0.024,
+                            "mean_loss_differential": -0.05,
+                            "dm_statistic": -2.5,
+                            "hln_statistic": -2.5,
+                            "hac_bandwidth": 4,
+                            "n_observations": 243,
+                            "loss": "squared_error",
+                            "alpha": 0.05,
+                        },
+                        {
+                            "model_a": "arima",
+                            "model_b": "naive",
+                            "direction": "model_a_higher_loss",
+                            "beats_naive_rmse": False,
+                            "significantly_beats_naive": False,
+                            "raw_p_value": 0.45,
+                            "holm_adjusted_p_value": 0.90,
+                            "mean_loss_differential": 0.02,
+                            "dm_statistic": 0.8,
+                            "hln_statistic": 0.8,
+                            "hac_bandwidth": 4,
+                            "n_observations": 243,
+                            "loss": "squared_error",
+                            "alpha": 0.05,
+                        },
+                    ]
+                }
+            }
+        }
+    }
+
+    record = export_forecast_artifacts.extract_naive_comparison(stat_tests, "BPI", "lag_reg")
+    assert record is not None
+    assert record["model_a"] == "lag_reg"
+    assert record["significantly_beats_naive"] is True
+    assert record["beats_naive_rmse"] is True
+    assert record["holm_adjusted_p_value"] == 0.024
+
+    # Test arima lookup
+    record_arima = export_forecast_artifacts.extract_naive_comparison(stat_tests, "BPI", "arima")
+    assert record_arima is not None
+    assert record_arima["model_a"] == "arima"
+    assert record_arima["significantly_beats_naive"] is False
+
+
+def test_extract_naive_comparison_handles_missing_or_malformed_gracefully():
+    assert export_forecast_artifacts.extract_naive_comparison({}, "BPI", "lag_reg") is None
+    assert export_forecast_artifacts.extract_naive_comparison(None, "BPI", "lag_reg") is None
+    assert export_forecast_artifacts.extract_naive_comparison({"per_company": {}}, "BPI", "lag_reg") is None
+    assert export_forecast_artifacts.extract_naive_comparison(
+        {"per_company": {"BPI": {"dm_squared_error": {}}}}, "BPI", "lag_reg"
+    ) is None
+    assert export_forecast_artifacts.extract_naive_comparison(
+        {"per_company": {"BPI": {"dm_squared_error": {"stage1_vs_naive": []}}}}, "BPI", "lag_reg"
+    ) is None
+    assert export_forecast_artifacts.extract_naive_comparison(
+        {"per_company": {"BPI": {"dm_squared_error": {"stage1_vs_naive": [{"model_a": "lstm"}]}}}}, "BPI", "lag_reg"
+    ) is None

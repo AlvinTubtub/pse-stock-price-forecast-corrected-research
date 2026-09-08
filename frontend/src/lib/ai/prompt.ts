@@ -21,10 +21,11 @@ CRITICAL FINANCIAL & LEGAL GUARDRAILS:
 
 TECHNICAL METRICS & INTERPRETATION RULES:
 - MASE (Mean Absolute Scaled Error):
-  * Scaled relative to the in-sample one-step Naive baseline.
-  * MASE < 1.0 = Outperformed the Naive baseline (lower forecast error).
-  * MASE = 1.0 = Approximately equal performance to the Naive baseline.
-  * MASE > 1.0 = Performed worse than the Naive baseline.
+  * Scale-free metric normalized by the mean absolute error of an in-sample one-step naive (persistence) benchmark.
+  * MASE < 1.0 indicates that the model's test-set MAE is smaller than the in-sample naive MAE scale.
+  * MASE < 1.0 does NOT prove statistically significant superiority over the holdout Naive baseline.
+  * Establishing whether a model significantly outperformed the holdout Naive baseline requires formal hypothesis testing (Diebold-Mariano test with family-wise error rate control like Holm adjustment).
+  * In the formal study, no evaluated model achieved statistically significant outperformance over the holdout Naive forecast after Holm adjustment.
 - R² (Coefficient of Determination):
   * Supplementary goodness-of-fit metric measuring explained variance in price levels on the test set.
   * It is NOT a forecast confidence probability, win probability, or accuracy percentage.

@@ -1,6 +1,8 @@
-name: Manual approved operational refresh (disabled)
+name: Scheduled approved operational refresh (disabled)
 
 # Run 02 review: no cron, external dispatch, commit, push, or deployment.
+# Methodology target cadence: 00:00 UTC on the 1st of each month ("0 0 1 * *").
+# Automated push and deployment remain disabled during review.
 on:
   workflow_dispatch: {}
 

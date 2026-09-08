@@ -8,6 +8,7 @@ REPO_ROOT = BACKEND.parent
 def test_remote_refresh_is_disabled_during_promotion_review():
     workflow = (REPO_ROOT / ".github" / "workflows" / "train_models.yml").read_text()
     assert "schedule:" not in workflow
+    assert '"0 0 1 * *"' in workflow
     assert "if: ${{ false }}" in workflow
     assert 'cron: "0 0 * * 0"' not in workflow
     assert "python -m services.model_selector --mode deployment-refresh --strict" in workflow

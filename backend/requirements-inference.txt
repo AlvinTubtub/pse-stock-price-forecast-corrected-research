@@ -1,7 +1,7 @@
 # Lightweight dependency set for daily inference only.
 #
 # Used by the Fast Pipeline (.github/workflows/update_pipeline.yml)
-# after data ingestion, to load persisted weekly models and generate
+# after data ingestion, to load persisted deployment models and generate
 # fresh next-trading-day forecasts without retraining.
 #
 # Versions are pinned to match the environment that actually produced the
@@ -23,8 +23,8 @@
 #   - scikit-learn 1.3.2 does not match the `_sklearn_version: '1.9.0'`
 #     embedded in every models/lag_regression/*.pkl artifact.
 #
-# Do NOT change these pins without also retraining all models (weekly
-# training must then be re-pinned to match, so training and inference
+# Do NOT change these pins without also retraining all models (scheduled
+# refresh must then be re-pinned to match, so training and inference
 # stay on one reproducible environment — see requirements-pipeline.txt).
 pandas==3.0.5
 numpy==1.26.4

@@ -262,7 +262,7 @@ class TestDailyInference(unittest.TestCase):
         self.assertIn("inference_metadata", updated)
         meta = updated["inference_metadata"]
         self.assertEqual(meta["models_retrained"], False)
-        self.assertEqual(meta["model_source"], "weekly_persisted_artifacts")
+        self.assertEqual(meta["model_source"], "persisted_deployment_artifacts")
         self.assertEqual(meta["data_as_of"], "2026-08-07")
         self.assertIn("forecast_for", meta)
         self.assertIn("inference_at", meta)
@@ -310,7 +310,7 @@ class TestDailyInference(unittest.TestCase):
             "forecast_for": "2026-08-02",
             "inference_at": "2026-08-01T16:00:00+08:00",
             "models_retrained": False,
-            "model_source": "weekly_persisted_artifacts",
+            "model_source": "persisted_deployment_artifacts",
         }
         (daily_inference.PREDICTION_CACHE_DIR / f"{self.symbol}.json").write_text(json.dumps(stale_cache))
 

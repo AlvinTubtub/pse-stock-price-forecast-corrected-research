@@ -1,6 +1,6 @@
 # Canonical model-training environment.
-# Keep these versions aligned with requirements-inference.txt because weekly
-# training serializes sklearn/statsmodels/torch artifacts that daily inference
+# Keep these versions aligned with requirements-inference.txt because scheduled
+# refresh serializes sklearn/statsmodels/torch artifacts that daily inference
 # must load without version/ABI drift.
 pandas==3.0.5
 numpy==1.26.4

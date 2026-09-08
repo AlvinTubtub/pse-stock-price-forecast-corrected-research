@@ -28,7 +28,7 @@ log = logging.getLogger(__name__)
 BASE_DIR = Path(__file__).resolve().parent.parent
 RAW_DIR = BASE_DIR / "data" / "raw"
 MODELS_DIR = BASE_DIR / "models"
-# New weekly deployment artifacts are written here.  The three legacy
+# Deployment artifacts are written here.  The three legacy
 # directories remain readable while existing repositories are migrated.
 DEPLOYMENT_CURRENT_DIR = MODELS_DIR / "deployment" / "current"
 LAG_MODELS_DIR = MODELS_DIR / "lag_regression"
@@ -38,7 +38,7 @@ PREDICTION_CACHE_DIR = BASE_DIR / "prediction_cache"
 PRODUCTION_HISTORY_DIR = BASE_DIR / "production_history"
 
 PHT = timezone(timedelta(hours=8))  # Philippine Time (UTC+8, no DST)
-MODEL_SOURCE = "weekly_persisted_artifacts"
+MODEL_SOURCE = "persisted_deployment_artifacts"
 
 # The 15-ticker universe the dashboard tracks. Sourced from the pdf
 # pipeline's config (which is itself kept in sync with
@@ -137,7 +137,7 @@ def _infer_arima(symbol: str, df: pd.DataFrame) -> float:
         raise ValueError(
             f"{symbol} ARIMA model was trained on {n_endog} obs, "
             f"but current data only has {len(close)} rows. "
-            f"Model/data lineage is inconsistent — weekly retraining required."
+            f"Model/data lineage is inconsistent — scheduled refresh required."
         )
 
     historical_close = close.iloc[:n_endog].reset_index(drop=True)
@@ -151,7 +151,7 @@ def _infer_arima(symbol: str, df: pd.DataFrame) -> float:
             f"{symbol} ARIMA model/data lineage mismatch: "
             f"max historical Close diff = {max_diff:.4f} against "
             f"model.model.endog. The persisted model was not trained "
-            f"on this data series — weekly retraining required."
+            f"on this data series — scheduled refresh required."
         )
 
     # ------------------------------------------------------------------

@@ -8,7 +8,7 @@ import ChangeBadge from "@/components/ChangeBadge";
 import ModernIcon, { ModernSquircleBadge } from "@/components/ModernIcon";
 import { useWatchlist } from "@/context/WatchlistContext";
 import { formatDate, formatNum, formatPeso, formatPct } from "@/lib/format";
-import type { CompanySummary, MetricsData } from "@/lib/types";
+import type { CompanySummary, MetricsData, NaiveComparison } from "@/lib/types";
 
 export default function WatchlistClient({
   allCompanies,
@@ -40,6 +40,7 @@ export default function WatchlistClient({
         pesoChange: company.predictedClose - company.latestClose,
         rmse: selectedMetrics?.rmse,
         mase: selectedMetrics?.mase,
+        naiveComparison: companyMetrics?.naiveComparison,
       };
     }),
     [metrics, watchedCompanies]
@@ -250,8 +251,23 @@ export default function WatchlistClient({
                   <MetricRow label="Expected Change" companies={comparisonRows} render={(company) => <span className={company.pctChange >= 0 ? "text-accent-emerald font-semibold" : "text-accent-rose font-semibold"}>{formatPeso(company.pesoChange)} ({formatPct(company.pctChange)})</span>} />
                   <MetricRow label="Selected Model" companies={comparisonRows} render={(company) => <span className="text-neon-400">{company.bestModel}</span>} />
                   <MetricRow label="Test RMSE (₱)" companies={comparisonRows} render={(company) => company.rmse === undefined ? "--" : formatNum(company.rmse)} />
-                  <MetricRow label="MASE (Scaled Error)" companies={comparisonRows} render={(company) => company.mase === undefined ? "--" : <span className={Number(company.mase) < 1 ? "text-accent-emerald font-semibold" : "text-accent-amber font-semibold"}>{formatNum(company.mase)}</span>} />
-                  <MetricRow label="Beats Naive Baseline?" companies={comparisonRows} render={(company) => company.mase === undefined ? "--" : Number(company.mase) < 1 ? <span className="text-accent-emerald font-semibold inline-flex items-center gap-1"><ModernIcon name="check" className="w-3.5 h-3.5" /> Yes (MASE &lt; 1)</span> : <span className="text-accent-amber font-semibold inline-flex items-center gap-1"><ModernIcon name="alertTriangle" className="w-3.5 h-3.5" /> No (MASE ≥ 1)</span>} />
+                  <MetricRow label="MASE (Scaled Error)" companies={comparisonRows} render={(company) => company.mase === undefined ? "--" : <span className="text-white font-semibold">{formatNum(company.mase)}</span>} />
+                  <MetricRow
+                    label="Naive Baseline Significance (DM/Holm)"
+                    companies={comparisonRows}
+                    render={(company) => {
+                      if (!company.naiveComparison) return <span className="text-slate-500">Unavailable</span>;
+                      return company.naiveComparison.significantly_beats_naive ? (
+                        <span className="text-accent-emerald font-semibold inline-flex items-center gap-1">
+                          <ModernIcon name="check" className="w-3.5 h-3.5" /> Significant (p = {company.naiveComparison.holm_adjusted_p_value.toFixed(4)})
+                        </span>
+                      ) : (
+                        <span className="text-slate-300 font-semibold inline-flex items-center gap-1">
+                          <ModernIcon name="alertTriangle" className="w-3.5 h-3.5 text-slate-400" /> Not sig. (p = {company.naiveComparison.holm_adjusted_p_value.toFixed(4)})
+                        </span>
+                      );
+                    }}
+                  />
                 </tbody>
               </table>
             </div>
@@ -268,8 +284,8 @@ function MetricRow({
   render,
 }: {
   label: string;
-  companies: Array<CompanySummary & { pesoChange: number; rmse?: string | number; mase?: string | number }>;
-  render: (company: CompanySummary & { pesoChange: number; rmse?: string | number; mase?: string | number }) => React.ReactNode;
+  companies: Array<CompanySummary & { pesoChange: number; rmse?: string | number; mase?: string | number; naiveComparison?: NaiveComparison | null }>;
+  render: (company: CompanySummary & { pesoChange: number; rmse?: string | number; mase?: string | number; naiveComparison?: NaiveComparison | null }) => React.ReactNode;
 }) {
   return (
     <tr>

@@ -39,11 +39,13 @@ Status: No specific data found for ticker symbol "${cleanSymbol}". Available tra
       const maseVal = parseFloat(String(m.mase));
       const maseNote =
         !isNaN(maseVal) && maseVal < 1.0
-          ? "(beats naive)"
+          ? "(MAE < in-sample naive scale)"
           : !isNaN(maseVal) && maseVal === 1.0
-          ? "(equals naive)"
-          : "(worse than naive)";
-      return `- ${name}: RMSE=₱${formatNum(m.rmse, 4)}, MAE=₱${formatNum(m.mae, 4)}, MASE=${formatNum(m.mase, 4)} ${maseNote}, R²=${formatNum(m.r2, 4)}`;
+          ? "(MAE = in-sample naive scale)"
+          : !isNaN(maseVal)
+          ? "(MAE > in-sample naive scale)"
+          : "";
+      return `- ${name}: RMSE=₱${formatNum(m.rmse, 4)}, MAE=₱${formatNum(m.mae, 4)}, MASE=${formatNum(m.mase, 4)}${maseNote ? " " + maseNote : ""}, R²=${formatNum(m.r2, 4)}`;
     })
     .join("\n");
 
@@ -58,7 +60,12 @@ Status: No specific data found for ticker symbol "${cleanSymbol}". Available tra
     Object.keys(modelLabels).find((k) => modelLabels[k] === company.model) || "arima";
   const selectedMetric = company.metrics[selectedModelKey];
   const selectedMase = selectedMetric ? parseFloat(String(selectedMetric.mase)) : NaN;
-  const beatsNaive = !isNaN(selectedMase) && selectedMase < 1.0;
+  const naiveComp = company.naiveComparison;
+  const naiveSignificanceStr = naiveComp
+    ? (naiveComp.significantly_beats_naive
+        ? `Statistically significant outperformance vs holdout naive (DM stat=${naiveComp.dm_statistic.toFixed(4)}, Holm p=${naiveComp.holm_adjusted_p_value.toFixed(4)})`
+        : `No statistically significant outperformance vs holdout naive (DM stat=${naiveComp.dm_statistic.toFixed(4)}, Holm p=${naiveComp.holm_adjusted_p_value.toFixed(4)})`)
+    : "Holdout naive hypothesis test evidence unavailable";
 
   // Backtest recent summary (last 5 sessions)
   let backtestSummary = "N/A";
@@ -90,7 +97,8 @@ Status: No specific data found for ticker symbol "${cleanSymbol}". Available tra
 - Forecasted Close: ${formatPeso(company.predictedClose)}
 - Expected Change: ${formatPeso(company.pesoChange)} (${formatPct(company.pctChange)}) [${company.direction.toUpperCase()}]
 - Selected Model: ${company.model} (Selected based on lowest test-set RMSE)
-- Selected Model Beats Naive Baseline? ${beatsNaive ? "Yes (MASE < 1.0)" : "No (MASE >= 1.0)"}
+- Selected Model MASE Scale: ${!isNaN(selectedMase) ? `${formatNum(selectedMase, 4)} (${selectedMase < 1.0 ? "holdout MAE < in-sample naive error scale" : "holdout MAE >= in-sample naive error scale"})` : "N/A"}
+- Holdout Naive Significance (Diebold-Mariano / Holm): ${naiveSignificanceStr}
 
 Model Performance Metrics on Held-out Test Set:
 ${metricsLines}

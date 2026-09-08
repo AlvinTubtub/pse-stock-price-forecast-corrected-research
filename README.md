@@ -311,17 +311,17 @@ MAE represents the average absolute difference between predicted and actual clos
 
 ### MASE
 
-Mean Absolute Scaled Error compares model forecast error with a naive benchmark.
+Mean Absolute Scaled Error compares model forecast error with an in-sample naive benchmark scale.
 
 Interpretation:
 
 ```text
-MASE < 1  → better than naive benchmark
-MASE = 1  → approximately equal to naive
-MASE > 1  → worse than naive benchmark
+MASE < 1  → test-set MAE is lower than in-sample naive error scale
+MASE = 1  → test-set MAE is approximately equal to in-sample naive scale
+MASE > 1  → test-set MAE is larger than in-sample naive scale
 ```
 
-A common development-period naive MAE denominator is used per company so models remain comparable.
+A common development-period naive MAE denominator is used per company so models remain comparable. Note that MASE < 1 indicates lower error relative to this in-sample baseline scale; it does not by itself establish statistically significant outperformance over the holdout Naive forecast, which requires formal hypothesis testing (Diebold-Mariano test with Holm correction).
 
 ---
 

@@ -125,3 +125,66 @@ def test_refresh_fails_without_approved_configuration_metadata(tmp_path):
     write_deployment_manifest(tmp_path, {"BPI": {}})
     with pytest.raises(DeploymentConfigurationError, match="approved_configurations"):
         model_selector.load_approved_deployment_configurations(tmp_path, ["BPI"])
+
+
+def test_challenger_retuning_preserves_five_value_lstm_diagnostics_and_does_not_modify_current_or_formal(tmp_path, monkeypatch):
+    _configure_paths(monkeypatch, tmp_path)
+    raw_dir = tmp_path / "data" / "raw"
+    raw_dir.mkdir(parents=True)
+    (raw_dir / "BPI.csv").write_text("Date,Close\n2026-01-01,100\n")
+
+    current_manifest = tmp_path / "models" / "deployment" / "current" / "deployment_manifest.json"
+    current_manifest.parent.mkdir(parents=True, exist_ok=True)
+    current_manifest.write_text(json.dumps({"original": "current"}))
+
+    formal_dir = tmp_path / "results" / "formal" / "FORMAL_01"
+    formal_dir.mkdir(parents=True, exist_ok=True)
+    formal_file = formal_dir / "evidence.txt"
+    formal_file.write_text("formal-untouched")
+
+    monkeypatch.setattr(model_selector, "validate_ohlcv_csv", lambda _p: pd.DataFrame({"Date": ["2026-01-01"], "Close": [100.0]}))
+    monkeypatch.setattr(model_selector.lag_regression, "train_deployment_lag_regression", lambda _df: {"mock": "lag"})
+    lag_cfg = model_selector.lag_regression.LagRegressionDeploymentConfig(alpha=0.1, candidate_features=("f1",), pacf_selected_lags=(1,))
+    monkeypatch.setattr(model_selector.lag_regression, "deployment_config_from_artifact", lambda _a: lag_cfg)
+    monkeypatch.setattr(model_selector.lag_regression, "save", Mock())
+    arima_cfg = model_selector.arima_model.ARIMAConfiguration(order=(1, 1, 0), trend="c")
+    monkeypatch.setattr(model_selector.arima_model, "retune_deployment_arima", lambda _df: ({"mock": "arima"}, arima_cfg))
+    monkeypatch.setattr(model_selector.arima_model, "save", Mock())
+
+    lstm_cfg = model_selector.lstm_model.LSTMConfig(lookback=5, hidden_size=25, learning_rate=0.01, batch_size=16)
+    lstm_diag = {
+        "mean_validation_rmse": 0.5,
+        "validation_rmse_std": 0.05,
+        "folds": [{"mean_rmse": 0.5}],
+        "configuration_results": [{"config": lstm_cfg.__dict__, "mean_rmse": 0.5}],
+        "target_start": "2026-01-01",
+        "target_end": "2026-01-10",
+    }
+    monkeypatch.setattr(model_selector.lstm_model, "retune_deployment_lstm", lambda _df, _sym: ({"mock": "lstm"}, lstm_cfg, lstm_diag))
+    monkeypatch.setattr(model_selector.lstm_model, "save", Mock())
+
+    manifest_path = model_selector.retune_deployment_challengers(raw_dir=raw_dir, symbols=["BPI"], run_id="CHALLENGER_TEST")
+
+    assert manifest_path.exists()
+    challenger_manifest = json.loads(manifest_path.read_text())
+    assert challenger_manifest["operation"] == "retune"
+    assert challenger_manifest["status"] == "challenger_only"
+    assert challenger_manifest["automatic_promotion"] is False
+    bpi_diag = challenger_manifest["configurations"]["BPI"]["lstm_tuning_diagnostics"]
+    assert bpi_diag["configuration_results"] == [{"config": lstm_cfg.__dict__, "mean_rmse": 0.5}]
+    assert bpi_diag["mean_validation_rmse"] == 0.5
+
+    assert json.loads(current_manifest.read_text()) == {"original": "current"}
+    assert formal_file.read_text() == "formal-untouched"
+
+
+def test_strict_refresh_requires_all_canonical_15_tickers_and_writes_refresh_operation(tmp_path, monkeypatch):
+    _configure_paths(monkeypatch, tmp_path)
+    raw_dir = tmp_path / "data" / "raw"
+    raw_dir.mkdir(parents=True)
+    tickers_14 = [t for t in model_selector.EXPECTED_TICKERS if t != "SCC"]
+    for t in tickers_14:
+        (raw_dir / f"{t}.csv").write_text("Date,Close\n2026-01-01,100\n")
+
+    with pytest.raises(RuntimeError, match="Strict deployment refresh universe check failed.*missing expected ticker"):
+        model_selector._legacy_refresh_deployment_all(raw_dir=raw_dir, strict=True)
