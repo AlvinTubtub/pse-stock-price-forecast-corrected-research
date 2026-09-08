@@ -1,24 +1,26 @@
-> **Run 02 operational control (September 8, 2026):** Production uses an atomic
-> pointer to immutable deployments under `backend/models/deployment/versions/`.
-> Daily inference loads persisted, hash-checked artifacts and never trains. The
-> fixed Run 02 configurations have explicit production-inference and one-time
-> scheduled-refresh authorization; challenger retuning and promotion stay separate.
->
-> See [promotion mapping, safety rules, tests and run commands](reports/run02-promotion/REVIEW.md).
-
 # ForecastPH
 
 **Cross-Sector Next-Day Stock Price Forecasting of Selected PSE-Listed Companies Using Lag-Informed Regression, ARIMA, and LSTM**
+ForecastPH is a research and operational forecasting platform for next-session closing prices of 15 Philippine Stock Exchange companies. It compares Lag-Informed Regression, ARIMA, and LSTM under a chronological, leakage-controlled evaluation design, then serves approved forecasts through a static Next.js dashboard.
 
 ForecastPH is a full-stack stock forecasting and research platform for selected companies listed on the Philippine Stock Exchange (PSE). It compares three forecasting approaches—**Lag-Informed Regression**, **ARIMA**, and **LSTM**—using a leakage-controlled, chronological, out-of-sample evaluation methodology.
+Live dashboard: [frontend-ten-xi-11.vercel.app](https://frontend-ten-xi-11.vercel.app/)
 
 The system provides next-trading-session forecasts, model evaluation metrics, interactive historical charts, 60-session backtests, forecast-error visualization, model comparison, an AI-assisted explanation layer, and an administrative management interface.
+> ForecastPH is an academic and educational project. Its forecasts are not financial advice.
 
 The repository contains both the **forecasting backend** and the **Next.js frontend** used for the deployed ForecastPH dashboard.
+## What the repository contains
 
 ---
+- A Python 3.11 backend for official-data ingestion, validation, formal research, persisted-model inference, and artifact export.
+- A Next.js 14 frontend for company forecasts, model comparisons, historical charts, operational status, and educational content.
+- An immutable formal Run 02 research result separated from rolling operational forecasts.
+- Versioned, hash-checked operational deployments with explicit authorization scopes.
+- GitHub Actions workflows for daily data/inference updates and one separately authorized model refresh.
 
 ## Table of Contents
+## Tracked companies
 
 - [Project Overview](#project-overview)
 - [Research Objective](#research-objective)
@@ -112,6 +114,8 @@ ForecastPH currently covers **15 PSE-listed companies across five sectors**.
 
 | Sector | Companies |
 |---|---|
+| Sector | Symbols |
+| --- | --- |
 | Financials | BPI, MBT, SECB |
 | Industrial | MER, JFC, SHLPH |
 | Property | MEG, ALI, SMPH |
@@ -337,10 +341,16 @@ It must **not** be interpreted as forecast confidence or prediction probability.
 ForecastPH includes formal statistical testing in addition to descriptive error metrics.
 
 ### Level 1: Model vs Naive Baseline
+| Industrial | JFC, MER, SHLPH |
+| Property | ALI, MEG, SMPH |
+| Services | GLO, ICT, PGOLD |
+| Mining and Oil | APX, NIKL, SCC |
 
 Each principal model is tested against the naive benchmark.
+## Models
 
 Primary loss:
+The formal study evaluates three principal model families and one benchmark:
 
 ```text
 Squared forecast error
@@ -492,14 +502,21 @@ Both charts must share:
 ForecastPH deliberately separates immutable research evidence from operational forecasting.
 
 ### Formal Research Artifacts
+- Lag-Informed Regression uses chronologically selected return lags and fold-local scaling.
+- ARIMA uses bounded candidate selection and expanding-window validation. Walk-forward updates append newly observed values without re-estimating fixed coefficients.
+- LSTM predicts changes in closing price with fold-local scaling, internal early stopping, and reconstruction to price levels.
+- Naive Baseline is an evaluation benchmark, not a deployment candidate.
 
 Formal research runs are stored under:
+The operational deployment uses the approved model family and frozen configuration for each company. Daily inference loads persisted artifacts; it does not train, retune challengers, select models, or alter the formal study.
 
 ```text
 backend/results/formal/<RUN_ID>/
 ```
+## Research and operational boundaries
 
 Example structure:
+ForecastPH keeps three kinds of evidence separate:
 
 ```text
 backend/results/formal/<RUN_ID>/
@@ -514,16 +531,22 @@ backend/results/formal/<RUN_ID>/
         ├── metrics.json
         └── diagnostics.json
 ```
+1. The formal Run 02 study is an immutable research snapshot with a fixed data cutoff and holdout evaluation.
+2. Issued operational forecasts are immutable predictions tied to their original deployment and manifest hash.
+3. Actual closing prices and forecast errors are attached only after the corresponding official target-session observation becomes available.
 
 Formal runs are intended to be:
+The approved formal run is `FORMAL_CORRECTED_20260828_02`. Its frontend artifact is stored at:
 
 ```text
 immutable
 reproducible
 auditable
+frontend/public/forecasts/formal/FORMAL_CORRECTED_20260828_02.json
 ```
 
 Once finalized, they should not be modified by normal deployment operations.
+Normal data updates, inference, deployment refreshes, and frontend builds must not rewrite this formal artifact.
 
 Finalization also requires complete tuning and policy evidence: all 48 LSTM
 configurations across five folds and three seeds, the complete expanded LASSO
@@ -532,8 +555,10 @@ policy. Valid observations remain in the primary analysis. Verified event
 dates, when available, are flagged by forecast target date and used only in a
 separate sensitivity analysis; observations are never removed merely because
 the model error or price movement is large.
+## Operational deployments
 
 ---
+Deployment state lives under:
 
 ### Deployment Artifacts
 
@@ -549,19 +574,30 @@ backend/models/deployment/
 │   ├── artifacts/
 │   └── manifest.json
 └── current/  # superseded record retained for audit
+├── current/
+└── versions/<DEPLOYMENT_VERSION>/
+    ├── manifest.json
+    └── artifacts/
 ```
 
 Deployment models may be retrained according to the production schedule.
+The active pointer is changed atomically only after a complete deployment passes validation. A deployment contains all 15 approved company configurations and the persisted artifact for each selected model family.
 
 Formal artifacts are evidence for the research study.
+The frontend explicitly supports both manifest generations:
 
 Deployment artifacts are used for live forecasts.
+- Schema v1 identifies the historical deployment with `promotion_id`.
+- Schema v2 identifies a versioned deployment with `deployment_version`, verified status, approval scopes, artifact hashes, configuration hashes, and training cutoffs.
 
 These two concerns must not be mixed.
+The frontend exports two deployment views:
 
 ---
 
 ## System Architecture
+- `deployment.json` is the manifest that issued the currently displayed forecast batch.
+- `active-deployment.json` is the deployment currently authorized for production inference.
 
 ```text
                      ┌─────────────────────┐
@@ -614,12 +650,20 @@ These two concerns must not be mixed.
                     │       Vercel         │
                     └──────────────────────┘
 ```
+These versions can differ. Existing forecasts remain tied to their issuing deployment, while the active deployment is used for the next eligible issuance. `operational.json` is accepted only when its deployment identity, complete 15-company coverage, authorization state, model mapping, and exact issuing-manifest SHA-256 are valid.
 
 ---
+## Forecast and error charts
 
 ## Frontend Features
+Company pages display the latest 60 realized target sessions in both **Backtest: Predicted vs. Actual** and **Forecast Error Over Time**.
 
 ForecastPH includes:
+- The graphs end at the latest target session with an official actual close.
+- Lag-Informed Regression, ARIMA, and LSTM are shown when the issued three-model snapshot exists for that target date.
+- Pending next-session forecasts are shown in the Next-Day Prediction section, not in either realized-history graph.
+- Forecast error is calculated as predicted close minus actual close.
+- The production marker separates stored evaluation observations from prospective issued forecasts.
 
 - company overview pages;
 - sector pages;
@@ -640,8 +684,10 @@ ForecastPH includes:
 - About page;
 - AI assistant;
 - starter questions.
+No missing historical forecast is reconstructed after the fact. No future actual or error is fabricated.
 
 Chart interactions include:
+## Architecture
 
 ```text
 +             Zoom In
@@ -652,6 +698,19 @@ Reset         Restore full view
 Mouse Wheel   Zoom
 Mouse Drag    Pan
 Double Click  Reset view
+Official PSE reports
+        ↓
+Validated OHLCV files in backend/data/raw/
+        ↓
+Approved persisted-model inference
+        ↓
+Complete operational batch + immutable issuance history
+        ↓
+Validated JSON export to frontend/public/forecasts/
+        ↓
+Next.js static/server-rendered pages
+        ↓
+Vercel Git deployment
 ```
 
 ---
@@ -659,8 +718,10 @@ Double Click  Reset view
 ## Admin Features
 
 The ForecastPH administrative interface provides management functionality separate from the public dashboard.
+Vercel does not run Python models. The frontend reads checked-in JSON artifacts and never trains models or writes forecast data.
 
 Administrative areas may include:
+## Repository layout
 
 ```text
 /admin
@@ -696,6 +757,10 @@ A simplified repository structure:
 ```text
 pse-stock-price-forecast/
 │
+.
+├── .github/workflows/
+│   ├── update_pipeline.yml       # daily official data and approved inference
+│   └── train_models.yml          # separately authorized one-time refresh
 ├── backend/
 │   ├── data/
 │   ├── models/
@@ -712,6 +777,13 @@ pse-stock-price-forecast/
 │   ├── tests/
 │   └── requirements.txt
 │
+│   ├── data/raw/                 # validated OHLCV CSV files
+│   ├── models/deployment/        # manifests, active pointer, and artifacts
+│   ├── operational/current.json  # complete approved operational batch
+│   ├── production_history/       # issued three-model forecast ledger
+│   ├── scripts/                  # exporters and validators
+│   ├── services/                 # ingestion, forecasting, and deployment logic
+│   └── tests/
 ├── frontend/
 │   ├── public/
 │   │   └── forecasts/
@@ -728,17 +800,29 @@ pse-stock-price-forecast/
 │
 ├── README.md
 └── ...
+│   ├── public/forecasts/         # generated frontend data contract
+│   ├── scripts/                  # frontend data and UI smoke tests
+│   └── src/                      # Next.js App Router application
+├── reports/run02-promotion/      # Run 02 operational review evidence
+└── README.md
 ```
 
 Exact internal paths may vary as the project evolves.
+## Local setup
 
 ---
+### Requirements
 
 ## Installation
+- Git
+- Python 3.11
+- Node.js 20 or a compatible current LTS release
+- npm
 
 ### Prerequisites
 
 Recommended:
+### Clone the repository
 
 ```text
 Python 3.11
@@ -752,13 +836,17 @@ Clone the repository:
 ```bash
 git clone https://github.com/AlvinTubtub/pse-stock-price-forecast.git
 cd pse-stock-price-forecast
+git clone https://github.com/AlvinTubtub/pse-stock-price-forecast-corrected-research.git
+cd pse-stock-price-forecast-corrected-research
 ```
 
 ---
 
 ## Running the Backend
+### Create the Python environment
 
 Move to the backend:
+From the repository root:
 
 ```bash
 cd backend
@@ -792,22 +880,28 @@ Install backend dependencies:
 
 ```bash
 pip install -r requirements.txt
+pip install -r backend/requirements-pipeline.txt
 ```
 
 ---
 
 ## Running the Frontend
+Use `backend/requirements-fast.txt` plus `backend/requirements-inference.txt` when reproducing the lighter daily CI environment.
 
 From the project root:
+### Install frontend dependencies
 
 ```bash
 cd frontend
+npm ci
 ```
 
 Install dependencies:
+The AI explanation endpoint is optional. To enable it locally:
 
 ```bash
 npm install
+cp .env.example .env.local
 ```
 
 Run development mode:
@@ -821,10 +915,12 @@ Then open:
 ```text
 http://localhost:3000
 ```
+Set `GEMINI_API_KEY` in `frontend/.env.local`. Never commit the key.
 
 ---
 
 ## Testing
+## Run the frontend
 
 Backend tests should be executed before deployment or methodology changes are merged.
 
@@ -835,6 +931,7 @@ backend/
 ```
 
 run:
+From `frontend/`:
 
 ```bash
 .venv/bin/python -m pytest -q
@@ -844,9 +941,11 @@ or, with the virtual environment activated:
 
 ```bash
 python -m pytest -q
+npm run dev
 ```
 
 The full automated test suite covers forecasting, artifact handling, statistical evaluation, diagnostics, and methodology-related safeguards.
+Open [http://localhost:3000](http://localhost:3000).
 
 Also useful:
 
@@ -855,6 +954,7 @@ python -m compileall -q services scripts
 ```
 
 From the repository root:
+To verify a production build:
 
 ```bash
 git diff --check
@@ -993,17 +1093,26 @@ backend pipeline
 → GitHub main
 → Vercel deployment
 → updated public dashboard
+npm run lint
+npm run test:all
+npm run build
+npm run start
 ```
 
 A Vercel redeployment alone does **not** recalculate forecasts.
+## Run the approved backend pipeline
 
 If the generated forecast JSON has not changed, a new Vercel build can still display the same forecast values.
+Run commands from `backend/` with the repository virtual environment active.
 
 Therefore:
+### Daily official-data ingestion and inference
 
 ```text
 corrected source code
 ≠ automatically corrected live forecast artifacts
+```bash
+python run_pipeline.py --no-train
 ```
 
 The full live update requires:
@@ -1015,8 +1124,10 @@ corrected code
 + published artifacts
 + Vercel refresh/deployment
 ```
+Despite the compatibility flag name, this command performs no model training. It ingests and validates official data, then runs inference with the single active persisted deployment. The operation publishes only a complete 15-company batch and preserves an existing same-target issuance.
 
 ---
+Useful ingestion options:
 
 ## Important Methodology Notes
 
@@ -1039,6 +1150,10 @@ scalers
 PACF-based lag selection
 feature selection
 LSTM normalization
+```bash
+python run_pipeline.py --no-download
+python run_pipeline.py --no-inference
+python run_pipeline.py --start-date 2026-09-01 --end-date 2026-09-08
 ```
 
 ---
@@ -1052,8 +1167,10 @@ Backtests should be genuine historical forecasts.
 ---
 
 ### Common Target Dates
+Do not bypass calendar, freshness, approval, completeness, or manifest checks for production output.
 
 All models being compared must predict the same target sessions.
+### Export frontend artifacts
 
 Model arrays must not simply be truncated to the same length without checking dates.
 
@@ -1061,6 +1178,9 @@ Correct comparison requires:
 
 ```text
 date-indexed alignment
+```bash
+python scripts/export_forecast_artifacts.py
+python -m scripts.validate_exports
 ```
 
 ---
@@ -1072,10 +1192,13 @@ The Naive Baseline assumes:
 ```text
 Tomorrow's close = Today's close
 ```
+The exporter writes generated files under `frontend/public/forecasts/`. Do not maintain forecast values through manual JSON edits; the next validated pipeline run will replace generated artifacts.
 
 It is included as a meaningful forecasting benchmark.
+### Refresh an approved deployment
 
 A complex forecasting model should not automatically be considered useful simply because it produces predictions.
+This is a separately authorized operation, not part of daily inference:
 
 ---
 
@@ -1129,6 +1252,8 @@ Better methodology
 → better protection against leakage and optimistic bias
 → more defensible model selection
 → potentially better generalization
+```bash
+python -m services.model_selector --mode deployment-refresh --strict
 ```
 
 not:
@@ -1145,6 +1270,7 @@ Financial markets remain noisy and affected by information unavailable to purely
 ## Formal Audit Principles
 
 The audited implementation is designed around the following principles:
+Challenger retuning is also separate and must never automatically promote a model:
 
 ```text
 ✓ chronological evaluation
@@ -1171,13 +1297,18 @@ The audited implementation is designed around the following principles:
 ✓ formal/deployment artifact separation
 ✓ immutable finalized research runs
 ✓ reproducible metadata and manifests
+```bash
+python -m services.model_selector --mode deployment-retune --symbols BPI
 ```
 
 ---
+## Testing
 
 ## Reproducibility
+### Backend
 
 Formal evaluation runs should contain enough information to identify:
+From `backend/`:
 
 - dataset version;
 - data cutoff;
@@ -1206,6 +1337,9 @@ scikit-learn
 statsmodels
 PyTorch
 SciPy
+```bash
+python -m pytest tests
+python -m scripts.validate_exports
 ```
 
 ### Forecasting
@@ -1216,6 +1350,7 @@ ARIMA
 LSTM
 Naive Baseline
 ```
+The backend suite covers data validation, production-history integrity, deployment refreshes, authorization scopes, artifact hashes, atomic activation, calendar behavior, and operational batches.
 
 ### Frontend
 
@@ -1225,9 +1360,16 @@ React
 TypeScript
 Tailwind CSS
 Recharts
+From `frontend/`:
+
+```bash
+npm run test:all
+npm run lint
+npm run build
 ```
 
 ### Infrastructure
+The frontend tests cover formal model pages, comparison behavior, schema-v1/v2 manifests, manifest hashing, rejected invalid batches, company/dashboard overlays, and realized-only three-model graph history for all 15 companies.
 
 ```text
 GitHub
@@ -1235,16 +1377,27 @@ GitHub Actions
 Vercel
 PostgreSQL / Neon
 ```
+## Automation
 
 ---
+### Daily official-data and approved forecast refresh
 
 ## Research Scope
+`.github/workflows/update_pipeline.yml` is triggered by the `update-pse-data` repository dispatch or manually through GitHub Actions. The external schedule is Monday at 17:30 and Tuesday through Friday at 16:00 in Asia/Manila.
 
 ForecastPH is designed for next-trading-session closing-price forecasting using historical market data.
+The workflow:
 
 The project does not attempt to predict every possible market-moving event.
+1. Checks the PSE trading calendar.
+2. Installs the pinned fast and inference dependencies.
+3. Runs official-data ingestion and approved persisted-model inference.
+4. Exports and validates frontend artifacts.
+5. Commits only when validated tracked artifacts changed.
+6. Lets Vercel deploy the resulting `main` commit through Git integration.
 
 Unexpected factors may include:
+### One-time approved model refresh
 
 - macroeconomic announcements;
 - company disclosures;
@@ -1256,42 +1409,66 @@ Unexpected factors may include:
 - changes in investor sentiment;
 - abnormal liquidity;
 - extraordinary corporate events.
+`.github/workflows/train_models.yml` has a date guard for November 3, 2026 UTC. It refits only approved frozen configurations, validates the versioned deployment, atomically updates the active pointer, exports the frontend artifacts, and commits the verified result. It does not perform challenger selection or alter the formal Run 02 study.
 
 These limitations should be considered when interpreting any model forecast.
+Both workflows share the `pse-pipeline` concurrency group so deployment refresh and inference cannot publish concurrently.
 
 ---
+## Vercel deployment
 
 ## Disclaimer
+The Vercel project uses `frontend/` as its Root Directory and deploys `main` through Git integration.
 
 ForecastPH is an academic and educational forecasting system.
+A successful Vercel build does not create a new forecast. Forecast values change only when a validated backend workflow commits new artifacts.
 
 The forecasts, model rankings, backtests, statistical results, and dashboard outputs are provided for:
+Production URL:
 
 ```text
 research
 education
 model comparison
 data-analysis demonstration
+https://frontend-ten-xi-11.vercel.app/
 ```
 
 They are **not financial advice**, investment recommendations, trading signals, or guarantees of future market performance.
 
 Stock prices are inherently uncertain, and historical predictive performance does not guarantee future results.
+## Engineering rules
 
 Users should conduct independent research and consult qualified financial professionals before making investment decisions.
 
 ---
 
 ## Repository
+- Preserve the immutable formal study and all previously issued prediction values.
+- Add actuals and errors only after official target-session data is available.
+- Never issue a future-session forecast before its input session is complete and validated.
+- Never mix companies, artifacts, or manifests across deployment versions.
+- Never accept partial 15-company production batches.
+- Never auto-promote a challenger or treat a deployment refresh as new formal evidence.
+- Validate exports before committing or deploying them.
+- Never commit credentials, tokens, or local environment files.
 
 ```text
 https://github.com/AlvinTubtub/pse-stock-price-forecast
 ```
+## Further documentation
 
 ---
+- [Backend implementation guide](backend/README.md)
+- [Run 02 operational promotion review](reports/run02-promotion/REVIEW.md)
+- [Completion report](COMPLETION_REPORT.md)
+- [Model development audit and improvement report](Model_Development_Audit_and_Improvement_Report.docx)
 
 ## Project
+## License and disclaimer
 
 **ForecastPH**
+No license file is currently included in this repository. Unless a license is added, normal copyright restrictions apply.
 
 > Cross-Sector Next-Day Stock Price Forecasting of Selected PSE-Listed Companies: A Comparative Study of Lag-Informed Regression, ARIMA, and LSTM.
+ForecastPH is intended for research, education, and software demonstration. Historical performance does not guarantee future results. Users remain responsible for independent financial analysis and decisions.
