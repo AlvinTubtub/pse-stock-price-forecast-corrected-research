@@ -10,7 +10,7 @@ The deployment lifecycle enforces a strict separation between immutable formal r
 2. **Approved Deployment Configurations:** Recorded in `backend/models/deployment/current/deployment_manifest.json` under `approved_configurations`.
 3. **Challenger-Only Retuning:** Hyperparameter search evaluates candidate configurations and writes only into `models/deployment/challengers/<CHALLENGER_ID>/`. It does not promote models automatically.
 4. **Human Review & Explicit Approval:** A human operator inspects challenger validation diagnostics and promotes approved configurations via `--confirm-approved`.
-5. **Scheduled Monthly Refit:** The approved configurations are refitted on fresh validated data monthly (`0 0 1 * *`, 00:00 UTC / 08:00 PHT on the 1st of each month). Daily inference uses persisted artifacts without training.
+5. **Approved One-Time Refit:** The approved configurations are scheduled for one controlled refresh on November 3, 2026 (`0 0 3 11 *`, with an explicit `2026-11-03` UTC guard). Daily runs use the frozen approved configurations without hyperparameter tuning or automatic promotion.
 
 > [!NOTE]
 > Full 15-ticker LSTM challenger retuning evaluates 48 configurations across 5 expanding-window folds and 3 tuning seeds (720 fits per ticker, or 10,800 fits across all 15 tickers). Consequently, retuning is performed incrementally one ticker at a time as a deliberate, controlled operational process.

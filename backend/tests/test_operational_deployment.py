@@ -159,12 +159,21 @@ def test_operational_entrypoints_delegate_only_to_manifest(monkeypatch):
     assert generate.call_count == 2
 
 
-def test_workflows_remain_disabled():
-    for filename in ["train_models.yml", "update_pipeline.yml"]:
-        text = (ops.BASE.parent / ".github/workflows" / filename).read_text()
-        assert "schedule:" not in text
-        assert "repository_dispatch:" not in text
-        assert "if: ${{ false }}" in text
+def test_workflow_triggers_are_explicit_and_controlled():
+    workflows = ops.BASE.parent / ".github/workflows"
+    daily = (workflows / "update_pipeline.yml").read_text()
+    training = (workflows / "train_models.yml").read_text()
+
+    assert "repository_dispatch:" in daily
+    assert "types: [update-pse-data]" in daily
+    assert "schedule:" not in daily
+    assert "python run_pipeline.py --no-train" in daily
+    assert "python -m services.model_selector" not in daily
+
+    assert 'cron: "0 0 3 11 *"' in training
+    assert "2026-11-03" in training
+    assert "workflow_dispatch:" not in training
+    assert "--mode deployment-refresh --strict" in training
 
 
 def test_export_preserves_formal_results_and_rejects_smoke(fast_generation, monkeypatch, tmp_path):

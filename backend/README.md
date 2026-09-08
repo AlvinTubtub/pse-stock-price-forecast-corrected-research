@@ -307,7 +307,7 @@ run daily:
 | | `.github/workflows/update_pipeline.yml` ("Fast Pipeline") | `.github/workflows/train_models.yml` ("Heavy Training") |
 |---|---|---|
 | Does | PDF ingestion -> `backend/data/raw/` CSVs only (`python backend/run_pipeline.py --no-train`) | Refits approved configurations (`python -m services.model_selector --mode deployment-refresh --strict`) |
-| Schedule | Monday-Friday, 4:00 PM Philippine Time | Sunday, 8:00 AM Philippine Time |
+| Schedule | Monday 5:30 PM; Tuesday-Friday 4:00 PM Philippine Time | November 3, 2026 at 8:00 AM Philippine Time |
 | Trigger | External: [Cron-job.org](https://cron-job.org) `repository_dispatch` (no GitHub-native cron) | GitHub Actions' own `schedule: cron` |
 | Dependencies | `backend/requirements-fast.txt` (pandas/numpy/pdfplumber/requests) | `backend/requirements-pipeline.txt` (adds scikit-learn/statsmodels/torch) |
 | Typical runtime | A couple of minutes | Refit-dependent; no scheduled ARIMA/LSTM grid search |
@@ -326,14 +326,14 @@ the Fast Pipeline needs Cron-job.org:
 
 1. Create a GitHub Personal Access Token with `repo` + `workflow` scope (a fine-grained token scoped to just this repo's contents+actions permissions also works).
 2. In Cron-job.org, create a new job with:
-   - **Schedule**: Monday–Friday, 16:00 (4:00 PM) — set the job's timezone to `Asia/Manila`.
+   - **Schedule**: create two jobs in timezone `Asia/Manila`: Monday at 17:30, and Tuesday-Friday at 16:00.
    - **Request type**: Custom HTTP request (`POST`)
    - **URL**: `https://api.github.com/repos/<OWNER>/<REPO>/dispatches`
    - **Headers**:
      - `Accept: application/vnd.github+json`
      - `Authorization: Bearer <YOUR_GITHUB_PAT>`
      - `X-GitHub-Api-Version: 2022-11-28`
-   - **Body**: `{"event_type": "run-pipeline"}`
+   - **Body**: `{"event_type": "update-pse-data"}`
 3. Save. Cron-job.org will now POST to GitHub on that schedule, which fires the `repository_dispatch` trigger and starts the Fast Pipeline workflow — no polling, no GitHub Actions schedule minute-drift.
 
 **Never commit the PAT to this repository.** Store it only in Cron-job.org's own encrypted request-header field.
@@ -345,7 +345,7 @@ not for the Fast Pipeline's tighter Monday-Friday schedule.
 
 ### What each workflow does
 
-**Fast Pipeline** (Monday-Friday):
+**Fast Pipeline** (Monday 17:30; Tuesday-Friday 16:00 Philippine time):
 
 1. Checks out the repo and installs `backend/requirements-fast.txt`.
 2. Runs `python backend/run_pipeline.py --no-train`, which downloads new EOD reports, extracts, cleans, validates, and merges them into `backend/data/raw/`, then writes `backend/latest_processed.json`. No model retraining.
@@ -356,7 +356,7 @@ not for the Fast Pipeline's tighter Monday-Friday schedule.
 7. Uploads `backend/data/pdf_pipeline/pipeline.log` as a build artifact either way, for troubleshooting.
 8. Vercel (Root Directory: `frontend/`) picks up the new commit and redeploys automatically via its Git integration — no separate step needed on this repo's side.
 
-**Deployment Refresh** (monthly, day 3 at 08:00 PHT):
+**One-time Deployment Refresh** (November 3, 2026 at 08:00 PHT):
 
 1. Checks out the repo (already current through Friday, via the week's Fast Pipeline commits) and installs `backend/requirements-pipeline.txt`.
 2. Runs `python -m services.model_selector --mode deployment-refresh --strict` (from `backend/`), which refits each approved configuration and preserves existing formal metrics and model-family choices.

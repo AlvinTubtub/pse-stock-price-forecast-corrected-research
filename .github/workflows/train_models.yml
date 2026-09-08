@@ -1,13 +1,13 @@
-name: Scheduled approved operational refresh (disabled)
+name: One-time approved model refresh — November 3, 2026
 
-# Run 02 review: no cron, external dispatch, commit, push, or deployment.
-# Methodology target cadence: 00:00 UTC on the 1st of each month ("0 0 1 * *").
-# Automated push and deployment remain disabled during review.
+# GitHub cron has no year field. The cron selects November 3 and the guard
+# permits the model refresh only when the UTC date is exactly 2026-11-03.
 on:
-  workflow_dispatch: {}
+  schedule:
+    - cron: "0 0 3 11 *"
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: pse-pipeline
@@ -15,24 +15,56 @@ concurrency:
 
 jobs:
   train:
-    # Remote execution requires a separate reviewed change after local acceptance.
-    if: ${{ false }}
     runs-on: ubuntu-latest
     timeout-minutes: 240
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Enforce one-time execution date
+        id: date_guard
+        run: |
+          if [ "$(date -u +'%Y-%m-%d')" = "2026-11-03" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+            echo "[model-refresh] Authorized date confirmed: 2026-11-03 UTC."
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "[model-refresh] Skipping: authorized only for 2026-11-03 UTC."
+          fi
+      - name: Checkout
+        if: steps.date_guard.outputs.run == 'true'
+        uses: actions/checkout@v4
+      - name: Set up Python
+        if: steps.date_guard.outputs.run == 'true'
+        uses: actions/setup-python@v5
         with:
           python-version-file: backend/.python-version
+          cache: pip
+          cache-dependency-path: backend/requirements-pipeline.txt
       - name: Install dependencies
+        if: steps.date_guard.outputs.run == 'true'
         working-directory: backend
-        run: pip install -r requirements-pipeline.txt
-      - name: Refresh approved deployment models strictly
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-pipeline.txt
+      - name: Refit approved frozen configurations
+        if: steps.date_guard.outputs.run == 'true'
         working-directory: backend
         run: python -m services.model_selector --mode deployment-refresh --strict
-      - name: Export frontend JSON artifacts
+      - name: Export frontend artifacts
+        if: steps.date_guard.outputs.run == 'true'
         working-directory: backend
         run: python scripts/export_forecast_artifacts.py
       - name: Validate exported artifacts
+        if: steps.date_guard.outputs.run == 'true'
         working-directory: backend
         run: python scripts/validate_exports.py
+      - name: Commit and push validated artifacts
+        if: steps.date_guard.outputs.run == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add backend/operational/current.json frontend/public/forecasts
+          if git diff --cached --quiet; then
+            echo "[model-refresh] No validated artifact changes to commit."
+          else
+            git commit -m "Approved one-time model refresh (2026-11-03)"
+            git push
+          fi

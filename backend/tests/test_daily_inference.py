@@ -374,16 +374,14 @@ class TestDailyInference(unittest.TestCase):
         # Verify no model training command
         self.assertNotIn("python -m services.model_selector", content)
 
-        # Verify correct ordering: ingestion -> inference -> export
-        ingest_pos = content.find("Run pipeline (ingestion")
-        inference_pos = content.find("Run daily inference")
-        export_pos = content.find("Export frontend JSON artifacts")
+        # run_pipeline --no-train performs ingestion followed by approved
+        # operational generation; export must follow that combined stage.
+        ingest_pos = content.find("Ingest official data and generate approved forecasts")
+        export_pos = content.find("Export frontend artifacts")
 
         self.assertGreater(ingest_pos, 0, "Ingestion step must exist")
-        self.assertGreater(inference_pos, 0, "Inference step must exist")
         self.assertGreater(export_pos, 0, "Export step must exist")
-        self.assertLess(ingest_pos, inference_pos, "Ingestion must come before inference")
-        self.assertLess(inference_pos, export_pos, "Inference must come before export")
+        self.assertLess(ingest_pos, export_pos, "Ingestion and inference must come before export")
 
     # ------------------------------------------------------------------
     # No training confirmation
