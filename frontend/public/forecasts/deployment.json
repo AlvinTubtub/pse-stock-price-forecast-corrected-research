@@ -1,26 +1,39 @@
 {
-  "schema_version": 1,
-  "promotion_id": "RUN02_OPS_20260907_01",
-  "promotion_date": "2026-09-07",
+  "schema_version": 2,
+  "deployment_version": "RUN02_OPS_20260908_105811Z",
+  "status": "verified",
   "formal_run_id": "FORMAL_CORRECTED_20260828_02",
-  "approved_code_commit": "bfb33b8c184c87cc8828af5529410da94addd71c",
-  "source_data_commit": "2e72058057f5ba2ef903147c8390c3f05f41ffe3",
-  "evidence_archive_sha256": "2b2ed0ca6b88ea6cfef5ac14013440da1c7c55c1d9f9640e04a595fdafca5d24",
   "formal_summary_sha256": "c0a5962709be16a82e5f5eeb634424ef0cad93a05d08db5c8af02e1d90ff5a6e",
-  "source_data_cutoff": "2026-08-28",
+  "evidence_archive_sha256": "2b2ed0ca6b88ea6cfef5ac14013440da1c7c55c1d9f9640e04a595fdafca5d24",
+  "approved_code_commit": "bfb33b8c184c87cc8828af5529410da94addd71c",
+  "approved_configuration_source": "RUN02_OPS_20260907_01:1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179",
+  "operation": "fixed_configuration_refit",
+  "created_at": "2026-09-08T18:58:11.732894+08:00",
   "approval": {
-    "status": "approved",
-    "scope": "manual_local_operational_generation",
-    "authority": "User instruction in this task: implement controlled Run 02 operational model promotion",
-    "date": "2026-09-07",
-    "scheduled_workflows": false,
-    "production_deployment": false
+    "approval_id": "RUN02_AUTH_20260908_01",
+    "authorized_at": "2026-09-08T10:45:08Z",
+    "scopes": [
+      "production_inference",
+      "scheduled_refresh"
+    ],
+    "record_sha256": "85c43a1e88b98f0f86d712892cb03bcfee6fc83a918064a92064c11a425a7f0c"
   },
-  "selection_policy": "Frozen Run 02 lowest holdout RMSE among principal models; tie order lag_reg, arima, lstm. Naive is a benchmark, not a candidate. This is a promotion decision, not new unbiased validation.",
-  "operation": "approval",
-  "artifact_layout": "deployment/current",
-  "created_at": "2026-08-28T16:55:52.727214+00:00",
-  "last_refit_at": "2026-09-07T18:00:00+00:00",
+  "runtime": {
+    "python": "3.11.16",
+    "platform": "macOS-26.6.2-arm64-arm-64bit",
+    "numpy": "1.26.4",
+    "pandas": "3.0.5",
+    "scikit-learn": "1.9.0",
+    "scipy": "1.17.1",
+    "statsmodels": "0.14.6",
+    "torch": "2.13.0",
+    "joblib": "1.5.3"
+  },
+  "code_revision": {
+    "git_head": "e5b4de1aa13c78a27f22e2b84e6f38f4493bf86c",
+    "working_tree_diff_sha256": "1004c587c15b1b46cd386ae59f67eaddd5ddafab301ed67399212bc6d76869d9",
+    "working_tree_clean": false
+  },
   "companies": {
     "ALI": {
       "model": "lag_reg",
@@ -70,7 +83,32 @@
         "scaler": "StandardScaler"
       },
       "source_data_cutoff": "2026-08-28",
-      "source_data_sha256": "1f9c704de669276a9c9e3f000166a66a4c38678b735db2294c30dbcbf950caca"
+      "source_data_sha256": "1f9c704de669276a9c9e3f000166a66a4c38678b735db2294c30dbcbf950caca",
+      "artifact": {
+        "path": "artifacts/lag_regression/ALI.pkl",
+        "sha256": "b47b9f54dffe7acb1f033058585061829be5638b76d26bca1af60e7e81981fc5",
+        "configuration_sha256": "fcef3c66a6c1b1691b97557f6f40542a3d58d54fda7cbce626c2369b290fb783",
+        "model_family": "lag_reg",
+        "training_cutoff": "2026-09-08",
+        "training_rows": 1630,
+        "source_data_sha256": "e7664bf76624367858e94036d2c07be2311283487104ed72501734aff3ce7509",
+        "runtime": {
+          "python": "3.11.16",
+          "platform": "macOS-26.6.2-arm64-arm-64bit",
+          "numpy": "1.26.4",
+          "pandas": "3.0.5",
+          "scikit-learn": "1.9.0",
+          "scipy": "1.17.1",
+          "statsmodels": "0.14.6",
+          "torch": "2.13.0",
+          "joblib": "1.5.3"
+        },
+        "code_revision": {
+          "git_head": "e5b4de1aa13c78a27f22e2b84e6f38f4493bf86c",
+          "working_tree_diff_sha256": "1004c587c15b1b46cd386ae59f67eaddd5ddafab301ed67399212bc6d76869d9",
+          "working_tree_clean": false
+        }
+      }
     },
     "APX": {
       "model": "lag_reg",
@@ -126,7 +164,32 @@
         "scaler": "StandardScaler"
       },
       "source_data_cutoff": "2026-08-28",
-      "source_data_sha256": "6d85622c0e3d8ed6d7f2d928063c5b83a8580af46c6b971566403e11fb9ec8f7"
+      "source_data_sha256": "6d85622c0e3d8ed6d7f2d928063c5b83a8580af46c6b971566403e11fb9ec8f7",
+      "artifact": {
+        "path": "artifacts/lag_regression/APX.pkl",
+        "sha256": "3ca4ada9bc234518672391f6e2a740d0be0414c0b984e4f67d7d4f42050bd459",
+        "configuration_sha256": "a6134dbc9c09a66e51afe68a3b84c188a42fd4f8578a7467e4b0abfc1ee89940",
+        "model_family": "lag_reg",
+        "training_cutoff": "2026-09-08",
+        "training_rows": 1630,
+        "source_data_sha256": "84b5a83c9838ce21c86c913161e0dc77e6eae3dff734006953cbd4f399c320c6",
+        "runtime": {
+          "python": "3.11.16",
+          "platform": "macOS-26.6.2-arm64-arm-64bit",
+          "numpy": "1.26.4",
+          "pandas": "3.0.5",
+          "scikit-learn": "1.9.0",
+          "scipy": "1.17.1",
+          "statsmodels": "0.14.6",
+          "torch": "2.13.0",
+          "joblib": "1.5.3"
+        },
+        "code_revision": {
+          "git_head": "e5b4de1aa13c78a27f22e2b84e6f38f4493bf86c",
+          "working_tree_diff_sha256": "1004c587c15b1b46cd386ae59f67eaddd5ddafab301ed67399212bc6d76869d9",
+          "working_tree_clean": false
+        }
+      }
     },
     "BPI": {
       "model": "arima",
@@ -142,7 +205,32 @@
         "target": "Close"
       },
       "source_data_cutoff": "2026-08-28",
-      "source_data_sha256": "358a40a3cd371e3158de4770552d7fd676355c9d15831c96f928434d42740456"
+      "source_data_sha256": "358a40a3cd371e3158de4770552d7fd676355c9d15831c96f928434d42740456",
+      "artifact": {
+        "path": "artifacts/arima/BPI.pkl",
+        "sha256": "a40aee64054f431a981b8364b065183b24653e64f50243cd5a46c646cd363196",
+        "configuration_sha256": "026fe051e7cd437d59028c543ee43703b732e9ca6b1e97842e170a0a7a30afae",
+        "model_family": "arima",
+        "training_cutoff": "2026-09-08",
+        "training_rows": 1630,
+        "source_data_sha256": "acd0df00a5a00547b72a103e0c25ec2d824c29f6dd9b62ea0aa40322ddb1cbd4",
+        "runtime": {
+          "python": "3.11.16",
+          "platform": "macOS-26.6.2-arm64-arm-64bit",
+          "numpy": "1.26.4",
+          "pandas": "3.0.5",
+          "scikit-learn": "1.9.0",
+          "scipy": "1.17.1",
+          "statsmodels": "0.14.6",
+          "torch": "2.13.0",
+          "joblib": "1.5.3"
+        },
+        "code_revision": {
+          "git_head": "e5b4de1aa13c78a27f22e2b84e6f38f4493bf86c",
+          "working_tree_diff_sha256": "1004c587c15b1b46cd386ae59f67eaddd5ddafab301ed67399212bc6d76869d9",
+          "working_tree_clean": false
+        }
+      }
     },
     "GLO": {
       "model": "arima",
@@ -158,7 +246,32 @@
         "target": "Close"
       },
       "source_data_cutoff": "2026-08-28",
-      "source_data_sha256": "7ca266cb2a98261cd85d46635591cea1b3c565db840dd5dfce04bf56ca979478"
+      "source_data_sha256": "7ca266cb2a98261cd85d46635591cea1b3c565db840dd5dfce04bf56ca979478",
+      "artifact": {
+        "path": "artifacts/arima/GLO.pkl",
+        "sha256": "f9a123b0eef5169a4271d8a1ac68e754fe440b8f099d7ccbbc4d4bd55c5d4d94",
+        "configuration_sha256": "683650fe40d1ec06923a32e1421bf3eac4575ddc2b1cec26f58277e2e9a26edb",
+        "model_family": "arima",
+        "training_cutoff": "2026-09-08",
+        "training_rows": 1630,
+        "source_data_sha256": "7bad2b80c136af15377065e1566c2fa3e2c71f5dca49c20d9d95d6cd644493e8",
+        "runtime": {
+          "python": "3.11.16",
+          "platform": "macOS-26.6.2-arm64-arm-64bit",
+          "numpy": "1.26.4",
+          "pandas": "3.0.5",
+          "scikit-learn": "1.9.0",
+          "scipy": "1.17.1",
+          "statsmodels": "0.14.6",
+          "torch": "2.13.0",
+          "joblib": "1.5.3"
+        },
+        "code_revision": {
+          "git_head": "e5b4de1aa13c78a27f22e2b84e6f38f4493bf86c",
+          "working_tree_diff_sha256": "1004c587c15b1b46cd386ae59f67eaddd5ddafab301ed67399212bc6d76869d9",
+          "working_tree_clean": false
+        }
+      }
     },
     "ICT": {
       "model": "lstm",
@@ -175,7 +288,32 @@
         "loss": "MSELoss"
       },
       "source_data_cutoff": "2026-08-28",
-      "source_data_sha256": "a0b261565c4cf3a4141a9f0e8c07d20349cbaef978f64b8551d48d4c555a3efb"
+      "source_data_sha256": "a0b261565c4cf3a4141a9f0e8c07d20349cbaef978f64b8551d48d4c555a3efb",
+      "artifact": {
+        "path": "artifacts/lstm/ICT.pth",
+        "sha256": "14b4c3b77665ba0af753f0807f6128622dbdc7341de7c596e7fb20e2d4b6c10d",
+        "configuration_sha256": "b5b9a40fe70a4338e7d0171f5561b12de0e3c406228fb4731cb0d84b0c69e24a",
+        "model_family": "lstm",
+        "training_cutoff": "2026-09-08",
+        "training_rows": 1630,
+        "source_data_sha256": "6b4378f214f2a140efe6cc8e832b3a5636cf6924c612f9134b6516a50abc2c02",
+        "runtime": {
+          "python": "3.11.16",
+          "platform": "macOS-26.6.2-arm64-arm-64bit",
+          "numpy": "1.26.4",
+          "pandas": "3.0.5",
+          "scikit-learn": "1.9.0",
+          "scipy": "1.17.1",
+          "statsmodels": "0.14.6",
+          "torch": "2.13.0",
+          "joblib": "1.5.3"
+        },
+        "code_revision": {
+          "git_head": "e5b4de1aa13c78a27f22e2b84e6f38f4493bf86c",
+          "working_tree_diff_sha256": "1004c587c15b1b46cd386ae59f67eaddd5ddafab301ed67399212bc6d76869d9",
+          "working_tree_clean": false
+        }
+      }
     },
     "JFC": {
       "model": "lag_reg",
@@ -231,7 +369,32 @@
         "scaler": "StandardScaler"
       },
       "source_data_cutoff": "2026-08-28",
-      "source_data_sha256": "b31864b078c1d51b31ca952165700da7da432104a20135635db1645e141d1d5e"
+      "source_data_sha256": "b31864b078c1d51b31ca952165700da7da432104a20135635db1645e141d1d5e",
+      "artifact": {
+        "path": "artifacts/lag_regression/JFC.pkl",
+        "sha256": "298a8492fff526969096db846585f2ab7a1e6edcf5251ad2ca6d5da6509f43a7",
+        "configuration_sha256": "f0dc948185c9936c3143ad2e6faea62155a5f44553f591f7809789bc62997c9e",
+        "model_family": "lag_reg",
+        "training_cutoff": "2026-09-08",
+        "training_rows": 1630,
+        "source_data_sha256": "f466432f8b07357fca1c225e6c31c07f17e94f99219b56119589c71c8e93c09b",
+        "runtime": {
+          "python": "3.11.16",
+          "platform": "macOS-26.6.2-arm64-arm-64bit",
+          "numpy": "1.26.4",
+          "pandas": "3.0.5",
+          "scikit-learn": "1.9.0",
+          "scipy": "1.17.1",
+          "statsmodels": "0.14.6",
+          "torch": "2.13.0",
+          "joblib": "1.5.3"
+        },
+        "code_revision": {
+          "git_head": "e5b4de1aa13c78a27f22e2b84e6f38f4493bf86c",
+          "working_tree_diff_sha256": "1004c587c15b1b46cd386ae59f67eaddd5ddafab301ed67399212bc6d76869d9",
+          "working_tree_clean": false
+        }
+      }
     },
     "MBT": {
       "model": "arima",
@@ -247,7 +410,32 @@
         "target": "Close"
       },
       "source_data_cutoff": "2026-08-28",
-      "source_data_sha256": "d47c6a963317f7cbabcae0cf6c2714e2805edc4ec7b5f6f55b804c01e779e7e5"
+      "source_data_sha256": "d47c6a963317f7cbabcae0cf6c2714e2805edc4ec7b5f6f55b804c01e779e7e5",
+      "artifact": {
+        "path": "artifacts/arima/MBT.pkl",
+        "sha256": "173d3496c62e676e489f2453c1e1d3ee5828c0e92b286538053dd4703ade3f7e",
+        "configuration_sha256": "3601aa41367e8bd350acb12e255045e93ff7bf331ddf347db21103787ec77304",
+        "model_family": "arima",
+        "training_cutoff": "2026-09-08",
+        "training_rows": 1630,
+        "source_data_sha256": "319039b3b4cf9a2fa2a3ffe3302a6b5481708c61247d74ecefb77cabfc71852f",
+        "runtime": {
+          "python": "3.11.16",
+          "platform": "macOS-26.6.2-arm64-arm-64bit",
+          "numpy": "1.26.4",
+          "pandas": "3.0.5",
+          "scikit-learn": "1.9.0",
+          "scipy": "1.17.1",
+          "statsmodels": "0.14.6",
+          "torch": "2.13.0",
+          "joblib": "1.5.3"
+        },
+        "code_revision": {
+          "git_head": "e5b4de1aa13c78a27f22e2b84e6f38f4493bf86c",
+          "working_tree_diff_sha256": "1004c587c15b1b46cd386ae59f67eaddd5ddafab301ed67399212bc6d76869d9",
+          "working_tree_clean": false
+        }
+      }
     },
     "MEG": {
       "model": "lag_reg",
@@ -297,7 +485,32 @@
         "scaler": "StandardScaler"
       },
       "source_data_cutoff": "2026-08-28",
-      "source_data_sha256": "48637122865abf299ebdc46c0aa3091de114d165b1e60ef50dc96bc31f347a5b"
+      "source_data_sha256": "48637122865abf299ebdc46c0aa3091de114d165b1e60ef50dc96bc31f347a5b",
+      "artifact": {
+        "path": "artifacts/lag_regression/MEG.pkl",
+        "sha256": "b8654bc1f4eeadf772e9664988a286f7bc2ca256558ded4999d3a63a2c5e605d",
+        "configuration_sha256": "023a5c80e256e770cb70e2edd1dfc3722193a087320e2e2575f9c52f7f3f25ba",
+        "model_family": "lag_reg",
+        "training_cutoff": "2026-09-08",
+        "training_rows": 1630,
+        "source_data_sha256": "8d03132c9b5f36e0af97e7f156b5c1734fbaf80fd5d849d79a7bc9c471f93d70",
+        "runtime": {
+          "python": "3.11.16",
+          "platform": "macOS-26.6.2-arm64-arm-64bit",
+          "numpy": "1.26.4",
+          "pandas": "3.0.5",
+          "scikit-learn": "1.9.0",
+          "scipy": "1.17.1",
+          "statsmodels": "0.14.6",
+          "torch": "2.13.0",
+          "joblib": "1.5.3"
+        },
+        "code_revision": {
+          "git_head": "e5b4de1aa13c78a27f22e2b84e6f38f4493bf86c",
+          "working_tree_diff_sha256": "1004c587c15b1b46cd386ae59f67eaddd5ddafab301ed67399212bc6d76869d9",
+          "working_tree_clean": false
+        }
+      }
     },
     "MER": {
       "model": "lag_reg",
@@ -355,7 +568,32 @@
         "scaler": "StandardScaler"
       },
       "source_data_cutoff": "2026-08-28",
-      "source_data_sha256": "21ec655cd47ad5b79475523f0cc693d65436af438ee6c58d8ef1940e9b9aff99"
+      "source_data_sha256": "21ec655cd47ad5b79475523f0cc693d65436af438ee6c58d8ef1940e9b9aff99",
+      "artifact": {
+        "path": "artifacts/lag_regression/MER.pkl",
+        "sha256": "b7a7b1f50b870b9f236c9d05656e2a06e84c92af7628824fe7421fd75c5b8cdf",
+        "configuration_sha256": "1ce46c0b20ce5cc6f46ad4a27c6438c516fbdfe2498f1d0d12f830258a9b3a94",
+        "model_family": "lag_reg",
+        "training_cutoff": "2026-09-08",
+        "training_rows": 1630,
+        "source_data_sha256": "8a0920402a98833b188d808cc087a3f458d8e7806202762483dcf0f3e67cfe73",
+        "runtime": {
+          "python": "3.11.16",
+          "platform": "macOS-26.6.2-arm64-arm-64bit",
+          "numpy": "1.26.4",
+          "pandas": "3.0.5",
+          "scikit-learn": "1.9.0",
+          "scipy": "1.17.1",
+          "statsmodels": "0.14.6",
+          "torch": "2.13.0",
+          "joblib": "1.5.3"
+        },
+        "code_revision": {
+          "git_head": "e5b4de1aa13c78a27f22e2b84e6f38f4493bf86c",
+          "working_tree_diff_sha256": "1004c587c15b1b46cd386ae59f67eaddd5ddafab301ed67399212bc6d76869d9",
+          "working_tree_clean": false
+        }
+      }
     },
     "NIKL": {
       "model": "lag_reg",
@@ -405,7 +643,32 @@
         "scaler": "StandardScaler"
       },
       "source_data_cutoff": "2026-08-28",
-      "source_data_sha256": "f8de815ea0e4ac757614ad75dd0a26754359468807e17dd8fb67d7ff906c28cd"
+      "source_data_sha256": "f8de815ea0e4ac757614ad75dd0a26754359468807e17dd8fb67d7ff906c28cd",
+      "artifact": {
+        "path": "artifacts/lag_regression/NIKL.pkl",
+        "sha256": "b2aba624a2ca8c1efeca8440a61ee351e7b35464ea0b21cea79f0b823b78f3aa",
+        "configuration_sha256": "5f81972a113683046b8676f65cd9153fedb70afd252dc68b5dc93a10f57c6b85",
+        "model_family": "lag_reg",
+        "training_cutoff": "2026-09-08",
+        "training_rows": 1630,
+        "source_data_sha256": "2875e7b01540aebce3ef3330932e82083d0ab30c87e11ff6659fd31f9eb5534b",
+        "runtime": {
+          "python": "3.11.16",
+          "platform": "macOS-26.6.2-arm64-arm-64bit",
+          "numpy": "1.26.4",
+          "pandas": "3.0.5",
+          "scikit-learn": "1.9.0",
+          "scipy": "1.17.1",
+          "statsmodels": "0.14.6",
+          "torch": "2.13.0",
+          "joblib": "1.5.3"
+        },
+        "code_revision": {
+          "git_head": "e5b4de1aa13c78a27f22e2b84e6f38f4493bf86c",
+          "working_tree_diff_sha256": "1004c587c15b1b46cd386ae59f67eaddd5ddafab301ed67399212bc6d76869d9",
+          "working_tree_clean": false
+        }
+      }
     },
     "PGOLD": {
       "model": "arima",
@@ -421,7 +684,32 @@
         "target": "Close"
       },
       "source_data_cutoff": "2026-08-28",
-      "source_data_sha256": "b2f8dfa3e2c9574bd426cd00c4549a1fe9edecbf608b90eb43a1c0de1ee6d1da"
+      "source_data_sha256": "b2f8dfa3e2c9574bd426cd00c4549a1fe9edecbf608b90eb43a1c0de1ee6d1da",
+      "artifact": {
+        "path": "artifacts/arima/PGOLD.pkl",
+        "sha256": "2d274924835f7ea4075e46345c0674bacbe31c982c31c1121a8c8e71c9e321ae",
+        "configuration_sha256": "2f850ba4e450a46c356aec6c3e011c17a0eda8324db8d68a06f67f97bd1f76a1",
+        "model_family": "arima",
+        "training_cutoff": "2026-09-08",
+        "training_rows": 1630,
+        "source_data_sha256": "575bba54368d2f7b159a5e6d294b7970d9cc750b17575f935ca88671f85cc46d",
+        "runtime": {
+          "python": "3.11.16",
+          "platform": "macOS-26.6.2-arm64-arm-64bit",
+          "numpy": "1.26.4",
+          "pandas": "3.0.5",
+          "scikit-learn": "1.9.0",
+          "scipy": "1.17.1",
+          "statsmodels": "0.14.6",
+          "torch": "2.13.0",
+          "joblib": "1.5.3"
+        },
+        "code_revision": {
+          "git_head": "e5b4de1aa13c78a27f22e2b84e6f38f4493bf86c",
+          "working_tree_diff_sha256": "1004c587c15b1b46cd386ae59f67eaddd5ddafab301ed67399212bc6d76869d9",
+          "working_tree_clean": false
+        }
+      }
     },
     "SCC": {
       "model": "arima",
@@ -437,7 +725,32 @@
         "target": "Close"
       },
       "source_data_cutoff": "2026-08-28",
-      "source_data_sha256": "65ef821e6a0cc6b2bf02b5d2c1fa45ca380f9a4cbabf027bda3e16c3a85cfffb"
+      "source_data_sha256": "65ef821e6a0cc6b2bf02b5d2c1fa45ca380f9a4cbabf027bda3e16c3a85cfffb",
+      "artifact": {
+        "path": "artifacts/arima/SCC.pkl",
+        "sha256": "3781ba318930f9a03dc4f349dbe0e609b16122d83166d48cc557f22b7e8f5fb3",
+        "configuration_sha256": "683650fe40d1ec06923a32e1421bf3eac4575ddc2b1cec26f58277e2e9a26edb",
+        "model_family": "arima",
+        "training_cutoff": "2026-09-08",
+        "training_rows": 1630,
+        "source_data_sha256": "86bd18eb4a46f39bf433f8de2ce4bfbf4295d4cb4680dd7a7b9d670fadb9fd57",
+        "runtime": {
+          "python": "3.11.16",
+          "platform": "macOS-26.6.2-arm64-arm-64bit",
+          "numpy": "1.26.4",
+          "pandas": "3.0.5",
+          "scikit-learn": "1.9.0",
+          "scipy": "1.17.1",
+          "statsmodels": "0.14.6",
+          "torch": "2.13.0",
+          "joblib": "1.5.3"
+        },
+        "code_revision": {
+          "git_head": "e5b4de1aa13c78a27f22e2b84e6f38f4493bf86c",
+          "working_tree_diff_sha256": "1004c587c15b1b46cd386ae59f67eaddd5ddafab301ed67399212bc6d76869d9",
+          "working_tree_clean": false
+        }
+      }
     },
     "SECB": {
       "model": "arima",
@@ -453,7 +766,32 @@
         "target": "Close"
       },
       "source_data_cutoff": "2026-08-28",
-      "source_data_sha256": "e4015b1da572c292ade95c7911d24b62f87d2599683ed827836cce2c5ff80d7b"
+      "source_data_sha256": "e4015b1da572c292ade95c7911d24b62f87d2599683ed827836cce2c5ff80d7b",
+      "artifact": {
+        "path": "artifacts/arima/SECB.pkl",
+        "sha256": "0c253bae89abd30c64d8c799fe017226a9aebcb2dfaa3b80aca4b8a090942fa5",
+        "configuration_sha256": "32a261614074fdae97eeea4129761d645f3adad9496aff3f79f9c94e07f4ad0b",
+        "model_family": "arima",
+        "training_cutoff": "2026-09-08",
+        "training_rows": 1630,
+        "source_data_sha256": "fbd6598343d6730127ebcffdfa98caa8e3d66e4f0a1cc60aae3c48a189d79bf0",
+        "runtime": {
+          "python": "3.11.16",
+          "platform": "macOS-26.6.2-arm64-arm-64bit",
+          "numpy": "1.26.4",
+          "pandas": "3.0.5",
+          "scikit-learn": "1.9.0",
+          "scipy": "1.17.1",
+          "statsmodels": "0.14.6",
+          "torch": "2.13.0",
+          "joblib": "1.5.3"
+        },
+        "code_revision": {
+          "git_head": "e5b4de1aa13c78a27f22e2b84e6f38f4493bf86c",
+          "working_tree_diff_sha256": "1004c587c15b1b46cd386ae59f67eaddd5ddafab301ed67399212bc6d76869d9",
+          "working_tree_clean": false
+        }
+      }
     },
     "SHLPH": {
       "model": "arima",
@@ -469,7 +807,32 @@
         "target": "Close"
       },
       "source_data_cutoff": "2026-08-28",
-      "source_data_sha256": "6f8fc34f631e6c81e5a21552c085efd48b8042675fab228666158ae7fe6fe4f9"
+      "source_data_sha256": "6f8fc34f631e6c81e5a21552c085efd48b8042675fab228666158ae7fe6fe4f9",
+      "artifact": {
+        "path": "artifacts/arima/SHLPH.pkl",
+        "sha256": "7346ba12ffb15d5438487726d35530e44252cb50ba5e6c3d1ffb3c9980b28279",
+        "configuration_sha256": "6a003806732db247b9825cd1989abae894061ea232c29d6d5950add1443db773",
+        "model_family": "arima",
+        "training_cutoff": "2026-09-08",
+        "training_rows": 1630,
+        "source_data_sha256": "9c850aa2844ba2e6d548d0711770a7127774d9932c5744a63c27a334b1924c50",
+        "runtime": {
+          "python": "3.11.16",
+          "platform": "macOS-26.6.2-arm64-arm-64bit",
+          "numpy": "1.26.4",
+          "pandas": "3.0.5",
+          "scikit-learn": "1.9.0",
+          "scipy": "1.17.1",
+          "statsmodels": "0.14.6",
+          "torch": "2.13.0",
+          "joblib": "1.5.3"
+        },
+        "code_revision": {
+          "git_head": "e5b4de1aa13c78a27f22e2b84e6f38f4493bf86c",
+          "working_tree_diff_sha256": "1004c587c15b1b46cd386ae59f67eaddd5ddafab301ed67399212bc6d76869d9",
+          "working_tree_clean": false
+        }
+      }
     },
     "SMPH": {
       "model": "lag_reg",
@@ -521,1277 +884,94 @@
         "scaler": "StandardScaler"
       },
       "source_data_cutoff": "2026-08-28",
-      "source_data_sha256": "0608a5a1948e045b1c6903155f26b1626f3b62efdbdfe79d522b58c623f3ac4a"
-    }
-  },
-  "approved_configurations": {
-    "ALI": {
-      "lag_reg": {
-        "alpha": 0.1,
-        "candidate_features": [
-          "bb_lower",
-          "bb_percent_b",
-          "bb_upper",
-          "bb_width_pct",
-          "daily_return",
-          "ema_10",
-          "ema_20",
-          "ema_gap_pct",
-          "hl_range_pct",
-          "lag_1",
-          "lag_2",
-          "lag_3",
-          "lag_5",
-          "log_volume",
-          "ma_10",
-          "ma_5",
-          "macd",
-          "macd_pct",
-          "macd_signal",
-          "oc_return_pct",
-          "return_lag_5",
-          "return_mean_10",
-          "return_mean_20",
-          "return_mean_5",
-          "return_vol_10",
-          "return_vol_20",
-          "return_vol_5",
-          "rolling_volatility",
-          "rsi_14",
-          "volume_ma_5",
-          "volume_mean_10",
-          "volume_mean_20"
-        ],
-        "pacf_selected_lags": [
-          5
-        ],
-        "max_iter": 50000,
-        "tol": 0.001,
-        "seed": 42,
-        "target": "next_close_delta",
-        "scaler": "StandardScaler"
-      },
-      "arima": {
-        "order": [
-          1,
-          0,
-          0
-        ],
-        "trend": "n",
-        "method": "statespace",
-        "maxiter": 2000,
-        "target": "Close"
-      },
-      "lstm": {
-        "lookback": 10,
-        "hidden_size": 25,
-        "learning_rate": 0.01,
-        "batch_size": 32,
-        "fixed_epochs": 4,
-        "seed": 42,
-        "input_design": "univariate_close_delta",
-        "scaler": "MinMaxScaler",
-        "optimizer": "Adam",
-        "loss": "MSELoss"
-      }
-    },
-    "APX": {
-      "lag_reg": {
-        "alpha": 0.01,
-        "candidate_features": [
-          "bb_lower",
-          "bb_percent_b",
-          "bb_upper",
-          "bb_width_pct",
-          "daily_return",
-          "ema_10",
-          "ema_20",
-          "ema_gap_pct",
-          "hl_range_pct",
-          "lag_1",
-          "lag_2",
-          "lag_3",
-          "lag_5",
-          "log_volume",
-          "ma_10",
-          "ma_5",
-          "macd",
-          "macd_pct",
-          "macd_signal",
-          "oc_return_pct",
-          "return_lag_1",
-          "return_lag_16",
-          "return_lag_4",
-          "return_lag_6",
-          "return_mean_10",
-          "return_mean_20",
-          "return_mean_5",
-          "return_vol_10",
-          "return_vol_20",
-          "return_vol_5",
-          "rolling_volatility",
-          "rsi_14",
-          "volume_ma_5",
-          "volume_mean_10",
-          "volume_mean_20"
-        ],
-        "pacf_selected_lags": [
-          1,
-          4,
-          6,
-          16
-        ],
-        "max_iter": 50000,
-        "tol": 0.001,
-        "seed": 42,
-        "target": "next_close_delta",
-        "scaler": "StandardScaler"
-      },
-      "arima": {
-        "order": [
-          1,
-          1,
-          1
-        ],
-        "trend": "n",
-        "method": "statespace",
-        "maxiter": 2000,
-        "target": "Close"
-      },
-      "lstm": {
-        "lookback": 5,
-        "hidden_size": 100,
-        "learning_rate": 0.01,
-        "batch_size": 32,
-        "fixed_epochs": 21,
-        "seed": 42,
-        "input_design": "univariate_close_delta",
-        "scaler": "MinMaxScaler",
-        "optimizer": "Adam",
-        "loss": "MSELoss"
-      }
-    },
-    "BPI": {
-      "lag_reg": {
-        "alpha": 0.1,
-        "candidate_features": [
-          "bb_lower",
-          "bb_percent_b",
-          "bb_upper",
-          "bb_width_pct",
-          "daily_return",
-          "ema_10",
-          "ema_20",
-          "ema_gap_pct",
-          "hl_range_pct",
-          "lag_1",
-          "lag_2",
-          "lag_3",
-          "lag_5",
-          "log_volume",
-          "ma_10",
-          "ma_5",
-          "macd",
-          "macd_pct",
-          "macd_signal",
-          "oc_return_pct",
-          "return_lag_1",
-          "return_lag_14",
-          "return_lag_16",
-          "return_lag_2",
-          "return_mean_10",
-          "return_mean_20",
-          "return_mean_5",
-          "return_vol_10",
-          "return_vol_20",
-          "return_vol_5",
-          "rolling_volatility",
-          "rsi_14",
-          "volume_ma_5",
-          "volume_mean_10",
-          "volume_mean_20"
-        ],
-        "pacf_selected_lags": [
-          1,
-          2,
-          14,
-          16
-        ],
-        "max_iter": 50000,
-        "tol": 0.001,
-        "seed": 42,
-        "target": "next_close_delta",
-        "scaler": "StandardScaler"
-      },
-      "arima": {
-        "order": [
-          1,
-          1,
-          1
-        ],
-        "trend": "n",
-        "method": "statespace",
-        "maxiter": 2000,
-        "target": "Close"
-      },
-      "lstm": {
-        "lookback": 30,
-        "hidden_size": 25,
-        "learning_rate": 0.01,
-        "batch_size": 16,
-        "fixed_epochs": 8,
-        "seed": 42,
-        "input_design": "univariate_close_delta",
-        "scaler": "MinMaxScaler",
-        "optimizer": "Adam",
-        "loss": "MSELoss"
-      }
-    },
-    "GLO": {
-      "lag_reg": {
-        "alpha": 15.848931924611142,
-        "candidate_features": [
-          "bb_lower",
-          "bb_percent_b",
-          "bb_upper",
-          "bb_width_pct",
-          "daily_return",
-          "ema_10",
-          "ema_20",
-          "ema_gap_pct",
-          "hl_range_pct",
-          "lag_1",
-          "lag_2",
-          "lag_3",
-          "lag_5",
-          "log_volume",
-          "ma_10",
-          "ma_5",
-          "macd",
-          "macd_pct",
-          "macd_signal",
-          "oc_return_pct",
-          "return_lag_10",
-          "return_lag_14",
-          "return_lag_2",
-          "return_lag_7",
-          "return_lag_9",
-          "return_mean_10",
-          "return_mean_20",
-          "return_mean_5",
-          "return_vol_10",
-          "return_vol_20",
-          "return_vol_5",
-          "rolling_volatility",
-          "rsi_14",
-          "volume_ma_5",
-          "volume_mean_10",
-          "volume_mean_20"
-        ],
-        "pacf_selected_lags": [
-          2,
-          7,
-          9,
-          10,
-          14
-        ],
-        "max_iter": 50000,
-        "tol": 0.001,
-        "seed": 42,
-        "target": "next_close_delta",
-        "scaler": "StandardScaler"
-      },
-      "arima": {
-        "order": [
-          0,
-          1,
-          0
-        ],
-        "trend": "n",
-        "method": "statespace",
-        "maxiter": 2000,
-        "target": "Close"
-      },
-      "lstm": {
-        "lookback": 10,
-        "hidden_size": 25,
-        "learning_rate": 0.001,
-        "batch_size": 32,
-        "fixed_epochs": 10,
-        "seed": 42,
-        "input_design": "univariate_close_delta",
-        "scaler": "MinMaxScaler",
-        "optimizer": "Adam",
-        "loss": "MSELoss"
-      }
-    },
-    "ICT": {
-      "lag_reg": {
-        "alpha": 0.3981071705534973,
-        "candidate_features": [
-          "bb_lower",
-          "bb_percent_b",
-          "bb_upper",
-          "bb_width_pct",
-          "daily_return",
-          "ema_10",
-          "ema_20",
-          "ema_gap_pct",
-          "hl_range_pct",
-          "lag_1",
-          "lag_2",
-          "lag_3",
-          "lag_5",
-          "log_volume",
-          "ma_10",
-          "ma_5",
-          "macd",
-          "macd_pct",
-          "macd_signal",
-          "oc_return_pct",
-          "return_lag_1",
-          "return_lag_11",
-          "return_lag_17",
-          "return_lag_19",
-          "return_lag_2",
-          "return_lag_4",
-          "return_lag_5",
-          "return_mean_10",
-          "return_mean_20",
-          "return_mean_5",
-          "return_vol_10",
-          "return_vol_20",
-          "return_vol_5",
-          "rolling_volatility",
-          "rsi_14",
-          "volume_ma_5",
-          "volume_mean_10",
-          "volume_mean_20"
-        ],
-        "pacf_selected_lags": [
-          1,
-          2,
-          4,
-          5,
-          11,
-          17,
-          19
-        ],
-        "max_iter": 50000,
-        "tol": 0.001,
-        "seed": 42,
-        "target": "next_close_delta",
-        "scaler": "StandardScaler"
-      },
-      "arima": {
-        "order": [
-          1,
-          1,
-          1
-        ],
-        "trend": "t",
-        "method": "statespace",
-        "maxiter": 2000,
-        "target": "Close"
-      },
-      "lstm": {
-        "lookback": 30,
-        "hidden_size": 25,
-        "learning_rate": 0.001,
-        "batch_size": 16,
-        "fixed_epochs": 47,
-        "seed": 42,
-        "input_design": "univariate_close_delta",
-        "scaler": "MinMaxScaler",
-        "optimizer": "Adam",
-        "loss": "MSELoss"
-      }
-    },
-    "JFC": {
-      "lag_reg": {
-        "alpha": 1.584893192461114,
-        "candidate_features": [
-          "bb_lower",
-          "bb_percent_b",
-          "bb_upper",
-          "bb_width_pct",
-          "daily_return",
-          "ema_10",
-          "ema_20",
-          "ema_gap_pct",
-          "hl_range_pct",
-          "lag_1",
-          "lag_2",
-          "lag_3",
-          "lag_5",
-          "log_volume",
-          "ma_10",
-          "ma_5",
-          "macd",
-          "macd_pct",
-          "macd_signal",
-          "oc_return_pct",
-          "return_lag_16",
-          "return_lag_20",
-          "return_lag_4",
-          "return_lag_9",
-          "return_mean_10",
-          "return_mean_20",
-          "return_mean_5",
-          "return_vol_10",
-          "return_vol_20",
-          "return_vol_5",
-          "rolling_volatility",
-          "rsi_14",
-          "volume_ma_5",
-          "volume_mean_10",
-          "volume_mean_20"
-        ],
-        "pacf_selected_lags": [
-          4,
-          9,
-          16,
-          20
-        ],
-        "max_iter": 50000,
-        "tol": 0.001,
-        "seed": 42,
-        "target": "next_close_delta",
-        "scaler": "StandardScaler"
-      },
-      "arima": {
-        "order": [
-          1,
-          0,
-          0
-        ],
-        "trend": "c",
-        "method": "statespace",
-        "maxiter": 2000,
-        "target": "Close"
-      },
-      "lstm": {
-        "lookback": 20,
-        "hidden_size": 25,
-        "learning_rate": 0.001,
-        "batch_size": 32,
-        "fixed_epochs": 65,
-        "seed": 42,
-        "input_design": "univariate_close_delta",
-        "scaler": "MinMaxScaler",
-        "optimizer": "Adam",
-        "loss": "MSELoss"
-      }
-    },
-    "MBT": {
-      "lag_reg": {
-        "alpha": 0.1,
-        "candidate_features": [
-          "bb_lower",
-          "bb_percent_b",
-          "bb_upper",
-          "bb_width_pct",
-          "daily_return",
-          "ema_10",
-          "ema_20",
-          "ema_gap_pct",
-          "hl_range_pct",
-          "lag_1",
-          "lag_2",
-          "lag_3",
-          "lag_5",
-          "log_volume",
-          "ma_10",
-          "ma_5",
-          "macd",
-          "macd_pct",
-          "macd_signal",
-          "oc_return_pct",
-          "return_lag_1",
-          "return_lag_2",
-          "return_lag_20",
-          "return_lag_6",
-          "return_mean_10",
-          "return_mean_20",
-          "return_mean_5",
-          "return_vol_10",
-          "return_vol_20",
-          "return_vol_5",
-          "rolling_volatility",
-          "rsi_14",
-          "volume_ma_5",
-          "volume_mean_10",
-          "volume_mean_20"
-        ],
-        "pacf_selected_lags": [
-          1,
-          2,
-          6,
-          20
-        ],
-        "max_iter": 50000,
-        "tol": 0.001,
-        "seed": 42,
-        "target": "next_close_delta",
-        "scaler": "StandardScaler"
-      },
-      "arima": {
-        "order": [
-          2,
-          1,
-          0
-        ],
-        "trend": "n",
-        "method": "statespace",
-        "maxiter": 2000,
-        "target": "Close"
-      },
-      "lstm": {
-        "lookback": 30,
-        "hidden_size": 25,
-        "learning_rate": 0.001,
-        "batch_size": 16,
-        "fixed_epochs": 51,
-        "seed": 42,
-        "input_design": "univariate_close_delta",
-        "scaler": "MinMaxScaler",
-        "optimizer": "Adam",
-        "loss": "MSELoss"
-      }
-    },
-    "MEG": {
-      "lag_reg": {
-        "alpha": 0.01584893192461114,
-        "candidate_features": [
-          "bb_lower",
-          "bb_percent_b",
-          "bb_upper",
-          "bb_width_pct",
-          "daily_return",
-          "ema_10",
-          "ema_20",
-          "ema_gap_pct",
-          "hl_range_pct",
-          "lag_1",
-          "lag_2",
-          "lag_3",
-          "lag_5",
-          "log_volume",
-          "ma_10",
-          "ma_5",
-          "macd",
-          "macd_pct",
-          "macd_signal",
-          "oc_return_pct",
-          "return_lag_1",
-          "return_mean_10",
-          "return_mean_20",
-          "return_mean_5",
-          "return_vol_10",
-          "return_vol_20",
-          "return_vol_5",
-          "rolling_volatility",
-          "rsi_14",
-          "volume_ma_5",
-          "volume_mean_10",
-          "volume_mean_20"
-        ],
-        "pacf_selected_lags": [
-          1
-        ],
-        "max_iter": 50000,
-        "tol": 0.001,
-        "seed": 42,
-        "target": "next_close_delta",
-        "scaler": "StandardScaler"
-      },
-      "arima": {
-        "order": [
-          1,
-          0,
-          0
-        ],
-        "trend": "n",
-        "method": "statespace",
-        "maxiter": 2000,
-        "target": "Close"
-      },
-      "lstm": {
-        "lookback": 30,
-        "hidden_size": 25,
-        "learning_rate": 0.001,
-        "batch_size": 16,
-        "fixed_epochs": 2,
-        "seed": 42,
-        "input_design": "univariate_close_delta",
-        "scaler": "MinMaxScaler",
-        "optimizer": "Adam",
-        "loss": "MSELoss"
-      }
-    },
-    "MER": {
-      "lag_reg": {
-        "alpha": 0.3981071705534973,
-        "candidate_features": [
-          "bb_lower",
-          "bb_percent_b",
-          "bb_upper",
-          "bb_width_pct",
-          "daily_return",
-          "ema_10",
-          "ema_20",
-          "ema_gap_pct",
-          "hl_range_pct",
-          "lag_1",
-          "lag_2",
-          "lag_3",
-          "lag_5",
-          "log_volume",
-          "ma_10",
-          "ma_5",
-          "macd",
-          "macd_pct",
-          "macd_signal",
-          "oc_return_pct",
-          "return_lag_1",
-          "return_lag_11",
-          "return_lag_2",
-          "return_lag_8",
-          "return_lag_9",
-          "return_mean_10",
-          "return_mean_20",
-          "return_mean_5",
-          "return_vol_10",
-          "return_vol_20",
-          "return_vol_5",
-          "rolling_volatility",
-          "rsi_14",
-          "volume_ma_5",
-          "volume_mean_10",
-          "volume_mean_20"
-        ],
-        "pacf_selected_lags": [
-          1,
-          2,
-          8,
-          9,
-          11
-        ],
-        "max_iter": 50000,
-        "tol": 0.001,
-        "seed": 42,
-        "target": "next_close_delta",
-        "scaler": "StandardScaler"
-      },
-      "arima": {
-        "order": [
-          3,
-          1,
-          2
-        ],
-        "trend": "t",
-        "method": "statespace",
-        "maxiter": 2000,
-        "target": "Close"
-      },
-      "lstm": {
-        "lookback": 10,
-        "hidden_size": 50,
-        "learning_rate": 0.01,
-        "batch_size": 16,
-        "fixed_epochs": 43,
-        "seed": 42,
-        "input_design": "univariate_close_delta",
-        "scaler": "MinMaxScaler",
-        "optimizer": "Adam",
-        "loss": "MSELoss"
-      }
-    },
-    "NIKL": {
-      "lag_reg": {
-        "alpha": 0.025118864315095822,
-        "candidate_features": [
-          "bb_lower",
-          "bb_percent_b",
-          "bb_upper",
-          "bb_width_pct",
-          "daily_return",
-          "ema_10",
-          "ema_20",
-          "ema_gap_pct",
-          "hl_range_pct",
-          "lag_1",
-          "lag_2",
-          "lag_3",
-          "lag_5",
-          "log_volume",
-          "ma_10",
-          "ma_5",
-          "macd",
-          "macd_pct",
-          "macd_signal",
-          "oc_return_pct",
-          "return_lag_13",
-          "return_mean_10",
-          "return_mean_20",
-          "return_mean_5",
-          "return_vol_10",
-          "return_vol_20",
-          "return_vol_5",
-          "rolling_volatility",
-          "rsi_14",
-          "volume_ma_5",
-          "volume_mean_10",
-          "volume_mean_20"
-        ],
-        "pacf_selected_lags": [
-          13
-        ],
-        "max_iter": 50000,
-        "tol": 0.001,
-        "seed": 42,
-        "target": "next_close_delta",
-        "scaler": "StandardScaler"
-      },
-      "arima": {
-        "order": [
-          1,
-          0,
-          0
-        ],
-        "trend": "n",
-        "method": "statespace",
-        "maxiter": 2000,
-        "target": "Close"
-      },
-      "lstm": {
-        "lookback": 10,
-        "hidden_size": 25,
-        "learning_rate": 0.001,
-        "batch_size": 32,
-        "fixed_epochs": 8,
-        "seed": 42,
-        "input_design": "univariate_close_delta",
-        "scaler": "MinMaxScaler",
-        "optimizer": "Adam",
-        "loss": "MSELoss"
-      }
-    },
-    "PGOLD": {
-      "lag_reg": {
-        "alpha": 0.15848931924611143,
-        "candidate_features": [
-          "bb_lower",
-          "bb_percent_b",
-          "bb_upper",
-          "bb_width_pct",
-          "daily_return",
-          "ema_10",
-          "ema_20",
-          "ema_gap_pct",
-          "hl_range_pct",
-          "lag_1",
-          "lag_2",
-          "lag_3",
-          "lag_5",
-          "log_volume",
-          "ma_10",
-          "ma_5",
-          "macd",
-          "macd_pct",
-          "macd_signal",
-          "oc_return_pct",
-          "return_lag_1",
-          "return_lag_12",
-          "return_mean_10",
-          "return_mean_20",
-          "return_mean_5",
-          "return_vol_10",
-          "return_vol_20",
-          "return_vol_5",
-          "rolling_volatility",
-          "rsi_14",
-          "volume_ma_5",
-          "volume_mean_10",
-          "volume_mean_20"
-        ],
-        "pacf_selected_lags": [
-          1,
-          12
-        ],
-        "max_iter": 50000,
-        "tol": 0.001,
-        "seed": 42,
-        "target": "next_close_delta",
-        "scaler": "StandardScaler"
-      },
-      "arima": {
-        "order": [
-          1,
-          1,
-          0
-        ],
-        "trend": "n",
-        "method": "statespace",
-        "maxiter": 2000,
-        "target": "Close"
-      },
-      "lstm": {
-        "lookback": 5,
-        "hidden_size": 25,
-        "learning_rate": 0.01,
-        "batch_size": 16,
-        "fixed_epochs": 5,
-        "seed": 42,
-        "input_design": "univariate_close_delta",
-        "scaler": "MinMaxScaler",
-        "optimizer": "Adam",
-        "loss": "MSELoss"
-      }
-    },
-    "SCC": {
-      "lag_reg": {
-        "alpha": 0.15848931924611143,
-        "candidate_features": [
-          "bb_lower",
-          "bb_percent_b",
-          "bb_upper",
-          "bb_width_pct",
-          "daily_return",
-          "ema_10",
-          "ema_20",
-          "ema_gap_pct",
-          "hl_range_pct",
-          "lag_1",
-          "lag_2",
-          "lag_3",
-          "lag_5",
-          "log_volume",
-          "ma_10",
-          "ma_5",
-          "macd",
-          "macd_pct",
-          "macd_signal",
-          "oc_return_pct",
-          "return_lag_1",
-          "return_lag_13",
-          "return_mean_10",
-          "return_mean_20",
-          "return_mean_5",
-          "return_vol_10",
-          "return_vol_20",
-          "return_vol_5",
-          "rolling_volatility",
-          "rsi_14",
-          "volume_ma_5",
-          "volume_mean_10",
-          "volume_mean_20"
-        ],
-        "pacf_selected_lags": [
-          1,
-          13
-        ],
-        "max_iter": 50000,
-        "tol": 0.001,
-        "seed": 42,
-        "target": "next_close_delta",
-        "scaler": "StandardScaler"
-      },
-      "arima": {
-        "order": [
-          0,
-          1,
-          0
-        ],
-        "trend": "n",
-        "method": "statespace",
-        "maxiter": 2000,
-        "target": "Close"
-      },
-      "lstm": {
-        "lookback": 30,
-        "hidden_size": 25,
-        "learning_rate": 0.001,
-        "batch_size": 32,
-        "fixed_epochs": 14,
-        "seed": 42,
-        "input_design": "univariate_close_delta",
-        "scaler": "MinMaxScaler",
-        "optimizer": "Adam",
-        "loss": "MSELoss"
-      }
-    },
-    "SECB": {
-      "lag_reg": {
-        "alpha": 0.25118864315095824,
-        "candidate_features": [
-          "bb_lower",
-          "bb_percent_b",
-          "bb_upper",
-          "bb_width_pct",
-          "daily_return",
-          "ema_10",
-          "ema_20",
-          "ema_gap_pct",
-          "hl_range_pct",
-          "lag_1",
-          "lag_2",
-          "lag_3",
-          "lag_5",
-          "log_volume",
-          "ma_10",
-          "ma_5",
-          "macd",
-          "macd_pct",
-          "macd_signal",
-          "oc_return_pct",
-          "return_lag_10",
-          "return_lag_14",
-          "return_lag_3",
-          "return_lag_8",
-          "return_mean_10",
-          "return_mean_20",
-          "return_mean_5",
-          "return_vol_10",
-          "return_vol_20",
-          "return_vol_5",
-          "rolling_volatility",
-          "rsi_14",
-          "volume_ma_5",
-          "volume_mean_10",
-          "volume_mean_20"
-        ],
-        "pacf_selected_lags": [
-          3,
-          8,
-          10,
-          14
-        ],
-        "max_iter": 50000,
-        "tol": 0.001,
-        "seed": 42,
-        "target": "next_close_delta",
-        "scaler": "StandardScaler"
-      },
-      "arima": {
-        "order": [
-          1,
-          0,
-          0
-        ],
-        "trend": "n",
-        "method": "statespace",
-        "maxiter": 2000,
-        "target": "Close"
-      },
-      "lstm": {
-        "lookback": 20,
-        "hidden_size": 25,
-        "learning_rate": 0.001,
-        "batch_size": 16,
-        "fixed_epochs": 2,
-        "seed": 42,
-        "input_design": "univariate_close_delta",
-        "scaler": "MinMaxScaler",
-        "optimizer": "Adam",
-        "loss": "MSELoss"
-      }
-    },
-    "SHLPH": {
-      "lag_reg": {
-        "alpha": 0.15848931924611143,
-        "candidate_features": [
-          "bb_lower",
-          "bb_percent_b",
-          "bb_upper",
-          "bb_width_pct",
-          "daily_return",
-          "ema_10",
-          "ema_20",
-          "ema_gap_pct",
-          "hl_range_pct",
-          "lag_1",
-          "lag_2",
-          "lag_3",
-          "lag_5",
-          "log_volume",
-          "ma_10",
-          "ma_5",
-          "macd",
-          "macd_pct",
-          "macd_signal",
-          "oc_return_pct",
-          "return_lag_3",
-          "return_mean_10",
-          "return_mean_20",
-          "return_mean_5",
-          "return_vol_10",
-          "return_vol_20",
-          "return_vol_5",
-          "rolling_volatility",
-          "rsi_14",
-          "volume_ma_5",
-          "volume_mean_10",
-          "volume_mean_20"
-        ],
-        "pacf_selected_lags": [
-          3
-        ],
-        "max_iter": 50000,
-        "tol": 0.001,
-        "seed": 42,
-        "target": "next_close_delta",
-        "scaler": "StandardScaler"
-      },
-      "arima": {
-        "order": [
-          0,
-          1,
-          3
-        ],
-        "trend": "t",
-        "method": "statespace",
-        "maxiter": 2000,
-        "target": "Close"
-      },
-      "lstm": {
-        "lookback": 10,
-        "hidden_size": 25,
-        "learning_rate": 0.001,
-        "batch_size": 16,
-        "fixed_epochs": 11,
-        "seed": 42,
-        "input_design": "univariate_close_delta",
-        "scaler": "MinMaxScaler",
-        "optimizer": "Adam",
-        "loss": "MSELoss"
-      }
-    },
-    "SMPH": {
-      "lag_reg": {
-        "alpha": 0.039810717055349734,
-        "candidate_features": [
-          "bb_lower",
-          "bb_percent_b",
-          "bb_upper",
-          "bb_width_pct",
-          "daily_return",
-          "ema_10",
-          "ema_20",
-          "ema_gap_pct",
-          "hl_range_pct",
-          "lag_1",
-          "lag_2",
-          "lag_3",
-          "lag_5",
-          "log_volume",
-          "ma_10",
-          "ma_5",
-          "macd",
-          "macd_pct",
-          "macd_signal",
-          "oc_return_pct",
-          "return_lag_1",
-          "return_lag_2",
-          "return_mean_10",
-          "return_mean_20",
-          "return_mean_5",
-          "return_vol_10",
-          "return_vol_20",
-          "return_vol_5",
-          "rolling_volatility",
-          "rsi_14",
-          "volume_ma_5",
-          "volume_mean_10",
-          "volume_mean_20"
-        ],
-        "pacf_selected_lags": [
-          1,
-          2
-        ],
-        "max_iter": 50000,
-        "tol": 0.001,
-        "seed": 42,
-        "target": "next_close_delta",
-        "scaler": "StandardScaler"
-      },
-      "arima": {
-        "order": [
-          1,
-          0,
-          1
-        ],
-        "trend": "n",
-        "method": "statespace",
-        "maxiter": 2000,
-        "target": "Close"
-      },
-      "lstm": {
-        "lookback": 10,
-        "hidden_size": 25,
-        "learning_rate": 0.01,
-        "batch_size": 16,
-        "fixed_epochs": 11,
-        "seed": 42,
-        "input_design": "univariate_close_delta",
-        "scaler": "MinMaxScaler",
-        "optimizer": "Adam",
-        "loss": "MSELoss"
+      "source_data_sha256": "0608a5a1948e045b1c6903155f26b1626f3b62efdbdfe79d522b58c623f3ac4a",
+      "artifact": {
+        "path": "artifacts/lag_regression/SMPH.pkl",
+        "sha256": "cc791c805d667dd832cc33e3e3417f22d23a63257bd24b98f963385c0fecea92",
+        "configuration_sha256": "42cbd66f0200b1f7a19efcf67eea11a3d93de6121ad8f32427a00c0e1ddc4f39",
+        "model_family": "lag_reg",
+        "training_cutoff": "2026-09-08",
+        "training_rows": 1630,
+        "source_data_sha256": "f2dbf24470793748d4547b5f0f143635f873a992f393527231103965ba7d7d70",
+        "runtime": {
+          "python": "3.11.16",
+          "platform": "macOS-26.6.2-arm64-arm-64bit",
+          "numpy": "1.26.4",
+          "pandas": "3.0.5",
+          "scikit-learn": "1.9.0",
+          "scipy": "1.17.1",
+          "statsmodels": "0.14.6",
+          "torch": "2.13.0",
+          "joblib": "1.5.3"
+        },
+        "code_revision": {
+          "git_head": "e5b4de1aa13c78a27f22e2b84e6f38f4493bf86c",
+          "working_tree_diff_sha256": "1004c587c15b1b46cd386ae59f67eaddd5ddafab301ed67399212bc6d76869d9",
+          "working_tree_clean": false
+        }
       }
     }
   },
-  "artifacts": {
+  "test_predictions": {
     "ALI": {
-      "arima": "models/deployment/current/arima/ALI.pkl",
-      "lag_regression": "models/deployment/current/lag_regression/ALI.pkl",
-      "lstm": "models/deployment/current/lstm/ALI.pth"
+      "predicted_close": 14.92,
+      "forecast_for": "2026-09-09"
     },
     "APX": {
-      "arima": "models/deployment/current/arima/APX.pkl",
-      "lag_regression": "models/deployment/current/lag_regression/APX.pkl",
-      "lstm": "models/deployment/current/lstm/APX.pth"
+      "predicted_close": 16.85,
+      "forecast_for": "2026-09-09"
     },
     "BPI": {
-      "arima": "models/deployment/current/arima/BPI.pkl",
-      "lag_regression": "models/deployment/current/lag_regression/BPI.pkl",
-      "lstm": "models/deployment/current/lstm/BPI.pth"
+      "predicted_close": 104.11,
+      "forecast_for": "2026-09-09"
     },
     "GLO": {
-      "arima": "models/deployment/current/arima/GLO.pkl",
-      "lag_regression": "models/deployment/current/lag_regression/GLO.pkl",
-      "lstm": "models/deployment/current/lstm/GLO.pth"
+      "predicted_close": 1583.0,
+      "forecast_for": "2026-09-09"
     },
     "ICT": {
-      "arima": "models/deployment/current/arima/ICT.pkl",
-      "lag_regression": "models/deployment/current/lag_regression/ICT.pkl",
-      "lstm": "models/deployment/current/lstm/ICT.pth"
+      "predicted_close": 953.57,
+      "forecast_for": "2026-09-09"
     },
     "JFC": {
-      "arima": "models/deployment/current/arima/JFC.pkl",
-      "lag_regression": "models/deployment/current/lag_regression/JFC.pkl",
-      "lstm": "models/deployment/current/lstm/JFC.pth"
+      "predicted_close": 151.97,
+      "forecast_for": "2026-09-09"
     },
     "MBT": {
-      "arima": "models/deployment/current/arima/MBT.pkl",
-      "lag_regression": "models/deployment/current/lag_regression/MBT.pkl",
-      "lstm": "models/deployment/current/lstm/MBT.pth"
+      "predicted_close": 64.68,
+      "forecast_for": "2026-09-09"
     },
     "MEG": {
-      "arima": "models/deployment/current/arima/MEG.pkl",
-      "lag_regression": "models/deployment/current/lag_regression/MEG.pkl",
-      "lstm": "models/deployment/current/lstm/MEG.pth"
+      "predicted_close": 2.24,
+      "forecast_for": "2026-09-09"
     },
     "MER": {
-      "arima": "models/deployment/current/arima/MER.pkl",
-      "lag_regression": "models/deployment/current/lag_regression/MER.pkl",
-      "lstm": "models/deployment/current/lstm/MER.pth"
+      "predicted_close": 478.21,
+      "forecast_for": "2026-09-09"
     },
     "NIKL": {
-      "arima": "models/deployment/current/arima/NIKL.pkl",
-      "lag_regression": "models/deployment/current/lag_regression/NIKL.pkl",
-      "lstm": "models/deployment/current/lstm/NIKL.pth"
+      "predicted_close": 4.72,
+      "forecast_for": "2026-09-09"
     },
     "PGOLD": {
-      "arima": "models/deployment/current/arima/PGOLD.pkl",
-      "lag_regression": "models/deployment/current/lag_regression/PGOLD.pkl",
-      "lstm": "models/deployment/current/lstm/PGOLD.pth"
+      "predicted_close": 40.71,
+      "forecast_for": "2026-09-09"
     },
     "SCC": {
-      "arima": "models/deployment/current/arima/SCC.pkl",
-      "lag_regression": "models/deployment/current/lag_regression/SCC.pkl",
-      "lstm": "models/deployment/current/lstm/SCC.pth"
+      "predicted_close": 17.78,
+      "forecast_for": "2026-09-09"
     },
     "SECB": {
-      "arima": "models/deployment/current/arima/SECB.pkl",
-      "lag_regression": "models/deployment/current/lag_regression/SECB.pkl",
-      "lstm": "models/deployment/current/lstm/SECB.pth"
+      "predicted_close": 63.99,
+      "forecast_for": "2026-09-09"
     },
     "SHLPH": {
-      "arima": "models/deployment/current/arima/SHLPH.pkl",
-      "lag_regression": "models/deployment/current/lag_regression/SHLPH.pkl",
-      "lstm": "models/deployment/current/lstm/SHLPH.pth"
+      "predicted_close": 8.1,
+      "forecast_for": "2026-09-09"
     },
     "SMPH": {
-      "arima": "models/deployment/current/arima/SMPH.pkl",
-      "lag_regression": "models/deployment/current/lag_regression/SMPH.pkl",
-      "lstm": "models/deployment/current/lstm/SMPH.pth"
-    }
-  },
-  "artifact_hashes": {
-    "ALI": {
-      "arima": "e50c128c01fe882d3dd2fa5dbf798faba61c9ccec3c0ea4d9aba8588679a0d2c",
-      "lag_regression": "db9462e7551363b126586a5d00b0ad7dbb5393c4ddccc6b788fd4853d32cb463",
-      "lstm": "dd74057354dd579469fbf8245e6a17b7a86600df13de42b2451f69aabd6eddd9"
-    },
-    "APX": {
-      "arima": "b5457a772eee374ed0bbd64a428f6d17736492e3b42e7de92edca34b36f96c76",
-      "lag_regression": "08bddbed3edda0af75ac44789ab144e75c92422f9b18c94e6e6e81e3e1e1b714",
-      "lstm": "af8b223f0a4423775c4e6531cfb7ebcd6ff2800fcffe8c1f1d731035e1a72f7d"
-    },
-    "BPI": {
-      "arima": "604d94723be6b0891d08a0b795f44dc13e3511b6e00aa0d03fe4cf930464a74c",
-      "lag_regression": "3c36f8842ba609503b7adef3ca55e9ea321467b9d6623db1d9164e6f427d791e",
-      "lstm": "c067b476913b037bfb776e78a9d101a750008867111bd2e199f188fdc0de617c"
-    },
-    "GLO": {
-      "arima": "1cdaf633c14ad4023e32723c17fa6cf855cff057540e410d643d3ae8e26e8a41",
-      "lag_regression": "f1fe8ec57edad3391d59d5d2f9a584c1fb03e54a5ee6969b0d276bae5b91da10",
-      "lstm": "d16bd0ce078d90ab9c7bc756f460e459407fc540a1a8894eb9c302f3502b5900"
-    },
-    "ICT": {
-      "arima": "c4504da78d8d3d1cb3101d64629d5d3baba2585516e4e7dbfdb9aee4f61d0c82",
-      "lag_regression": "06e17978b62d596268e8aa305ae72cbc1b033e8b43819e5f075bd7803ed9397f",
-      "lstm": "2cbc1ff41cf93ca5428e7a64791e0647c77a08bfbc7d9963aefab8c4c8b80657"
-    },
-    "JFC": {
-      "arima": "ff8e30d27e89c7b28512ff63055702790e4fb6b4c9247f36590f5ecaa797011f",
-      "lag_regression": "c1c2c88c060b04e1c95b8856da4ee8d575025993310b63a0f71507dad64e0263",
-      "lstm": "b9968ab8e4a452ee881bb88ebfdc3131ce82e113e6144416a00cf7554c88c436"
-    },
-    "MBT": {
-      "arima": "051baa65aef581fa5666e3d8a523a70a752ea22012d89b14d84fcbe782d0f73d",
-      "lag_regression": "dfa81c1550757f9b7579f9e8b17c33e1d684e022417314bd352a1f6ce619e60e",
-      "lstm": "86e819886f164af66ef104718b5823d4455a81a91bc5c4f484a846a27c6db13c"
-    },
-    "MEG": {
-      "arima": "5cb22851b49fa62e287cb85456571a586ea96501ab452b99d60a24b076b4d077",
-      "lag_regression": "0e154a8377ae3b6bfae78bef23dd6ce5f0bdbb89ebaba321784cd1fc504f06c2",
-      "lstm": "ac7a244578d1a9926398437c2ed5704b4d2262462a78ec8f42ce8add7dddacbb"
-    },
-    "MER": {
-      "arima": "2095172c6aa1731d702fb69c8bef98a6c44f943f02f23db92578ea1d6a133486",
-      "lag_regression": "07d6b2a8312c3afbff79e4eaa3f31fc9fcf8933b14edb2a94492ebec8d188c96",
-      "lstm": "f7c535f1fedcc27a8a14f9ed48f6a98d62fc6094e1affba10ae632823b75b3fe"
-    },
-    "NIKL": {
-      "arima": "3f78b5d8089c1e67cf49a96b62f9ea8babd32767f9fed08c5af2f997c3d13b9e",
-      "lag_regression": "9960b9ec8616a1337cc0d74e66b47ea4d002233fc9509a5771037db6069515b0",
-      "lstm": "4faef4241e8eb508950cdc463b05673eddd150ac85f7e179daef7fe5ebd29b88"
-    },
-    "PGOLD": {
-      "arima": "481d6f79e24e36859eeb5197171770275ff230449f2834971081b10babaed334",
-      "lag_regression": "ff3b9a79a2eeef8468addf40f8b1e1d454df6a914977481343a6cacac7f7f42d",
-      "lstm": "784123f99bac0c731f3dc8669d5f526947749606d14e5e09b97d69da4233966d"
-    },
-    "SCC": {
-      "arima": "59bb07bfc3096df17be4711e1496bd15eb9cc7e53c5b889fc9c0df48ecb24edb",
-      "lag_regression": "601f99a501e9cd95a4c5a2ea91062ddeabe0237d79b339623b0e874b4550125b",
-      "lstm": "4bc001abde74a560036406292ebbc066b7683995ee87927b68eeb336e4146f27"
-    },
-    "SECB": {
-      "arima": "8c692787f12833db92f3bed7cb4ba8bc8bc883a201730cc5934b17179ac6921f",
-      "lag_regression": "0470206094aeb4f1cfd440e206d7219777cce14a14acb9d053afcacb5274dcd1",
-      "lstm": "f871cfb2f85f62670d38f443a5d3c2f5b632c3776180a3297c350cefddf90b7c"
-    },
-    "SHLPH": {
-      "arima": "ff84c6f0294452165dff959524c8c148aaf14e36600470105b2e9ca48590c068",
-      "lag_regression": "79adec7789f69b0efcb45e6ccadc3438fc167afa83f9fb8db1e4a26c664bf664",
-      "lstm": "1778b722a281ba270dbd398e1034ca25da01ec4eb256c240b85955faae5d30dc"
-    },
-    "SMPH": {
-      "arima": "3df67de7033a0f274ee013312a69e40c685844862985b6e022f911c956ad3567",
-      "lag_regression": "b2ef6acd7c97f7a24e9e47ece98ccf895af32667d2b733a508017ec3fe7a24c5",
-      "lstm": "5d41bc750c5c5390d5d7cbba25036c1581f780baa53b9dcc38772a86e335049e"
+      "predicted_close": 18.35,
+      "forecast_for": "2026-09-09"
     }
   }
 }
