@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-10T13:34:51.015549+08:00",
+  "generatedAt": "2026-09-10T16:02:20.785040+08:00",
   "forecastDate": "2026-09-08",
-  "lastRunAt": "2026-09-09T08:02:05+00:00",
+  "lastRunAt": "2026-09-10T08:02:14+00:00",
   "status": "ok",
   "totalCompanies": 15,
   "missingCompanies": [],
@@ -28,17 +28,17 @@
     }
   ],
   "marketSummary": {
-    "gainers": 7,
-    "losers": 7,
-    "unchanged": 1
+    "gainers": 9,
+    "losers": 6,
+    "unchanged": 0
   },
   "topGainer": {
     "symbol": "ALI",
     "name": "Ayala Land, Inc.",
     "sector": "Property",
-    "latestClose": 14.74,
+    "latestClose": 14.7,
     "predictedClose": 15.08,
-    "pctChange": 2.31,
+    "pctChange": 2.59,
     "direction": "bullish",
     "bestModel": "Lag-Informed Regression",
     "confidence": 98.6,
@@ -48,9 +48,9 @@
     "symbol": "ICT",
     "name": "Intl. Container Terminal Services",
     "sector": "Services",
-    "latestClose": 975.0,
+    "latestClose": 987.0,
     "predictedClose": 935.15,
-    "pctChange": -4.09,
+    "pctChange": -5.25,
     "direction": "bearish",
     "bestModel": "LSTM",
     "confidence": 98.9,
