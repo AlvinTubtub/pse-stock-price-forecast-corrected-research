@@ -1,6 +1,9 @@
-> **Run 02 operational control (September 8, 2026):** Daily inference uses one
-> fixed, persisted, hash-checked deployment and invokes no training. Operational
-> refreshes build immutable version directories and activate them atomically.
+> **Run 02 operational control (September 8, 2026):** Daily inference uses each
+> company's selected artifact from one approved, persisted, hash-checked deployment
+> plus two comparison-only artifacts, and performs no daily fitting or tuning. The
+> separately authorized deployment
+> refresh refits only the selected families with frozen configurations, builds an
+> immutable version directory, and activates it atomically.
 >
 > See [promotion mapping, safety rules, tests and run commands](../reports/run02-promotion/REVIEW.md).
 
@@ -20,10 +23,11 @@ redeploys automatically on every push — no deploy hook or cross-repo wiring re
 **This directory is a pure, read-only-to-the-frontend data pipeline.** There is no server, no API,
 and no upload/retraining capability triggered from the UI — every number the frontend shows comes
 from files already committed here by the automated pipeline described below.
-`scripts/export_forecast_artifacts.py` is the only piece written specifically for the frontend: it
-reshapes this pipeline's existing outputs (`data/raw/`, `prediction_cache/`, `best_models.json`,
-`latest_processed.json`, `statistical_tests.json`) into the flat JSON contract the frontend expects,
-and runs as the last step of both GitHub Actions workflows below.
+`scripts/export_forecast_artifacts.py` is the main backend-to-frontend adapter. It validates and
+reshapes raw OHLCV, approved deployment state, `operational/current.json`, production history,
+legacy prediction caches, and formal-study presentation data into the JSON contract the frontend
+expects. It runs near the end of both GitHub Actions workflows below and is followed by the export
+validator.
 
 > The previous Streamlit UI (`app.py`, `ui/`, `pages_app/`) has been removed — it's fully superseded
 > by `../frontend/`.
@@ -49,10 +53,12 @@ Cron-job.org (Mon 17:30; Tue–Fri 16:00)     GitHub Actions (2026-11-03 08:00 P
         ▼                                             ▼
 run_pipeline.py --no-train                  model_selector --mode deployment-refresh --strict
   1. Download latest PSE EDGE disclosures      1. Load approved configurations
-  2. Extract and validate PDF tables           2. Refit Lag Regression, ARIMA, and LSTM
-  3. Update OHLCV datasets                        without retuning or formal evaluation
+  2. Extract and validate PDF tables           2. Refit only each company's selected family
+  3. Update OHLCV datasets                        with its frozen configuration
      (data/raw/<SYMBOL>.csv)                   3. Preserve approved model families and metrics
   4. Update latest_processed.json              4. Atomically activate a versioned deployment
+  5. Issue one selected operational forecast and
+     three-model comparison snapshot per company
         │
         ▼
 Commit changed artifacts only
@@ -70,8 +76,8 @@ Commit changed artifacts only
         Dashboard reflects the latest data/models — no user interaction required
 ```
 
-Data and inference refresh daily on trading days; approved deployment
-configurations have one authorized refit on November 3, 2026 — see
+Data, selected-model inference, and three-model comparison issuance refresh daily on trading days; approved deployment
+configurations have one authorized frozen-configuration refit on November 3, 2026 — see
 "Automated Pipeline" below for why, and the runtime numbers behind that
 split.
 
@@ -244,9 +250,12 @@ backend/
 │   ├── pdf_reports/        # staged PSE EDGE EOD PDFs (gitignored, except bundled samples)
 │   └── pdf_pipeline/       # intermediate ETL artifacts + pipeline.log (gitignored)
 ├── models/
+│   ├── deployment/         # active pointer, approval records, immutable versions, selected artifacts
 │   ├── lag_regression/     # <TICKER>.pkl
 │   ├── arima/              # <TICKER>.pkl
 │   └── lstm/                # <TICKER>.pth
+├── operational/current.json # complete approved current batch + selected-model issuance history
+├── production_history/      # historical contemporaneous three-model comparison ledgers
 ├── prediction_cache/        # <TICKER>.json — cached metrics/predictions, read by the export script
 ├── best_models.json         # {"<TICKER>": "<best model label>"} per ticker, lowest RMSE
 ├── statistical_tests.json   # cross-model significance tests (DM/HLN, Friedman, Wilcoxon-Holm, consistency check)
@@ -303,10 +312,10 @@ run daily:
 
 | | `.github/workflows/update_pipeline.yml` ("Fast Pipeline") | `.github/workflows/train_models.yml` ("Heavy Training") |
 |---|---|---|
-| Does | PDF ingestion -> `backend/data/raw/` CSVs only (`python backend/run_pipeline.py --no-train`) | Refits approved configurations (`python -m services.model_selector --mode deployment-refresh --strict`) |
+| Does | PDF ingestion, approved selected-model inference, three-model shadow comparison issuance, export and validation (`python backend/run_pipeline.py --no-train`) | Refits each company's selected family with its frozen approved configuration (`python -m services.model_selector --mode deployment-refresh --strict`) |
 | Schedule | Monday 5:30 PM; Tuesday-Friday 4:00 PM Philippine Time | November 3, 2026 at 8:00 AM Philippine Time |
 | Trigger | External: [Cron-job.org](https://cron-job.org) `repository_dispatch` (no GitHub-native cron) | GitHub Actions' own `schedule: cron` |
-| Dependencies | `backend/requirements-fast.txt` (pandas/numpy/pdfplumber/requests) | `backend/requirements-pipeline.txt` (adds scikit-learn/statsmodels/torch) |
+| Dependencies | `backend/requirements-fast.txt` plus `backend/requirements-inference.txt` | `backend/requirements-pipeline.txt` (complete refit and validation stack) |
 | Typical runtime | A couple of minutes | Refit-dependent; no scheduled ARIMA/LSTM grid search |
 | Commits | `backend/data/raw/`, `backend/latest_processed.json`, `backend/operational/current.json`, `frontend/public/forecasts/` | `backend/models/deployment/versions/`, `backend/models/deployment/active.json`, approval record, and validated exports |
 
@@ -341,42 +350,43 @@ The explicit `2026-11-03` UTC guard prevents recurrence in later years.
 
 **Fast Pipeline** (Monday 17:30; Tuesday-Friday 16:00 Philippine time):
 
-1. Checks out the repo and installs `backend/requirements-fast.txt`.
-2. Runs `python backend/run_pipeline.py --no-train`, which downloads new EOD reports, extracts, cleans, validates, and merges them into `backend/data/raw/`, then writes `backend/latest_processed.json`. No model retraining.
-3. Verifies at least one non-empty CSV exists in `backend/data/raw/` — if not, the job fails loudly instead of silently pushing nothing.
-4. Runs `python backend/scripts/export_forecast_artifacts.py`, which writes `frontend/public/forecasts/*.json`.
-5. Stages `backend/data/raw/`, `backend/latest_processed.json`, and `frontend/public/forecasts/`, then checks `git diff --cached`. If nothing changed (e.g. a market holiday, or the pipeline already ran for that data), the job **finishes successfully without committing** — idempotent, no empty commits ever.
-6. If something changed, commits and pushes.
-7. Uploads `backend/data/pdf_pipeline/pipeline.log` as a build artifact either way, for troubleshooting.
-8. Vercel (Root Directory: `frontend/`) picks up the new commit and redeploys automatically via its Git integration — no separate step needed on this repo's side.
+1. Checks out the repo and installs `backend/requirements-fast.txt` and `backend/requirements-inference.txt`.
+2. Checks the maintained PSE trading calendar and skips the remaining data steps successfully when the exchange is closed.
+3. Runs `python backend/run_pipeline.py --no-train`, which downloads new EOD reports, extracts, cleans, validates, and merges them into `backend/data/raw/`, then writes `backend/latest_processed.json`. It validates the approved active deployment, issues one selected operational forecast per company, and records a three-model shadow comparison snapshot for the same target. All 45 predictions must succeed before the batch is written. It performs no model fitting, retuning, model selection, or automatic promotion.
+4. Exports and validates `frontend/public/forecasts/*.json`, including the approved formal identity and complete operational batch.
+5. Stages raw data, processing metadata, the operational ledger, and frontend exports. If nothing changed, the job finishes successfully without an empty commit; otherwise it commits and pushes.
+6. Vercel can redeploy the frontend commit through the repository's Git integration.
 
 **One-time Deployment Refresh** (November 3, 2026 at 08:00 PHT):
 
 1. Checks out the repo (already current through Friday, via the week's Fast Pipeline commits) and installs `backend/requirements-pipeline.txt`.
-2. Runs `python -m services.model_selector --mode deployment-refresh --strict` (from `backend/`), which refits each approved configuration and preserves existing formal metrics and model-family choices.
-3. Verifies `backend/best_models.json` and `backend/prediction_cache/` were actually populated.
-4. Runs `python backend/scripts/export_forecast_artifacts.py`, which writes `frontend/public/forecasts/*.json`.
-5. Stages the new immutable version, manifest, active pointer, approval record, operational ledger, and validated frontend exports.
-6. If something changed, commits and pushes; Vercel redeploys automatically.
+2. Runs `python -m services.model_selector --mode deployment-refresh --strict` (from `backend/`), which refits only each company's approved selected family using its frozen configuration and preserves formal metrics and model-family choices.
+3. Exports and validates the frontend artifacts after the complete refit succeeds.
+4. Stages the new immutable version, manifest, active pointer, approval record, operational ledger, and validated frontend exports.
+5. If something changed, commits and pushes; Vercel can redeploy automatically through its Git integration.
 
 Both workflows are granted only `contents: write` — nothing else.
 
 ### Manual / ops trigger (workflow_dispatch)
 
-For a maintainer testing or backfilling outside the scheduled runs:
-**Actions → Fast Pipeline (data + inference, no training) → Run workflow** or **Actions → PSE Scheduled Model Refresh → Run workflow**. Both are operator actions taken directly in GitHub, entirely outside the deployed frontend. Challenger retuning and promotion use their explicit researcher-only commands and are never automatic.
+For a maintainer testing or backfilling outside the scheduled daily run, use
+**Actions → Daily official-data and approved forecast refresh → Run workflow**. The one-time
+November 3 deployment refresh intentionally has no `workflow_dispatch` trigger. Challenger
+retuning and promotion use explicit researcher-only commands and are never automatic.
 
 ### Running it locally
 
 From the repo root:
 
 ```bash
-pip install -r backend/requirements-fast.txt       # PDF ingestion only
-pip install -r backend/requirements-pipeline.txt   # adds the ML stack, for training
+pip install -r backend/requirements-fast.txt       # PDF ingestion
+pip install -r backend/requirements-inference.txt  # selected and comparison persisted-artifact inference
+pip install -r backend/requirements-pipeline.txt   # complete refit/formal-development stack
 
-python backend/run_pipeline.py                     # fetch new reports, process, train, evaluate, select
-python backend/run_pipeline.py --no-download       # only process what's already in backend/data/pdf_reports/
-python backend/run_pipeline.py --no-train          # skip retraining (only refresh backend/data/raw/ CSVs)
+python backend/run_pipeline.py                     # ingest official data and issue approved forecasts
+python backend/run_pipeline.py --no-download       # process staged PDFs, then issue approved forecasts
+python backend/run_pipeline.py --no-train          # compatibility spelling used by the Fast Pipeline; no daily fitting occurs
+python backend/run_pipeline.py --no-inference      # ingest only; do not issue forecasts
 python backend/run_pipeline.py --start-date 2026-07-01 --end-date 2026-07-27
 cd backend && python -m services.model_selector --mode deployment-refresh  # refresh approved models
 python backend/scripts/export_forecast_artifacts.py  # refresh frontend/public/forecasts/ from whatever's on disk
@@ -392,12 +402,12 @@ Exit code `0` means success (including "nothing new to do"); exit code `1` means
 
 ### Idempotency / duplicate-run protection
 
-Re-running either workflow on data/models it already has is safe and a
-no-op at the commit layer: `merge_into_raw()` upserts by date (identical
-rows produce an identical file), retraining on unchanged data reproduces
-bit-for-bit-equivalent models, and each workflow's `git diff --cached`
-check means an unchanged working tree never produces a commit —
-including two accidental triggers on the same day.
+Re-running the daily workflow on data it already has is safe and a no-op at
+the commit layer: `merge_into_raw()` upserts by date, same-target operational
+issuance preserves the first forecast, and the workflow's `git diff --cached`
+check prevents empty commits. The deployment refresh validates every refitted
+artifact before atomically replacing the active pointer; a failed or incomplete
+15-company refresh leaves the previous deployment active.
 
 ## About the Forecasting Models
 
@@ -415,6 +425,17 @@ against a naive (yesterday's close) baseline, using:
 - MAE
 - MASE
 - R²
+
+Formal evaluation compares all three model families with the Naive benchmark.
+Daily controlled operation still recognizes only the selected family recorded
+for each company in the active deployment manifest as the operational forecast.
+During the same run, it now loads the two non-selected families from the
+separate hash-pinned comparison manifest and records an immutable three-model
+shadow snapshot before the target session. Comparison approval explicitly
+forbids fitting, model selection, and automatic promotion. A failure in any of
+the 45 predictions prevents the complete batch from being written. Once the
+official close arrives, all three issued values can appear in the Backtest and
+Forecast Error charts. Missing retrospective forecasts are never manufactured.
 
 Cross-model significance is assessed with Diebold-Mariano (Newey-West HAC
 variance, HLN small-sample correction) within each company, and a

@@ -389,6 +389,12 @@ export interface OperationalForecast {
   error: number | null;
   deploymentVersion: string;
   coverage: string;
+  comparisonForecasts?: Record<string, number>;
+  comparisonApprovalId?: string;
+  comparisonApprovalSha256?: string;
+  comparisonManifestSha256?: string;
+  comparisonArtifactSha256?: Record<string, string>;
+  comparisonConfigurationSha256?: Record<string, string>;
 }
 export interface OperationalBatch {
   manifestSha256: string;

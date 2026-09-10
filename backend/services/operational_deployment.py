@@ -32,6 +32,8 @@ MANIFEST_DIR = CANONICAL_MANIFEST_PATH.parent
 VERSIONS_DIR = DEPLOYMENT_ROOT / "versions"
 ACTIVE_POINTER = DEPLOYMENT_ROOT / "active.json"
 APPROVAL_PATH = DEPLOYMENT_ROOT / "approvals/RUN02_AUTH_20260908_01.json"
+COMPARISON_APPROVAL_PATH = DEPLOYMENT_ROOT / "approvals/RUN02_COMPARISON_AUTH_20260910_01.json"
+COMPARISON_MANIFEST_PATH = DEPLOYMENT_ROOT / "comparison/RUN02_COMPARISON_20260910_01.json"
 OUTPUT = BASE / "operational"
 LOCK_PATH = DEPLOYMENT_ROOT / ".deployment.lock"
 PHT = timezone(timedelta(hours=8))
@@ -41,6 +43,8 @@ RUN_ID = "FORMAL_CORRECTED_20260828_02"
 CODE = "bfb33b8c184c87cc8828af5529410da94addd71c"
 ARCHIVE = "2b2ed0ca6b88ea6cfef5ac14013440da1c7c55c1d9f9640e04a595fdafca5d24"
 LABELS = {"lag_reg": "Lag-Informed Regression", "arima": "ARIMA", "lstm": "LSTM"}
+COMPARISON_FAMILIES = ("lag_reg", "arima", "lstm")
+COMPARISON_MANIFEST_SHA256 = "ccc03428b302db82642970ae7ca1dd31cc30eaeed6d0b643d19fc489759a2377"
 
 
 def digest(path: Path) -> str:
@@ -125,6 +129,26 @@ def _approval(required_scope: str) -> tuple[dict, str]:
     if authorized.tzinfo is None:
         raise ValueError("Deployment approval timestamp must be timezone-aware")
     return approval, digest(APPROVAL_PATH)
+
+
+def _comparison_approval() -> tuple[dict, str]:
+    """Validate the independent authorization for three-model shadow forecasts."""
+    approval = read_json(COMPARISON_APPROVAL_PATH)
+    if (approval.get("schema_version") != 1
+            or approval.get("formal_run_id") != RUN_ID
+            or approval.get("scope") != "production_comparison_inference"
+            or approval.get("source_manifest_sha256") != COMPARISON_MANIFEST_SHA256
+            or approval.get("model_families") != list(COMPARISON_FAMILIES)
+            or approval.get("fitting_authorized") is not False
+            or approval.get("challenger_retuning_authorized") is not False
+            or approval.get("model_selection_authorized") is not False
+            or approval.get("automatic_promotion_authorized") is not False
+            or not approval.get("authority")):
+        raise ValueError("Three-model comparison inference lacks explicit frozen-artifact authorization")
+    authorized = datetime.fromisoformat(approval["authorized_at"].replace("Z", "+00:00"))
+    if authorized.tzinfo is None:
+        raise ValueError("Comparison approval timestamp must be timezone-aware")
+    return approval, digest(COMPARISON_APPROVAL_PATH)
 
 
 def _expected_companies() -> dict:
@@ -313,6 +337,95 @@ def predict_persisted(df: pd.DataFrame, symbol: str, item: dict, base_dir: Path 
     return round(float(value), 2)
 
 
+def _comparison_items(symbol: str) -> dict[str, dict]:
+    """Return the three frozen, hash-pinned comparison artifacts for one company."""
+    if digest(COMPARISON_MANIFEST_PATH) != COMPARISON_MANIFEST_SHA256:
+        raise ValueError("Frozen comparison manifest hash mismatch")
+    source = read_json(COMPARISON_MANIFEST_PATH)
+    if (source.get("schema_version") != 1 or source.get("status") != "verified"
+            or source.get("formal_run_id") != RUN_ID
+            or source.get("purpose") != "prospective_shadow_comparison_only"
+            or source.get("fitting_authorized") is not False
+            or source.get("model_selection_authorized") is not False
+            or source.get("automatic_promotion_authorized") is not False
+            or set(source.get("companies", {})) != set(TARGET_COMPANIES)):
+        raise ValueError("Frozen comparison manifest is incomplete")
+    items = source["companies"][symbol]
+    if set(items) != set(COMPARISON_FAMILIES):
+        raise ValueError(f"{symbol}: comparison configurations must contain all three families")
+    for family in COMPARISON_FAMILIES:
+        item = items[family]
+        item["model"] = family
+        item["artifact"]["configuration_sha256"] = canonical_hash(item["configuration"])
+        item["artifact"]["model_family"] = family
+    return items
+
+
+def predict_comparison_persisted(df: pd.DataFrame, symbol: str, item: dict) -> float:
+    """Predict one frozen comparison family without fitting or changing deployment state."""
+    from services.forecasting import arima_model, lag_regression, lstm_model
+    family = item["model"]
+    config = item["configuration"]
+    path = BASE / item["artifact"]["path"]
+    if not path.is_file() or digest(path) != item["artifact"]["sha256"]:
+        raise ValueError(f"{symbol}: frozen {family} comparison artifact hash mismatch")
+    loader = {"lag_reg": lag_regression.load, "arima": arima_model.load, "lstm": lstm_model.load}[family]
+    artifact = loader(path)
+    if family == "lag_reg":
+        if (float(artifact.alpha) != float(config["alpha"])
+                or artifact.candidate_features != config["candidate_features"]
+                or artifact.pacf_selected_lags != config["pacf_selected_lags"]):
+            raise ValueError(f"{symbol}: Lag Regression comparison artifact/configuration mismatch")
+        value = lag_regression.predict_next(artifact, df)
+    elif family == "arima":
+        if list(artifact.model.order) != config["order"] or artifact.model.trend != config["trend"]:
+            raise ValueError(f"{symbol}: ARIMA comparison artifact/configuration mismatch")
+        close = df["Close"].astype(float).to_numpy()
+        endog = np.asarray(artifact.model.endog).reshape(-1)
+        if len(endog) > len(close) or not np.allclose(endog, close[:len(endog)], atol=1e-3, rtol=0):
+            raise ValueError(f"{symbol}: ARIMA comparison training-data lineage mismatch")
+        if len(close) > len(endog):
+            artifact = artifact.append(close[len(endog):], refit=False)
+        value = arima_model.predict_next(artifact)
+    else:
+        expected = {key: config[key] for key in (
+            "input_design", "input_size", "seq_len", "hidden_size", "learning_rate",
+            "batch_size", "fixed_epochs", "training_seed"
+        )}
+        if any(artifact.get(key) != value for key, value in expected.items()):
+            raise ValueError(f"{symbol}: LSTM comparison artifact/configuration mismatch")
+        value = lstm_model.predict_next(artifact, df)
+    if not math.isfinite(float(value)) or float(value) <= 0:
+        raise ValueError(f"{symbol}: frozen {family} comparison produced an invalid price")
+    return round(float(value), 2)
+
+
+def _comparison_forecasts(df: pd.DataFrame, symbol: str, selected_item: dict,
+                          selected_value: float) -> tuple[dict, dict, dict]:
+    items = _comparison_items(symbol)
+    forecasts: dict[str, float] = {}
+    artifact_hashes: dict[str, str] = {}
+    configuration_hashes: dict[str, str] = {}
+    for family in COMPARISON_FAMILIES:
+        label = LABELS[family]
+        item = items[family]
+        if family == selected_item["model"]:
+            value = selected_value
+            artifact_hash = selected_item.get("artifact", {}).get("sha256")
+            configuration_hash = canonical_hash(selected_item["configuration"])
+        else:
+            log.info("[comparison] predicting %s with frozen %s artifact", symbol, family)
+            value = predict_comparison_persisted(df, symbol, item)
+            artifact_hash = item["artifact"]["sha256"]
+            configuration_hash = item["artifact"]["configuration_sha256"]
+        if not isinstance(artifact_hash, str) or len(artifact_hash) != 64:
+            raise ValueError(f"{symbol}: comparison artifact identity is incomplete")
+        forecasts[label] = round(float(value), 2)
+        artifact_hashes[label] = artifact_hash
+        configuration_hashes[label] = configuration_hash
+    return forecasts, artifact_hashes, configuration_hashes
+
+
 def refit_predict(df: pd.DataFrame, item: dict, return_artifact: bool = False):
     """Fit one exact selected configuration; never select or tune."""
     from services.forecasting import arima_model, lag_regression, lstm_model
@@ -492,6 +605,30 @@ def _validate_record(record: dict, boundary: dict) -> None:
             raise ValueError("Invalid realized forecast error")
     elif record["error"] is not None:
         raise ValueError("Unrealized forecast must not have an error")
+    comparisons = record.get("comparisonForecasts")
+    if comparisons is not None:
+        approval, approval_sha = _comparison_approval()
+        if (set(comparisons) != set(LABELS.values())
+                or not all(math.isfinite(value) and value > 0 for value in comparisons.values())
+                or not math.isclose(comparisons[record["model"]], record["predictedClose"], abs_tol=0.001)
+                or record.get("comparisonApprovalId") != approval["approval_id"]
+                or record.get("comparisonApprovalSha256") != approval_sha
+                or record.get("comparisonManifestSha256") != COMPARISON_MANIFEST_SHA256):
+            raise ValueError("Invalid three-model comparison forecast provenance")
+        expected_items = _comparison_items(symbol)
+        expected_artifacts = {}
+        expected_configurations = {}
+        for family, item in expected_items.items():
+            label = LABELS[family]
+            if family == manifest["companies"][symbol]["model"]:
+                expected_artifacts[label] = record.get("artifactSha256")
+                expected_configurations[label] = record.get("configurationSha256")
+            else:
+                expected_artifacts[label] = item["artifact"]["sha256"]
+                expected_configurations[label] = item["artifact"]["configuration_sha256"]
+        if (record.get("comparisonArtifactSha256") != expected_artifacts
+                or record.get("comparisonConfigurationSha256") != expected_configurations):
+            raise ValueError("Three-model comparison artifact/configuration identity mismatch")
 
 
 def validate_batch(payload: dict, manifest: dict | None = None, sha: str | None = None) -> None:
@@ -526,6 +663,7 @@ def infer_daily(*, raw_dir: Path = BASE / "data/raw", output: Path = OUTPUT,
     """Issue one complete batch from one fixed active deployment; never train."""
     del manifest_dir
     _approval("production_inference")
+    comparison_approval, comparison_approval_sha = _comparison_approval()
     now = (now or datetime.now(PHT)).astimezone(PHT)
     symbols = sorted(TARGET_COMPANIES) if symbols is None else symbols
     if development:
@@ -570,6 +708,9 @@ def infer_daily(*, raw_dir: Path = BASE / "data/raw", output: Path = OUTPUT,
             log.info("[infer] predicting %s with fixed deployment %s", symbol, version)
             value = predict_persisted(df, symbol, item, manifest=manifest, manifest_path=manifest_path)
             artifact = item.get("artifact", {})
+            comparisons, comparison_artifacts, comparison_configurations = _comparison_forecasts(
+                df, symbol, item, value
+            )
             record = {"symbol": symbol, "model": LABELS[item["model"]], "predictedClose": value,
                       "previousClose": float(df["Close"].iloc[-1]),
                       "dataAsOf": df["Date"].iloc[-1].date().isoformat(), "forecastFor": forecast_for,
@@ -577,7 +718,13 @@ def infer_daily(*, raw_dir: Path = BASE / "data/raw", output: Path = OUTPUT,
                       "deploymentVersion": version, "manifestSha256": sha, "formalRunId": RUN_ID,
                       "sourceDataSha256": input_hashes[symbol], "configuration": item["configuration"],
                       "configurationSha256": canonical_hash(item["configuration"]),
-                      "artifactSha256": artifact.get("sha256"), "coverage": "post_promotion_prospective"}
+                      "artifactSha256": artifact.get("sha256"), "coverage": "post_promotion_prospective",
+                      "comparisonForecasts": comparisons,
+                      "comparisonApprovalId": comparison_approval["approval_id"],
+                      "comparisonApprovalSha256": comparison_approval_sha,
+                      "comparisonManifestSha256": COMPARISON_MANIFEST_SHA256,
+                      "comparisonArtifactSha256": comparison_artifacts,
+                      "comparisonConfigurationSha256": comparison_configurations}
             forecasts[symbol] = record
             if not development:
                 history.append(copy.deepcopy(record))

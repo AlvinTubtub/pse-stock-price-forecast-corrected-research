@@ -89,23 +89,26 @@ function makeBatch(manifest, predictedClose, targetDate) {
   assert.equal(activeManifest.schema_version, 2);
   assert.equal(data.deploymentVersion(await data.getDeploymentManifest()), activeManifest.deployment_version);
 
-  // The checked-in latest realized session must retain all three predictions that were
-  // issued before its close; the operational overlay may replace only the selected model.
+  // The checked-in history retains all three predictions through September 9. September 10
+  // was issued before controlled comparison snapshots and remains honestly selected-only.
   const publishedBatch = JSON.parse(fs.readFileSync(path.join(dest, 'operational.json')));
   const latestRealizedTarget = publishedBatch.history
     .filter((row) => row.actual !== null)
     .map((row) => row.forecastFor)
     .sort()
     .at(-1);
-  assert.equal(latestRealizedTarget, '2026-09-09');
+  assert.equal(latestRealizedTarget, '2026-09-10');
+  const latestThreeModelTarget = '2026-09-09';
   for (const symbol of Object.keys(activeManifest.companies)) {
     const detail = await data.getCompanyDetail(symbol);
     const graph = chartData.buildCompanyChartData(detail);
-    const index = graph.dates.indexOf(latestRealizedTarget);
-    assert.notEqual(index, -1, `${symbol}: latest realized session must be charted`);
+    assert.notEqual(graph.dates.indexOf(latestRealizedTarget), -1,
+      `${symbol}: latest realized session must be charted`);
+    const index = graph.dates.indexOf(latestThreeModelTarget);
+    assert.notEqual(index, -1, `${symbol}: latest issued three-model session must be charted`);
     for (const model of ['Lag-Informed Regression', 'ARIMA', 'LSTM']) {
       assert.equal(Number.isFinite(graph.byModel[model]?.[index]), true,
-        `${symbol}: ${model} must be present on the latest realized session`);
+        `${symbol}: ${model} must be present on the latest issued three-model session`);
     }
   }
 
@@ -127,6 +130,17 @@ function makeBatch(manifest, predictedClose, targetDate) {
   writeManifest(activeManifest);
   const versionedBatch = makeBatch(activeManifest, 22, '2026-09-10');
   for (const symbol of Object.keys(activeManifest.companies)) {
+    const selectedLabel = {
+      lag_reg: 'Lag-Informed Regression', arima: 'ARIMA', lstm: 'LSTM',
+    }[activeManifest.companies[symbol].model];
+    versionedBatch.forecasts[symbol].comparisonForecasts = {
+      'Lag-Informed Regression': selectedLabel === 'Lag-Informed Regression' ? 22 : 21.8,
+      ARIMA: selectedLabel === 'ARIMA' ? 22 : 22.1,
+      LSTM: selectedLabel === 'LSTM' ? 22 : 21.9,
+    };
+    versionedBatch.forecasts[symbol].comparisonApprovalId = 'comparison-test';
+    versionedBatch.forecasts[symbol].comparisonApprovalSha256 = 'a'.repeat(64);
+    versionedBatch.forecasts[symbol].comparisonManifestSha256 = 'b'.repeat(64);
     versionedBatch.history.push({
       ...versionedBatch.forecasts[symbol],
       predictedClose: 21.5,
@@ -134,6 +148,11 @@ function makeBatch(manifest, predictedClose, targetDate) {
       dataAsOf: '2026-09-08',
       actual: 21,
       error: 0.5,
+      comparisonForecasts: {
+        'Lag-Informed Regression': selectedLabel === 'Lag-Informed Regression' ? 21.5 : 21.3,
+        ARIMA: selectedLabel === 'ARIMA' ? 21.5 : 21.6,
+        LSTM: selectedLabel === 'LSTM' ? 21.5 : 21.4,
+      },
     });
   }
   writeBatch(versionedBatch);
@@ -141,6 +160,7 @@ function makeBatch(manifest, predictedClose, targetDate) {
   assert.equal(acceptedV2.deploymentVersion, activeManifest.deployment_version);
   const companyDetail = await data.getCompanyDetail('ALI');
   assert.equal(companyDetail.predictedClose, 22);
+  assert.equal(Object.values(companyDetail.nextClose).filter(Number.isFinite).length, 3);
   assert.deepEqual(
     companyDetail.operationalHistory.map((row) => [row.forecastFor, row.predictedClose, row.actual]),
     [['2026-09-09', 21.5, 21], ['2026-09-10', 22, null]],
@@ -163,6 +183,12 @@ function makeBatch(manifest, predictedClose, targetDate) {
   assert.equal((await data.getCompanies()).find((row) => row.symbol === 'ALI').predictedClose, 22);
   assert.equal((await data.getDashboard()).forecastDate, '2026-09-10');
   assert.equal((await data.getDashboard()).marketSummary.gainers, 15);
+
+  const invalidComparisons = clone(versionedBatch);
+  delete invalidComparisons.forecasts.ALI.comparisonForecasts.LSTM;
+  writeBatch(invalidComparisons);
+  assert.equal(await data.getOperationalBatch(), null);
+  writeBatch(versionedBatch);
 
   writeBatch({ ...versionedBatch, manifestSha256: '0'.repeat(64) });
   assert.equal(await data.getOperationalBatch(), null);

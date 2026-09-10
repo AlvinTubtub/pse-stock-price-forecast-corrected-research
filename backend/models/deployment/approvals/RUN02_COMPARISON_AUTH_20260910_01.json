@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "approval_id": "RUN02_COMPARISON_AUTH_20260910_01",
+  "formal_run_id": "FORMAL_CORRECTED_20260828_02",
+  "authorized_at": "2026-09-10T19:26:55+08:00",
+  "authority": "Repository owner instruction to issue all three model comparisons after each daily official-data refresh",
+  "scope": "production_comparison_inference",
+  "source_manifest_sha256": "ccc03428b302db82642970ae7ca1dd31cc30eaeed6d0b643d19fc489759a2377",
+  "model_families": [
+    "lag_reg",
+    "arima",
+    "lstm"
+  ],
+  "fitting_authorized": false,
+  "challenger_retuning_authorized": false,
+  "model_selection_authorized": false,
+  "automatic_promotion_authorized": false,
+  "notes": "Comparison forecasts are shadow outputs only. The selected operational family remains controlled by the active deployment manifest."
+}

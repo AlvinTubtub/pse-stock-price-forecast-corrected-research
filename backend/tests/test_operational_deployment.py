@@ -68,6 +68,7 @@ def fast_generation(monkeypatch, tmp_path):
     fit = Mock(return_value=20.0)
     monkeypatch.setattr(ops, "refit_predict", lambda df, item, return_artifact=False: (fit(df, item), None) if return_artifact else fit(df, item))
     monkeypatch.setattr(ops, "predict_persisted", lambda df, symbol, item, **_kwargs: fit(df, item))
+    monkeypatch.setattr(ops, "predict_comparison_persisted", lambda df, symbol, item: fit(df, item))
     return tmp_path, fit
 
 
@@ -81,8 +82,19 @@ def test_full_batch_idempotence_and_no_legacy_writes(fast_generation):
     assert all(r["actual"] is None for r in first["history"])
     second = ops.generate(output=output, now=NOW)
     assert second["history"] == first["history"]
-    assert fit.call_count == 15  # repeat issuance does not refit or overwrite
+    assert fit.call_count == 45  # repeat issuance does not rerun selected or comparison inference
     assert before == {p: ops.digest(p) for p in protected}
+
+
+def test_comparison_failure_does_not_publish_selected_only_batch(fast_generation, monkeypatch):
+    output, _ = fast_generation
+    monkeypatch.setattr(
+        ops, "predict_comparison_persisted",
+        Mock(side_effect=RuntimeError("comparison artifact failed")),
+    )
+    with pytest.raises(RuntimeError, match="comparison artifact failed"):
+        ops.generate(output=output, now=NOW)
+    assert not (output / "current.json").exists()
 
 
 def test_failure_does_not_publish_partial_batch(fast_generation):
@@ -135,6 +147,16 @@ def test_malformed_history_rejected(fast_generation):
     batch["history"][0]["issuedAt"] = batch["history"][0]["forecastFor"] + "T18:00:00+08:00"
     manifest, sha = ops.load_manifest()
     with pytest.raises(ValueError): ops.validate_batch(batch, manifest, sha)
+
+
+def test_comparison_provenance_is_required_when_comparisons_are_present(fast_generation):
+    output, _ = fast_generation
+    batch = ops.generate(output=output, now=NOW)
+    batch["history"][0]["comparisonApprovalSha256"] = "0" * 64
+    batch["forecasts"][batch["history"][0]["symbol"]] = copy.deepcopy(batch["history"][0])
+    manifest, sha = ops.load_manifest()
+    with pytest.raises(ValueError, match="comparison forecast provenance"):
+        ops.validate_batch(batch, manifest, sha)
 
 
 def test_frozen_lasso_does_not_select_pacf_or_alpha(monkeypatch):

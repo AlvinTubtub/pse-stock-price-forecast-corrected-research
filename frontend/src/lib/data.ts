@@ -92,13 +92,19 @@ export async function getCompanyDetail(symbol: string): Promise<CompanyDetail | 
     ? (company.naiveComparisons[modelKey] ?? null)
     : (company.naiveComparison?.model_a === modelKey ? company.naiveComparison : null);
   const pesoChange = row.predictedClose - row.previousClose;
+  const issuedComparisons = row.comparisonForecasts ? {
+    lag: row.comparisonForecasts["Lag-Informed Regression"],
+    arima: row.comparisonForecasts.ARIMA,
+    lstm: row.comparisonForecasts.LSTM,
+  } : null;
   return { ...company, model: row.model, predictedClose: row.predictedClose,
     previousClose: row.previousClose, pesoChange, pctChange: pesoChange / row.previousClose * 100,
     direction: pesoChange >= 0 ? "bullish" : "bearish", confidence: undefined,
     naiveComparison: matchedComparison,
-    comparisonForecastDate: company.forecastDate,
-    comparisonNextClose: company.nextClose,
-    nextClose: key ? { ...(company.nextClose ?? {}), [key]: row.predictedClose } : (company.nextClose ?? {}),
+    comparisonForecastDate: issuedComparisons ? row.forecastFor : company.forecastDate,
+    comparisonNextClose: issuedComparisons ?? company.nextClose,
+    nextClose: key ? { ...(issuedComparisons ?? company.nextClose ?? {}), [key]: row.predictedClose }
+      : (issuedComparisons ?? company.nextClose ?? {}),
     ohlcv: operational?.ohlcv[symbol.toUpperCase()] ?? company.ohlcv,
     operationalHistory: (operational.history ?? [])
       .filter((record) => record.symbol === symbol.toUpperCase())
@@ -190,9 +196,18 @@ export async function getOperationalBatch(): Promise<OperationalBatch | null> {
       || Object.keys(batch.forecasts ?? {}).sort().join() !== Object.keys(manifest.companies).sort().join()) return null;
   const manifestBytes = await fs.readFile(path.join(FORECASTS_DIR, "deployment.json"));
   if (batch.manifestSha256 !== createHash("sha256").update(manifestBytes).digest("hex")) return null;
+  const comparisonLabels = Object.values(MODEL_LABELS).sort();
   if (Object.entries(batch.forecasts).some(([symbol, row]) => row.symbol !== symbol
       || row.model !== MODEL_LABELS[manifest.companies[symbol].model] || row.coverage !== "post_promotion_prospective"
       || !Number.isFinite(row.predictedClose) || row.predictedClose <= 0
-      || !Number.isFinite(row.previousClose) || row.previousClose <= 0)) return null;
+      || !Number.isFinite(row.previousClose) || row.previousClose <= 0
+      || (row.comparisonForecasts !== undefined && (
+        Object.keys(row.comparisonForecasts).sort().join() !== comparisonLabels.join()
+        || Object.values(row.comparisonForecasts).some((value) => !Number.isFinite(value) || value <= 0)
+        || row.comparisonForecasts[row.model] !== row.predictedClose
+        || typeof row.comparisonApprovalId !== "string"
+        || !/^[a-f0-9]{64}$/.test(row.comparisonApprovalSha256 ?? "")
+        || !/^[a-f0-9]{64}$/.test(row.comparisonManifestSha256 ?? "")
+      )))) return null;
   return batch;
 }

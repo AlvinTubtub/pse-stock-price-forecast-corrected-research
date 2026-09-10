@@ -1,138 +1,190 @@
 # Run 02 operational promotion review
 
-Implemented only in `/Users/alvintubtub/Downloads/pse-stock-price-forecast-corrected-research`, branch `codex/run02-operational-promotion`.
-
-**GO for a manual local full 15-company generation using the pinned runtime, subject to the input freshness checks at execution.** No full 15-company model generation was performed. No schedule, remote job, Vercel deployment, commit, or push was enabled or executed.
+This review describes the implementation currently on `main` through commit
+`cf34752c08bd2a0e152e1c85c0576c5bf0a98a30`. The active operational deployment is approved,
+complete for all 15 companies, and producing prospective forecasts. Formal Run 02 remains an
+immutable research result and is not used as operational forecast history.
 
 ## Identity and approval
 
-- Promotion: `RUN02_OPS_20260907_01`, September 7, 2026.
-- Formal source: `FORMAL_CORRECTED_20260828_02`.
+- Formal run: `FORMAL_CORRECTED_20260828_02`.
+- Formal source-data cutoff: August 28, 2026.
 - Approved formal implementation commit: `bfb33b8c184c87cc8828af5529410da94addd71c`.
-- Formal source-data commit: `2e72058057f5ba2ef903147c8390c3f05f41ffe3`.
-- Evidence archive SHA-256: `2b2ed0ca6b88ea6cfef5ac14013440da1c7c55c1d9f9640e04a595fdafca5d24` (computed from the original archive, read-only).
-- Formal source-data cutoff: August 28, 2026; each company's source hash is in the manifest.
-- Reviewed deployment manifest SHA-256: `16dc7ee566e6f24692729774db7e17d4cf5749f3a862992a8acbba273d9bc591`.
-- Approval status: `approved`; scope: `manual_local_operational_generation`; authority: the user's instruction in this task. Approval explicitly excludes scheduled workflows and production deployment.
-- The commit above identifies the approved **formal source code**, not this uncommitted integration. New artifacts record hashes of the actual fitting/feature/promotion implementation and exact runtime package versions. Review and commit this integration separately; no integration commit is falsely claimed here.
+- Evidence archive SHA-256: `2b2ed0ca6b88ea6cfef5ac14013440da1c7c55c1d9f9640e04a595fdafca5d24`.
+- Formal frontend summary SHA-256: `c0a5962709be16a82e5f5eeb634424ef0cad93a05d08db5c8af02e1d90ff5a6e`.
+- Original promotion identifier: `RUN02_OPS_20260907_01`.
+- Controlled operational target boundary: September 8, 2026.
+- Active deployment: `RUN02_OPS_20260908_105811Z`, activated September 8, 2026.
+- Frozen configuration source manifest SHA-256: `1182b54f0290d50ed5160e1cfb1ff13a5b214796268769460f6cf4fa711aa179`.
+- Active deployment manifest SHA-256: `9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a`.
+- Approval record: `RUN02_AUTH_20260908_01`, SHA-256
+  `85c43a1e88b98f0f86d712892cb03bcfee6fc83a918064a92064c11a425a7f0c`.
+- Approval status: approved for production inference and the separately scheduled refresh. Challenger
+  retuning and automatic promotion remain unauthorized.
+- Comparison manifest: `RUN02_COMPARISON_20260910_01`, SHA-256
+  `ccc03428b302db82642970ae7ca1dd31cc30eaeed6d0b643d19fc489759a2377`.
+- Comparison approval: `RUN02_COMPARISON_AUTH_20260910_01`, SHA-256
+  `68efbb548fc5bb38c0ccc547b71f5caab235d131f984fc89e7c731efb4547b3b`.
 
 ## Frozen company mapping
 
-The chosen family is the lowest Run 02 holdout RMSE among the three principal models; ties follow lag_reg, arima, lstm. Naive remains a benchmark. This operational choice uses the completed study and is not a fresh unbiased performance evaluation or a claim of superiority to naive.
+The selected family is the lowest Run 02 holdout RMSE among the three principal model families.
+Naive remains an evaluation benchmark and is not eligible for deployment. The selected families and
+configurations are fixed; an operational run cannot search, retune, substitute, or promote a model.
 
-| Company | Model ID | Frozen configuration |
+| Company | Selected family | Frozen configuration |
 |---|---|---|
-| ALI | lag_reg | alpha=0.1; PACF return lags=[5]; 32 frozen candidate columns |
-| APX | lag_reg | alpha=0.01; PACF return lags=[1, 4, 6, 16]; 35 frozen candidate columns |
-| BPI | arima | order=(1, 1, 1); trend=n; statespace, maxiter=2000; confirmed convergence required |
-| GLO | arima | order=(0, 1, 0); trend=n; statespace, maxiter=2000; confirmed convergence required |
-| ICT | lstm | lookback=30; hidden=25; learning rate=0.001; batch=16; epochs=47; seed=42 |
-| JFC | lag_reg | alpha=1.58489319246; PACF return lags=[4, 9, 16, 20]; 35 frozen candidate columns |
-| MBT | arima | order=(2, 1, 0); trend=n; statespace, maxiter=2000; confirmed convergence required |
-| MEG | lag_reg | alpha=0.0158489319246; PACF return lags=[1]; 32 frozen candidate columns |
-| MER | lag_reg | alpha=0.398107170553; PACF return lags=[1, 2, 8, 9, 11]; 36 frozen candidate columns |
-| NIKL | lag_reg | alpha=0.0251188643151; PACF return lags=[13]; 32 frozen candidate columns |
-| PGOLD | arima | order=(1, 1, 0); trend=n; statespace, maxiter=2000; confirmed convergence required |
-| SCC | arima | order=(0, 1, 0); trend=n; statespace, maxiter=2000; confirmed convergence required |
-| SECB | arima | order=(1, 0, 0); trend=n; statespace, maxiter=2000; confirmed convergence required |
-| SHLPH | arima | order=(0, 1, 3); trend=t; statespace, maxiter=2000; confirmed convergence required |
-| SMPH | lag_reg | alpha=0.0398107170553; PACF return lags=[1, 2]; 33 frozen candidate columns |
+| ALI | Lag-Informed Regression | alpha=0.1; PACF return lags=[5]; 32 candidate columns |
+| APX | Lag-Informed Regression | alpha=0.01; PACF return lags=[1, 4, 6, 16]; 35 candidate columns |
+| BPI | ARIMA | order=(1,1,1); trend=n; statespace; maxiter=2000 |
+| GLO | ARIMA | order=(0,1,0); trend=n; statespace; maxiter=2000 |
+| ICT | LSTM | lookback=30; hidden=25; learning rate=0.001; batch=16; epochs=47; seed=42 |
+| JFC | Lag-Informed Regression | alpha=1.58489319246; PACF return lags=[4, 9, 16, 20]; 35 candidate columns |
+| MBT | ARIMA | order=(2,1,0); trend=n; statespace; maxiter=2000 |
+| MEG | Lag-Informed Regression | alpha=0.0158489319246; PACF return lags=[1]; 32 candidate columns |
+| MER | Lag-Informed Regression | alpha=0.398107170553; PACF return lags=[1, 2, 8, 9, 11]; 36 candidate columns |
+| NIKL | Lag-Informed Regression | alpha=0.0251188643151; PACF return lags=[13]; 32 candidate columns |
+| PGOLD | ARIMA | order=(1,1,0); trend=n; statespace; maxiter=2000 |
+| SCC | ARIMA | order=(0,1,0); trend=n; statespace; maxiter=2000 |
+| SECB | ARIMA | order=(1,0,0); trend=n; statespace; maxiter=2000 |
+| SHLPH | ARIMA | order=(0,1,3); trend=t; statespace; maxiter=2000 |
+| SMPH | Lag-Informed Regression | alpha=0.0398107170553; PACF return lags=[1, 2]; 33 candidate columns |
 
-Every full configuration is in `backend/deployments/RUN02_OPS_20260907_01.json`. LASSO retains the ordered candidate feature matrix inferred from the final Run 02 diagnostics coefficient keys, including zero coefficients, and the final PACF lag subset. Coefficients and scaler statistics are re-estimated; the candidate set and alpha are not reselected. An all-zero Run 02 fit does not mean that an empty feature matrix should be fitted. LSTM retains Run 02's selected epochs and seed; the older refresh routine's epoch-selection step is bypassed.
+The complete configurations and per-artifact hashes are stored in the active schema-v2 manifest.
+Lag-Informed Regression re-estimates coefficients only during an authorized deployment refresh while
+retaining its candidate columns, alpha, and PACF lag set. ARIMA retains its order and trend. LSTM
+retains its architecture, fixed epoch count, and seed.
 
-## Previous pipeline and integration
+## Operational controls
 
-Previously, the exporter used `best_models.json`, falling back to the lowest non-naive MASE in cached metrics. Daily inference loaded three persisted model families from deployment/current, falling back to legacy directories. The earlier refresh obtained configuration metadata from those artifacts/manifests, preserved legacy family choices, and refitted all three families. Its LSTM path reselected epochs.
+Daily `run_pipeline.py --no-train` validates approval before ingestion and then uses
+`operational_deployment.infer_daily`. It loads the active hash-checked persisted artifact for each
+company's selected family and issues one operational next-session forecast. Under an independent
+comparison-only approval, the same run loads the two non-selected persisted artifacts from a
+dedicated 45-artifact hash-pinned manifest. It constructs a three-model shadow snapshot for every
+company. Daily inference performs no fitting, hyperparameter search, model selection,
+fallback-family substitution, or automatic promotion.
 
-Now `run_pipeline.py` validates approval before official PDF ingestion, always disables legacy training, then invokes the approved generator. `scripts.daily_inference.run_daily_inference` and `model_selector.refresh_deployment_all` also delegate to it. Old helper functions remain for historical artifact inspection and existing tests; they do not choose the active Run 02 deployment. A legacy retuned challenger cannot change the pinned Run 02 pointer.
+The separately authorized `deployment-refresh --strict` operation refits only each company's
+selected family with its frozen configuration. It writes a new immutable version directory, reloads
+and hash-checks every artifact, verifies training-data lineage and predictions, and updates the active
+pointer atomically only after all 15 companies succeed.
 
-The generator requires an explicitly approved, hash-pinned manifest with all 15 companies. It validates all source CSVs before fitting, requires current completed-session data and a target session that has not opened, fits only each selected family, rejects nonconvergence/non-finite predictions, and verifies that inputs have not changed while fitting. No search, PACF selection, epoch selection, fallback family, or automatic promotion runs. Calendar rules come from the repository's PSE calendar; official data ingestion remains the repository's existing PDF pipeline. No external reports were downloaded for this task.
+Operational input and publication safeguards include:
 
-A lock prevents simultaneous writes to an output directory. `backend/operational/current.json` contains the full batch, latest OHLCV, prospective issuance ledger, manifest/source/implementation hashes, runtime versions, and first-issue/first-target promotion boundary. It is replaced atomically only after every company succeeds. A failed fit leaves the previous complete batch untouched. Repeat issuance for the same target preserves the first forecast; a revised source for an already-issued target fails for review. Actuals and errors are filled only for already-issued prospective records.
+- exact 15-company manifest and batch coverage;
+- explicit approval scopes and hash-checked manifest identity;
+- completed-session freshness and common source-data cutoff checks;
+- rejection of missing, stale, malformed, non-finite, or changing inputs;
+- one deployment lock across inference and refresh;
+- preservation of the first forecast already issued for a target session;
+- reconciliation of actuals and errors only after official target-session data arrives; and
+- atomic publication only after the selected operational forecasts and all 45 comparison predictions
+  succeed.
 
-`scripts/export_forecast_artifacts.py` now exports this separately to `frontend/public/forecasts/operational.json`, validating the complete batch. It does not overwrite legacy artifacts. The frontend validates the deployment hash, coverage and family mapping before using an operational batch. `/operations` displays the version, 15-company mapping, current forecasts and post-promotion coverage. Global status and company pages explicitly identify the legacy snapshot while full generation is pending. Fresh forecasts and OHLCV overlay the old display only after a complete valid batch exists.
+The current batch contains 15 forecasts using data through September 10 and targets September 11,
+2026. Its immutable operational history contains 60 rows: 15 each for September 8, September 9,
+September 10, and September 11. The first three target dates are realized; September 11 remains
+pending.
 
-## Import and preservation
+## Formal and operational separation
 
-`imported-files.json` is the exact allowlist and original SHA-256 record for 13 imported Formal Study Results files. These cover the immutable exporter/test/data, validation, frontend study UI/types/readers/AI context, and related documentation. Original workflow changes and the old workflow test were inspected and adapted to disabled execution instead of blindly copied. `formal_evidence/`, manuscript drafts, virtual environments, generated caches and unrelated files were not imported.
+The formal summary under `frontend/public/forecasts/formal/` is generated only by the dedicated
+formal exporter, which refuses a non-identical overwrite. Normal ingestion, operational inference,
+deployment refresh, reconciliation, and frontend export do not recompute or modify Run 02 evidence
+or metrics.
 
-The formal exporter was run against the original evidence directory read-only. Its regenerated summary was byte-identical to the imported summary: 15 companies, 60 canonical metric rows, 14,580 holdout predictions. No formal metric was recalculated or changed.
-
-`preservation.json` records 784 original file hashes checked with zero content changes. Original uncommitted Git status remained unchanged. Target raw CSVs, persisted models, prediction caches, `best_models.json`, statistical tests, legacy production ledgers, and company/history JSON artifacts also remained unchanged.
+Formal holdout predictions are never copied into operational history. Operational rows must include
+their original issue time, target date, source-data hash, deployment version, manifest hash, selected
+configuration, and artifact hash. A realized error is accepted only for a forecast issued before the
+target session opened.
 
 ## Historical chart handling
 
-Pre-promotion company charts retain the existing stored evaluation (60 sessions, June 4–August 28) and four realized legacy issued sessions (September 2–7 for ALI/BPI). Their original missing sessions remain missing. These are labelled pre-promotion evaluation/legacy issued history. The compact formal dataset is used for immutable study tables; it is never a live ledger source.
+Company Backtest and Forecast Error charts combine distinct sources without relabelling them:
 
-Post-promotion prediction/error charts are separate on `/operations`, identified by deployment version and first-issue/target boundary. They use only records issued before the target session, after actualization. Initial post-promotion history is empty; development smoke results do not count. No holdout-to-live conversion, invented retrospective refit backtest, interpolation, or promotion-era relabelling occurs. Stored MASE/RMSE on legacy pages are expressly pre-promotion metrics, not measured accuracy of the new refits.
+- stored evaluation through August 28, 2026;
+- legacy forecasts issued for September 2–7 target sessions; and
+- controlled operational selected-model forecasts beginning September 8.
 
-## Verification
+The chart window contains only the latest 60 realized target sessions. Pending September 11
+forecasts appear in the next-session presentation and are excluded from realized-history charts.
 
-- `tests.txt`: 72 targeted Python tests passed in the pinned model environment. Coverage includes immutable formal identity/export, exact 15-company mapping, rejected mutations/missing approval, incomplete universe, stale data, fixed LASSO/LSTM policy, entrypoint routing, atomic batch failure, repeat issuance, reconciliation, malformed history and disabled workflows. Earlier legacy test expectations were updated where the operational contract deliberately changed from partial legacy inference to strict approved batches.
-- `frontend-tests.txt`: server-reader tests passed for pending state, smoke/incomplete/unapproved rejection, active forecast overlays, unchanged legacy history, fresh OHLCV and consistent dashboard/latest metadata.
-- TypeScript: `tsc --noEmit --incremental false` passed.
-- Artifact validator: 15/15 legacy company files consistent, approved formal results intact, approved operational manifest valid; full generation explicitly reported pending.
-- Browser: local `/operations`, `/compare`, `/companies/ALI` returned successful rendered pages. Verified 15-company mapping, zero post-promotion coverage, Run 02 immutable identity/conclusion, and ALI's pre-promotion label. Screenshot visually inspected; no browser errors or Next.js error overlay. No production build or deployment was attempted.
-- `preflight.json`: all 15 source CSVs have 1,629 rows through September 7, 2026, targeting September 8. This was validation only, without a full model run.
+Each company production-history ledger contains six realized three-model records for September 2,
+3, 4, 7, 8, and 9. September 9 therefore displays Actual, Lag-Informed Regression, ARIMA, and LSTM
+for all 15 companies. The September 10 target was issued before this comparison change and honestly
+retains only its selected operational prediction. From September 8 onward, the selected line is the
+controlled operational result; non-selected lines, when prospectively issued, are contemporaneous
+comparison forecasts. They are not promoted models.
 
-## ALI/BPI development smoke
+Beginning with the first new target issued after this comparison change is committed and run, the
+daily controlled pipeline records all three model values in each operational issuance row. The
+manifest-selected family remains the sole operational forecast; the other two are shadow comparisons.
+The frontend displays those rows only after the target actual is available and deliberately leaves
+older missing values absent instead of generating retrospective predictions.
 
-`smoke-pinned/current.json` and `smoke-pinned.log` record actual fresh refits:
+## Frontend behavior
 
-| Company | Selected configuration | Data through | Next session | Forecast |
-|---|---|---|---|---|
-| ALI | LASSO alpha 0.1, frozen 32 candidate features | 2026-09-07 | 2026-09-08 | PHP 15.08 |
-| BPI | ARIMA (1,1,1), trend n, converged | 2026-09-07 | 2026-09-08 | PHP 105.16 |
+The frontend accepts an operational batch only when the issuing manifest is approved, complete,
+hash-valid, production-scoped, and consistent with all 15 selected families. It safely rejects
+development, partial, stale, or altered data. The Models page presents formal model performance
+without exposing internal formal-run identifiers, code hashes, or repository links in the public UI.
+Company pages display the active operational deployment, current next-session selected-model
+forecast, explicit legacy and controlled boundaries, and honest realized error coverage.
 
-Both use 1,629 rows and are marked `developmentOnly: true`; their issuance history is empty. They were not exported to the frontend as operational forecasts. The first smoke under NumPy 2.4.6 is retained in `smoke/current.json`; it produced identical prices. The final smoke used repository-pinned NumPy 1.26.4, pandas 3.0.5, scikit-learn 1.9.0, SciPy 1.17.1, statsmodels 0.14.6, torch 2.13.0 and joblib 1.5.3 on Python 3.11.15.
+## Workflow safety
 
-## Remaining limitations and next step
+- `.github/workflows/update_pipeline.yml` is enabled for `repository_dispatch` event
+  `update-pse-data` and manual `workflow_dispatch`. Its intended external Cron-job.org schedule is
+  Monday 17:30 and Tuesday–Friday 16:00 in `Asia/Manila`. The repository cannot verify the external
+  Cron-job.org account configuration or token state.
+- `.github/workflows/train_models.yml` is enabled only for cron `0 0 3 11 *`, corresponding to
+  November 3 at 08:00 PHT. A UTC date guard permits execution only on `2026-11-03`, preventing the
+  cron expression from running the refresh in later years.
+- Both workflows use the `pse-pipeline` concurrency group, validate artifacts before committing,
+  and have only `contents: write` permission.
+- A successful artifact commit can trigger the connected Vercel project through its normal Git
+  integration. Neither workflow contains a Vercel CLI deployment command.
 
-No blocker remains for a **manual local first full generation** using those pinned dependencies and fresh official inputs. Only ALI and BPI received real model smoke fits, as requested; the first 15-company run must still demonstrate convergence for every selected family, including ICT's 47-epoch LSTM. If any fails, no partial operational batch publishes. The full post-promotion ledger and measured errors do not exist yet.
+## Verification completed September 10, 2026
 
-The pinned NumPy and pytest overlay resides in `/tmp/run02-promotion-deps`; recreate a normal environment with `backend/requirements-pipeline.txt` if that temporary folder disappears. No shared environment or original repository environment was changed. Calendar maintenance and verified official-input sourcing continue to be operational prerequisites.
+- Backend: `python -m pytest -q` — 278 passed; no failures.
+- Frontend: `npm run test:all` — all three frontend suites passed.
+- TypeScript: `npx tsc --noEmit --incremental false` — passed.
+- Production frontend build: `npm run build` — passed; 28 routes generated.
+- Export validator: passed for all 15 companies with the approved formal result intact.
+- Evidence archive verification: passed; archive SHA-256 and all 189 entries matched.
+- Browser check: ALI company view rendered both chart boundaries and all three model series through
+  September 9. The September 10 selected-only point accurately reflects its pre-change issuance.
+  Synthetic frontend assertions verify three-model rendering for newly issued comparison rows.
 
-Scheduling, remote workflow execution and Vercel deployment remain disabled and require a separate user-authorized change. Both workflow jobs have `if: ${{ false }}`, no schedule or external dispatch triggers, read-only Git permissions, and no commit/push step.
+## Current assessment
 
-## Manual execution after review (not executed)
+**GO for continued complete 15-company selected-model operational inference**, subject to the normal
+calendar, freshness, approval, manifest, and artifact checks at execution. The fail-closed behavior
+must remain in place.
 
-From this repository, with the verified temporary runtime still present:
+The controlled three-model shadow issuance is now implemented. Its first production target will be
+the next target that does not already have an immutable issuance when the updated daily workflow
+runs. Existing same-target forecasts remain unchanged, so gaps from targets issued before this
+change—September 10 and the already-issued September 11 target—are intentionally not backfilled.
+
+## Review and later commit
+
+Run from the repository root:
 
 ```bash
-cd /Users/alvintubtub/Downloads/pse-stock-price-forecast-corrected-research
-PYTHONPATH=/tmp/run02-promotion-deps:backend /opt/anaconda3/envs/pse-backend/bin/python backend/scripts/run_operational.py
-PYTHONPATH=/tmp/run02-promotion-deps:backend /opt/anaconda3/envs/pse-backend/bin/python backend/scripts/export_forecast_artifacts.py
-PYTHONPATH=/tmp/run02-promotion-deps:backend /opt/anaconda3/envs/pse-backend/bin/python backend/scripts/validate_exports.py
-```
-
-If the source CSVs are stale, use the official ingestion entrypoint first; do not bypass freshness checks or run the smoke command as live generation:
-
-```bash
-PYTHONPATH=/tmp/run02-promotion-deps:backend /opt/anaconda3/envs/pse-backend/bin/python backend/run_pipeline.py --no-train
-```
-
-## Exact review and commit commands (not executed)
-
-`changed-files.txt` lists every changed/new review file, including this report. It excludes all ignored build/test caches and virtual environments.
-
-```bash
-cd /Users/alvintubtub/Downloads/pse-stock-price-forecast-corrected-research
-test "$(git branch --show-current)" = "codex/run02-operational-promotion"
 git status --short
 git diff --check
-git diff --stat
-git diff
-cat reports/run02-promotion/changed-files.txt
+git diff -- frontend/README.md backend/README.md reports/run02-promotion/REVIEW.md COMPLETION_REPORT.md
 ```
 
-After reviewing the new files as well as the tracked diff:
+After review, the documentation can be committed and pushed separately:
 
 ```bash
-git add --pathspec-from-file=reports/run02-promotion/changed-files.txt
+git add frontend/README.md backend/README.md reports/run02-promotion/REVIEW.md COMPLETION_REPORT.md
 git diff --cached --check
-git diff --cached --stat
 git diff --cached
-git commit -m "Add controlled Run 02 operational promotion with frozen manifests"
+git commit -m "Update operational promotion documentation"
+git push origin main
 ```
-
-No push command is needed for this local review. Do not run any of these commands in the original repository.

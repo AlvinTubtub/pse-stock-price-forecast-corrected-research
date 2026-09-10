@@ -2,9 +2,11 @@
 
 ## 1. Project Overview
 
-**Project:** ForecastPH — PSE Stock Price Forecast Dashboard  
-**Repository:** https://github.com/AlvinTubtub/pse-stock-price-forecast.git  
-**Live Dashboard:** https://pse-stock-price-forecast.vercel.app/
+**Project:** ForecastPH — PSE Stock Price Forecast Dashboard
+
+**Repository:** https://github.com/AlvinTubtub/pse-stock-price-forecast-corrected-research.git
+
+**Live Dashboard:** https://frontend-ten-xi-11.vercel.app/
 
 ForecastPH is an educational Philippine Stock Exchange (PSE) next-session stock-price forecasting dashboard. It combines a Python-based forecasting and evaluation pipeline with a Next.js frontend deployed through Vercel.
 
@@ -15,7 +17,14 @@ The system tracks 15 PSE-listed companies across five sectors and compares:
 - LSTM
 - Naive previous-close baseline
 
-The forecasting target is next-session closing price, reconstructed from predicted next-session price change (ΔClose).
+The forecasting target is next-session closing price. Lag-Informed Regression and LSTM predict
+next-session price change (ΔClose) and reconstruct the closing-price level; ARIMA models the closing
+price level and applies differencing internally according to its fixed order.
+
+The approved formal study is immutable and separate from rolling operational output. Controlled
+operation begins with the September 8, 2026 target session. The active deployment is
+`RUN02_OPS_20260908_105811Z`; its current checked-in batch uses official data through September 10
+and forecasts September 11 for all 15 companies.
 
 ---
 
@@ -83,6 +92,14 @@ The forecasting target is next-session closing price, reconstructed from predict
                                               │
                                               ▼
                                       PSE Forecast Assistant
+```
+
+The Model Training and Model Evaluation stages represent explicit formal-research or authorized
+deployment-refresh operations. They do not run in the daily operational path. Daily operation
+ingests official data, validates the active approved deployment, loads each company's selected
+persisted artifact and two separately approved comparison artifacts, issues a complete 15-company
+next-session batch, validates the exports, and commits only changed artifacts.
+
 3. Forecasting Models
 
 The project compares the following forecasting approaches:
@@ -103,7 +120,7 @@ Naive Baseline
 
 Uses the previous closing price as the benchmark forecast.
 
-Forecast reconstruction:
+Forecast reconstruction for Lag-Informed Regression and LSTM:
 
 ΔClose(t+1) = Close(t+1) − Close(t)
 
@@ -231,6 +248,10 @@ The three model forecasts are displayed as separate dashed segments originating 
 
 The chart does not display historical model predictions across the entire historical series.
 
+The current approved operational forecast is the manifest-selected model for each company. Any
+additional model values shown for a future target must come from forecasts issued before that target
+session; the frontend does not calculate forecasts itself.
+
 9. Backtest Chart
 
 The Backtest: Predicted vs. Actual (Last 60 Sessions) chart was improved to use actual trading-session dates rather than generic Day 1–Day 60 labels.
@@ -249,6 +270,18 @@ The Naive baseline is visually distinguished from forecasting models.
 
 The chart retains interactive zoom, pan, and reset behavior.
 
+The latest 60-session view has explicit provenance boundaries:
+
+- Stored evaluation ends August 28, 2026.
+- September 2–7 is legacy/pre-promotion issued history.
+- Controlled operational selected-model history begins September 8, 2026.
+
+For the September 9, 2026 realized session, every company chart displays Actual plus
+Lag-Informed Regression, ARIMA, and LSTM using forecasts issued before that session. From September
+8 onward, non-selected lines are contemporaneous comparison forecasts; they are not additional
+promoted operational models. September 10 remains selected-only because it was issued before the
+scheduled comparison change. Pending September 11 forecasts are excluded from the backtest.
+
 10. Forecast Error Chart
 
 The Forecast Error Over Time chart uses:
@@ -264,6 +297,10 @@ Zero           → perfect prediction
 The chart includes a clear zero reference line and uses actual backtest trading-session dates.
 
 The selected model is visually emphasized and the Naive baseline is visually distinguished.
+
+It uses the same evaluation, legacy, and controlled-operation boundaries as the backtest chart and
+contains only realized targets. It never derives an error for a pending forecast or creates a
+historical prediction after the actual close is known.
 
 11. Philippine Trading Calendar
 
@@ -540,7 +577,8 @@ R² is not presented as confidence or probability.
 
 21. Automated Data Pipeline
 
-The Fast Pipeline is responsible for daily market-data updates and inference.
+The Fast Pipeline is responsible for official market-data updates and approved selected-model
+inference.
 
 Current operational flow:
 
@@ -566,7 +604,11 @@ Commit changed artifacts
       ↓
 Vercel redeployment
 
-The Fast Pipeline does not retrain models.
+The Fast Pipeline does not fit, retrain, retune, select, or promote models. It validates the active
+approved deployment and the separate comparison-only approval. For each company it loads the
+selected operational artifact plus the two non-selected comparison artifacts. It publishes only
+after all 15 selected predictions and all 30 additional comparison predictions succeed, and it
+preserves the first forecast already issued for a target session.
 
 Model refresh remains a separate scheduled workflow.
 
@@ -579,22 +621,25 @@ Monday:
 Tuesday–Friday:
 4:00 PM Philippine Time
 
-The daily inference uses persisted deployment models and generates next-session forecasts from the latest validated OHLCV data.
+The daily inference uses persisted selected and comparison artifacts to generate one operational
+forecast and one three-model shadow snapshot per company from the latest validated OHLCV data. The repository workflow is triggered by
+`update-pse-data` through Cron-job.org, or manually through `workflow_dispatch`. The repository
+cannot verify the external Cron-job.org account or token state.
 
 Scheduled Model Refresh
 One-time authorized execution:
 November 3, 2026 at 08:00 Asia/Manila (`0 0 3 11 *`) with an explicit `2026-11-03` UTC year guard.
 
-The scheduled refresh workflow updates:
-
-Lag-Informed Regression
-ARIMA
-LSTM
-
-using the fixed Run 02 selected configurations. It creates a complete immutable
+The scheduled refresh refits only each company's selected model family using its fixed Run 02
+configuration. Across the 15-company mapping, the selected families include Lag-Informed
+Regression, ARIMA, and LSTM. It creates a complete immutable
 deployment version and atomically replaces the active pointer only after all 15
 artifacts pass reload, hash, configuration, lineage, and prediction checks. It
 does not change formal evidence, retune challengers, or overwrite issued forecasts.
+
+The workflow uses GitHub cron `0 0 3 11 *` and checks that the UTC date is exactly November 3,
+2026. It therefore skips the same calendar date in later years. It intentionally has no manual
+`workflow_dispatch` trigger.
 
 23. Data Integrity
 
@@ -628,6 +673,14 @@ metrics.json
 companies.json
 company/<SYMBOL>.json
 history/<SYMBOL>.json
+operational.json
+deployment.json
+active-deployment.json
+formal/FORMAL_CORRECTED_20260828_02.json
+
+The formal JSON is an immutable research presentation contract. Operational JSON is accepted only
+when the issuing manifest is approved, production-scoped, hash-valid, and complete for all 15
+companies. Development, partial, stale, and altered batches fail safely.
 
 The frontend does not:
 
@@ -665,15 +718,24 @@ PSE Calendar tests:
 
 
 Full backend test suite:
-111 tests passed
+278 tests passed
 0 failures
 0 errors
 Frontend
-npx tsc --noEmit
+npm run test:all
+All three frontend suites passed
+
+npx tsc --noEmit --incremental false
 0 errors
 Production build
 npm run build
-Successful
+Successful; 28 routes generated
+
+Export validation
+15/15 company artifacts passed; approved formal results remained intact
+
+Evidence archive verification
+Archive SHA-256 and all 189 entries matched
 
 The production frontend build includes the dynamic:
 
@@ -688,7 +750,7 @@ Pandas
 NumPy
 scikit-learn
 Statsmodels
-TensorFlow/Keras
+PyTorch
 Joblib
 Custom PSE PDF/data pipeline
 Frontend
@@ -712,7 +774,7 @@ PSE trading-calendar guard
 
 The frontend is deployed to:
 
-https://pse-stock-price-forecast.vercel.app/
+https://frontend-ten-xi-11.vercel.app/
 
 Vercel configuration:
 
@@ -765,9 +827,18 @@ The PSE calendar is based on the holidays currently represented in the repositor
 
 Gemini API usage is subject to Google's active model and project rate limits.
 
+Daily controlled inference identifies each company's manifest-selected model as the sole operational
+forecast and also records Lag-Informed Regression, ARIMA, and LSTM as an approved immutable shadow
+snapshot. The selected family is never changed by comparison output. The first production target
+covered by this new behavior will be the next target without an existing issuance after the change is
+committed and scheduled. Missing comparisons for September 10 and the already-issued September 11
+target remain absent because replacing an issued forecast or generating one after the actual close
+would break the prospective-history contract.
+
 31. Final Status
 
-ForecastPH is operational and production-ready for its intended educational and academic use case.
+ForecastPH is operational for its intended educational and academic use case, with fail-closed
+controls for approved 15-company inference and a separately guarded deployment refresh.
 
 Core components validated:
 
@@ -795,7 +866,7 @@ Core components validated:
 ✅ Production build
 
 Repository:
-https://github.com/AlvinTubtub/pse-stock-price-forecast.git
+https://github.com/AlvinTubtub/pse-stock-price-forecast-corrected-research.git
 
 Live Dashboard:
-https://pse-stock-price-forecast.vercel.app/
+https://frontend-ten-xi-11.vercel.app/

@@ -67,6 +67,9 @@ export function buildCompanyChartData(company: CompanyDetail): CompanyChartData 
       forecasts: {},
     };
     point.actual = row.actual;
+    for (const [model, value] of Object.entries(row.comparisonForecasts ?? {})) {
+      if (Number.isFinite(value)) point.forecasts[model] = value;
+    }
     point.forecasts[row.model] = row.predictedClose;
     points.set(row.forecastFor, point);
   }

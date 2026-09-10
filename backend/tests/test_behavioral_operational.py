@@ -35,6 +35,32 @@ def test_active_manifest_has_15_selected_models_and_valid_hashes():
         assert len(item["artifact"]["configuration_sha256"]) == 64
 
 
+def test_three_model_comparison_has_separate_no_fit_no_promotion_approval():
+    approval, approval_sha = ops._comparison_approval()
+    assert len(approval_sha) == 64
+    assert approval["scope"] == "production_comparison_inference"
+    assert approval["model_families"] == ["lag_reg", "arima", "lstm"]
+    assert approval["source_manifest_sha256"] == ops.COMPARISON_MANIFEST_SHA256
+    assert approval["fitting_authorized"] is False
+    assert approval["model_selection_authorized"] is False
+    assert approval["automatic_promotion_authorized"] is False
+
+
+def test_comparison_manifest_pins_all_45_persisted_artifacts():
+    manifest = ops.read_json(ops.COMPARISON_MANIFEST_PATH)
+    assert ops.digest(ops.COMPARISON_MANIFEST_PATH) == ops.COMPARISON_MANIFEST_SHA256
+    assert set(manifest["companies"]) == set(ops.TARGET_COMPANIES)
+    artifact_count = 0
+    for symbol in sorted(ops.TARGET_COMPANIES):
+        items = ops._comparison_items(symbol)
+        assert set(items) == set(ops.COMPARISON_FAMILIES)
+        for item in items.values():
+            artifact = item["artifact"]
+            assert ops.digest(ops.BASE / artifact["path"]) == artifact["sha256"]
+            artifact_count += 1
+    assert artifact_count == 45
+
+
 def test_daily_inference_never_refits_or_tunes(monkeypatch, tmp_path):
     """Daily inference must strictly use persisted models and never call refit_predict."""
     refit_mock = Mock(side_effect=AssertionError("refit_predict must never be called during infer_daily"))
@@ -42,11 +68,16 @@ def test_daily_inference_never_refits_or_tunes(monkeypatch, tmp_path):
 
     # Mock predict_persisted to return deterministic mock value
     predict_mock = Mock(return_value=25.0)
+    comparison_mock = Mock(return_value=25.0)
     monkeypatch.setattr(ops, "predict_persisted", predict_mock)
+    monkeypatch.setattr(ops, "predict_comparison_persisted", comparison_mock)
 
     batch = ops.infer_daily(output=tmp_path, now=NOW)
     assert len(batch["forecasts"]) == 15
     assert predict_mock.call_count == 15
+    assert comparison_mock.call_count == 30
+    assert all(set(row["comparisonForecasts"]) == set(ops.LABELS.values())
+               for row in batch["forecasts"].values())
     refit_mock.assert_not_called()
 
 
