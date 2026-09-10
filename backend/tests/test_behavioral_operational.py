@@ -3,7 +3,7 @@ import copy
 import json
 import shutil
 import sys
-from datetime import datetime
+from datetime import datetime, time
 from pathlib import Path
 from unittest.mock import Mock, patch
 
@@ -16,7 +16,10 @@ from services import operational_deployment as ops
 from services import model_selector
 from services.forecasting import arima_model, lag_regression, lstm_model
 
-NOW = datetime.fromisoformat("2026-09-08T18:00:00+08:00")
+LATEST_DATA_DATE = pd.read_csv(
+    ops.BASE / "data/raw/ALI.csv", usecols=["Date"], parse_dates=["Date"]
+)["Date"].max().date()
+NOW = datetime.combine(LATEST_DATA_DATE, time(18), tzinfo=ops.PHT)
 
 
 def test_active_manifest_has_15_selected_models_and_valid_hashes():
@@ -94,6 +97,8 @@ def test_superseded_manifest_is_preserved_for_audit():
 def test_refresh_does_not_replace_existing_same_target_issuance():
     current = ops.read_json(ops.OUTPUT / "current.json")
     active, _ = ops.load_manifest()
-    assert current["deploymentVersion"] == ops.PROMOTION
-    assert active["deployment_version"] != current["deploymentVersion"]
-    assert {row["forecastFor"] for row in current["forecasts"].values()} == {"2026-09-09"}
+    assert current["deploymentVersion"] == active["deployment_version"]
+    legacy = [row for row in current["history"] if row["deploymentVersion"] == ops.PROMOTION]
+    assert len(legacy) == 30
+    assert len({(row["symbol"], row["forecastFor"]) for row in legacy}) == 30
+    assert all(row in current["history"] for row in current["forecasts"].values())

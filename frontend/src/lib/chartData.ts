@@ -4,6 +4,8 @@ export interface CompanyChartData {
   dates: string[];
   actual: number[];
   byModel: Record<string, Array<number | null>>;
+  legacyStartDate?: string;
+  legacyEndDate?: string;
   liveStartDate?: string;
 }
 
@@ -73,10 +75,15 @@ export function buildCompanyChartData(company: CompanyDetail): CompanyChartData 
     .sort((a, b) => a.date.localeCompare(b.date))
     .slice(-60);
   const modelNames = [...new Set(latest.flatMap((point) => Object.keys(point.forecasts)))];
-  const productionDates = [
-    ...(company.productionBacktestDates ?? []),
-    ...realizedOperational.map((row) => row.forecastFor),
-  ].sort();
+  const controlledOperationalDates = realizedOperational
+    .map((row) => row.forecastFor)
+    .filter((date) => !company.operationalPromotionStartDate
+      || date >= company.operationalPromotionStartDate)
+    .sort();
+  const legacyDates = (company.productionBacktestDates ?? [])
+    .filter((date) => !company.operationalPromotionStartDate
+      || date < company.operationalPromotionStartDate)
+    .sort();
 
   return {
     dates: latest.map((point) => point.date),
@@ -84,6 +91,10 @@ export function buildCompanyChartData(company: CompanyDetail): CompanyChartData 
     byModel: Object.fromEntries(
       modelNames.map((model) => [model, latest.map((point) => point.forecasts[model] ?? null)])
     ),
-    liveStartDate: productionDates[0],
+    legacyStartDate: legacyDates[0],
+    legacyEndDate: legacyDates.at(-1),
+    liveStartDate: controlledOperationalDates.length > 0
+      ? company.operationalPromotionStartDate ?? controlledOperationalDates[0]
+      : undefined,
   };
 }

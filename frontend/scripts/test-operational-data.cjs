@@ -24,8 +24,21 @@ const data = require(path.join(temp, 'data.cjs'));
 const chartData = require(path.join(temp, 'chart-data.cjs'));
 const manifestPath = path.join(dest, 'deployment.json');
 const activeManifestPath = path.join(dest, 'active-deployment.json');
-const historicalManifest = JSON.parse(fs.readFileSync(manifestPath));
+const companyViewSource = fs.readFileSync(path.join(root, 'src/components/company/CompanyDetailView.tsx'), 'utf8');
+const predictionChartSource = fs.readFileSync(path.join(root, 'src/components/charts/PredictionChart.tsx'), 'utf8');
+const errorChartSource = fs.readFileSync(path.join(root, 'src/components/charts/ErrorChart.tsx'), 'utf8');
 const activeManifest = JSON.parse(fs.readFileSync(activeManifestPath));
+const historicalManifest = {
+  schema_version: 1,
+  promotion_id: 'RUN02_OPS_TEST_V1',
+  promotion_date: '2026-09-07',
+  formal_run_id: activeManifest.formal_run_id,
+  approval: { status: 'approved', scope: 'manual_local_operational_generation' },
+  companies: Object.fromEntries(Object.entries(activeManifest.companies).map(([symbol, item]) => [
+    symbol,
+    { model: item.model, configuration: item.configuration },
+  ])),
+};
 const clone = (value) => JSON.parse(JSON.stringify(value));
 const writeBatch = (value) => fs.writeFileSync(path.join(dest, 'operational.json'), JSON.stringify(value));
 const writeManifest = (value) => fs.writeFileSync(manifestPath, `${JSON.stringify(value, null, 2)}\n`);
@@ -40,7 +53,7 @@ function makeBatch(manifest, predictedClose, targetDate) {
     deploymentVersion: versionOf(manifest),
     developmentOnly: false,
     approvalStatus: 'approved',
-    promotionBoundary: { firstIssuedAt: '2026-09-07T18:00:00+08:00', firstTargetDate: targetDate },
+    promotionBoundary: { firstIssuedAt: '2026-09-07T18:00:00+08:00', firstTargetDate: '2026-09-08' },
     forecasts: {},
     history: [],
     ohlcv: {},
@@ -66,8 +79,35 @@ function makeBatch(manifest, predictedClose, targetDate) {
 }
 
 (async () => {
+  assert.match(companyViewSource, /Legacy issued Sep 2–7/);
+  assert.match(companyViewSource, /Controlled operational from Sep 8/);
+  assert.match(companyViewSource, /development-period[\s\S]*in-sample Naive scaling error/);
+  assert.doesNotMatch(companyViewSource, /MASE &lt; 1\.0 indicates better performance than the naive baseline/);
+  assert.match(predictionChartSource, /Legacy issued/);
+  assert.match(errorChartSource, /Legacy issued/);
+
   assert.equal(activeManifest.schema_version, 2);
   assert.equal(data.deploymentVersion(await data.getDeploymentManifest()), activeManifest.deployment_version);
+
+  // The checked-in latest realized session must retain all three predictions that were
+  // issued before its close; the operational overlay may replace only the selected model.
+  const publishedBatch = JSON.parse(fs.readFileSync(path.join(dest, 'operational.json')));
+  const latestRealizedTarget = publishedBatch.history
+    .filter((row) => row.actual !== null)
+    .map((row) => row.forecastFor)
+    .sort()
+    .at(-1);
+  assert.equal(latestRealizedTarget, '2026-09-09');
+  for (const symbol of Object.keys(activeManifest.companies)) {
+    const detail = await data.getCompanyDetail(symbol);
+    const graph = chartData.buildCompanyChartData(detail);
+    const index = graph.dates.indexOf(latestRealizedTarget);
+    assert.notEqual(index, -1, `${symbol}: latest realized session must be charted`);
+    for (const model of ['Lag-Informed Regression', 'ARIMA', 'LSTM']) {
+      assert.equal(Number.isFinite(graph.byModel[model]?.[index]), true,
+        `${symbol}: ${model} must be present on the latest realized session`);
+    }
+  }
 
   // Historical schema v1 remains accepted and retains byte-level manifest hashing.
   writeManifest(historicalManifest);
@@ -85,13 +125,13 @@ function makeBatch(manifest, predictedClose, targetDate) {
   // Schema v2 uses deployment_version and requires verified status, production scope,
   // artifact/configuration hashes, and an exact hash of the issuing manifest bytes.
   writeManifest(activeManifest);
-  const versionedBatch = makeBatch(activeManifest, 22, '2026-09-09');
+  const versionedBatch = makeBatch(activeManifest, 22, '2026-09-10');
   for (const symbol of Object.keys(activeManifest.companies)) {
     versionedBatch.history.push({
       ...versionedBatch.forecasts[symbol],
       predictedClose: 21.5,
-      forecastFor: '2026-09-08',
-      dataAsOf: '2026-09-07',
+      forecastFor: '2026-09-09',
+      dataAsOf: '2026-09-08',
       actual: 21,
       error: 0.5,
     });
@@ -103,21 +143,25 @@ function makeBatch(manifest, predictedClose, targetDate) {
   assert.equal(companyDetail.predictedClose, 22);
   assert.deepEqual(
     companyDetail.operationalHistory.map((row) => [row.forecastFor, row.predictedClose, row.actual]),
-    [['2026-09-08', 21.5, 21], ['2026-09-09', 22, null]],
+    [['2026-09-09', 21.5, 21], ['2026-09-10', 22, null]],
   );
+  assert.equal(companyDetail.operationalPromotionStartDate, '2026-09-08');
   for (const symbol of Object.keys(activeManifest.companies)) {
     const detail = await data.getCompanyDetail(symbol);
     const graph = chartData.buildCompanyChartData(detail);
     assert.equal(graph.dates.length, 60, `${symbol}: graph must contain 60 realized sessions`);
-    assert.equal(graph.dates.at(-1), '2026-09-08', `${symbol}: graph must end on today's realized session`);
-    assert.equal(graph.dates.includes('2026-09-09'), false, `${symbol}: graph must exclude tomorrow's forecast`);
+    assert.equal(graph.dates.at(-1), '2026-09-09', `${symbol}: graph must end on today's realized session`);
+    assert.equal(graph.dates.includes('2026-09-10'), false, `${symbol}: graph must exclude tomorrow's forecast`);
     assert.equal(graph.actual.at(-1), 21, `${symbol}: graph must use today's official close`);
+    assert.equal(graph.legacyStartDate, '2026-09-02', `${symbol}: graph must label legacy issuance start`);
+    assert.equal(graph.legacyEndDate, '2026-09-07', `${symbol}: graph must label legacy issuance end`);
+    assert.equal(graph.liveStartDate, '2026-09-08', `${symbol}: graph must use controlled promotion boundary`);
     for (const model of ['Lag-Informed Regression', 'ARIMA', 'LSTM']) {
       assert.equal(Number.isFinite(graph.byModel[model].at(-1)), true, `${symbol}: ${model} must be present today`);
     }
   }
   assert.equal((await data.getCompanies()).find((row) => row.symbol === 'ALI').predictedClose, 22);
-  assert.equal((await data.getDashboard()).forecastDate, '2026-09-09');
+  assert.equal((await data.getDashboard()).forecastDate, '2026-09-10');
   assert.equal((await data.getDashboard()).marketSummary.gainers, 15);
 
   writeBatch({ ...versionedBatch, manifestSha256: '0'.repeat(64) });

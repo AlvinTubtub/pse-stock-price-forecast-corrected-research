@@ -2,7 +2,7 @@
 import copy
 import json
 import sys
-from datetime import datetime
+from datetime import datetime, time
 from pathlib import Path
 from unittest.mock import Mock
 
@@ -12,7 +12,10 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from services import operational_deployment as ops
 
-NOW = datetime.fromisoformat("2026-09-08T18:00:00+08:00")
+LATEST_DATA_DATE = pd.read_csv(
+    ops.BASE / "data/raw/ALI.csv", usecols=["Date"], parse_dates=["Date"]
+)["Date"].max().date()
+NOW = datetime.combine(LATEST_DATA_DATE, time(18), tzinfo=ops.PHT)
 
 
 def test_manifest_covers_exact_frozen_mapping():
@@ -53,8 +56,10 @@ def test_incomplete_or_unsafe_generation_rejected(kwargs):
 
 
 def test_stale_data_cannot_be_issued_live():
+    next_session = ops.get_calendar().next_trading_day(LATEST_DATA_DATE)
+    stale_now = datetime.combine(next_session, time(18), tzinfo=ops.PHT)
     with pytest.raises(ValueError, match="stale"):
-        ops.validate_data(ops.BASE / "data/raw/ALI.csv", now=datetime.fromisoformat("2026-09-10T18:00:00+08:00"), development=False)
+        ops.validate_data(ops.BASE / "data/raw/ALI.csv", now=stale_now, development=False)
 
 
 @pytest.fixture
@@ -105,11 +110,15 @@ def test_reconcile_only_previously_issued_rows_and_preserve_failure(fast_generat
     def next_session(path, **kwargs):
         df, _ = original_validate(path, now=NOW, development=False)
         row = df.iloc[-1].copy()
-        row["Date"] = pd.Timestamp("2026-09-09")
-        return pd.concat([df, row.to_frame().T], ignore_index=True).astype({"Date": "datetime64[ns]"}), "2026-09-10"
+        realized_target = first["forecasts"]["ALI"]["forecastFor"]
+        row["Date"] = pd.Timestamp(realized_target)
+        following_target = ops.get_calendar().next_trading_day(pd.Timestamp(realized_target).date())
+        return (pd.concat([df, row.to_frame().T], ignore_index=True)
+                .astype({"Date": "datetime64[ns]"}), following_target.isoformat())
     monkeypatch.setattr(ops, "validate_data", next_session)
     fit.side_effect = RuntimeError("failed fit")
-    later = datetime.fromisoformat("2026-09-09T18:00:00+08:00")
+    later = datetime.combine(pd.Timestamp(first["forecasts"]["ALI"]["forecastFor"]).date(),
+                             time(18), tzinfo=ops.PHT)
     with pytest.raises(RuntimeError): ops.generate(output=output, now=later)
     assert (output / "current.json").read_bytes() == original
     fit.side_effect = None
@@ -123,7 +132,7 @@ def test_reconcile_only_previously_issued_rows_and_preserve_failure(fast_generat
 def test_malformed_history_rejected(fast_generation):
     output, _ = fast_generation
     batch = ops.generate(output=output, now=NOW)
-    batch["history"][0]["issuedAt"] = "2026-09-09T18:00:00+08:00"
+    batch["history"][0]["issuedAt"] = batch["history"][0]["forecastFor"] + "T18:00:00+08:00"
     manifest, sha = ops.load_manifest()
     with pytest.raises(ValueError): ops.validate_batch(batch, manifest, sha)
 

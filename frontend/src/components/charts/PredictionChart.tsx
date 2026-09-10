@@ -57,6 +57,8 @@ export interface PredictionChartProps {
   actual: Array<number | null>;
   byModel: Record<string, Array<number | null>>;
   selectedModel?: string;
+  legacyStartDate?: string;
+  legacyEndDate?: string;
   liveStartDate?: string;
 }
 
@@ -65,6 +67,8 @@ export default function PredictionChart({
   actual,
   byModel,
   selectedModel,
+  legacyStartDate,
+  legacyEndDate,
   liveStartDate,
 }: PredictionChartProps) {
   const data = actual.map((value, i) => {
@@ -158,12 +162,20 @@ export default function PredictionChart({
         <span className="text-slate-400">
           Showing {data.length} trading sessions &middot; Hover points to inspect prices
         </span>
-        {liveStartDate && (
-          <span className="inline-flex items-center gap-1.5 rounded-md border border-neon-400/40 bg-neon-400/10 px-2 py-1 font-semibold text-neon-300 font-mono text-[11px]">
-            <span className="h-3 border-l-2 border-dashed border-neon-400" aria-hidden="true" />
-            Live forecast begins
-          </span>
-        )}
+        <span className="flex flex-wrap items-center gap-2">
+          {legacyStartDate && legacyEndDate && (
+            <span className="inline-flex items-center gap-1.5 rounded-md border border-accent-amber/40 bg-accent-amber/10 px-2 py-1 font-semibold text-accent-amber font-mono text-[11px]">
+              <span className="h-3 border-l-2 border-dashed border-accent-amber" aria-hidden="true" />
+              Legacy issued {formatShortDate(legacyStartDate)}–{formatShortDate(legacyEndDate)}
+            </span>
+          )}
+          {liveStartDate && (
+            <span className="inline-flex items-center gap-1.5 rounded-md border border-neon-400/40 bg-neon-400/10 px-2 py-1 font-semibold text-neon-300 font-mono text-[11px]">
+              <span className="h-3 border-l-2 border-dashed border-neon-400" aria-hidden="true" />
+              Controlled operational begins {formatShortDate(liveStartDate)}
+            </span>
+          )}
+        </span>
       </div>
 
       <div className="w-full">
@@ -173,6 +185,14 @@ export default function PredictionChart({
             margin={{ top: 10, right: 15, left: 10, bottom: 5 }}
           >
             <CartesianGrid stroke="#22252e" strokeDasharray="3 3" vertical={false} />
+            {legacyStartDate && (
+              <ReferenceLine
+                x={legacyStartDate}
+                stroke="#ffb800"
+                strokeWidth={2}
+                strokeDasharray="4 4"
+              />
+            )}
             {liveStartDate && (
               <ReferenceLine
                 x={liveStartDate}

@@ -110,7 +110,8 @@ export default function CompanyDetailView({ company }: CompanyDetailViewProps) {
   }
 
   const chartData = buildCompanyChartData(company);
-  const hasRealizedProductionHistory = Boolean(chartData.liveStartDate);
+  const hasLegacyHistory = Boolean(chartData.legacyStartDate && chartData.legacyEndDate);
+  const hasControlledOperationalHistory = Boolean(chartData.liveStartDate);
 
   return (
     <div className="space-y-8">
@@ -425,23 +426,33 @@ export default function CompanyDetailView({ company }: CompanyDetailViewProps) {
             Backtest: Predicted vs. Actual (Last 60 Sessions)
           </h2>
           <span className="rounded-md border border-accent-amber/30 bg-accent-amber/10 px-2 py-0.5 text-[10px] font-semibold font-mono uppercase tracking-wide text-accent-amber">
-            Pre-promotion evaluation
+            Stored evaluation through Aug 28
           </span>
-          {hasRealizedProductionHistory && (
+          {hasLegacyHistory && (
+            <span className="rounded-md border border-accent-amber/30 bg-accent-amber/10 px-2 py-0.5 text-[10px] font-semibold font-mono uppercase tracking-wide text-accent-amber">
+              Legacy issued Sep 2–7
+            </span>
+          )}
+          {hasControlledOperationalHistory && (
             <span className="rounded-md border border-accent-emerald/30 bg-accent-emerald/10 px-2 py-0.5 text-[10px] font-semibold font-mono uppercase tracking-wide text-accent-emerald">
-              Live forecast
+              Controlled operational from Sep 8
             </span>
           )}
         </div>
         <p className="text-sm text-slate-400 mb-4">
-          The latest 60 realized target sessions combine the stored evaluation with immutable
-          issued forecasts. The vertical marker shows where prospective production coverage begins.
+          The latest 60 realized target sessions combine stored evaluation, legacy forecasts issued
+          for the September 2–7 pre-promotion period, and controlled operational forecasts from
+          September 8. From September 8 onward, the selected model is the promoted operational
+          series; the other model lines are contemporaneous comparison forecasts. The amber and teal
+          markers show the two boundaries.
         </p>
         <PredictionChart
           dates={chartData.dates}
           actual={chartData.actual}
           byModel={chartData.byModel}
           selectedModel={company.model}
+          legacyStartDate={chartData.legacyStartDate}
+          legacyEndDate={chartData.legacyEndDate}
           liveStartDate={chartData.liveStartDate}
         />
       </section>
@@ -452,24 +463,32 @@ export default function CompanyDetailView({ company }: CompanyDetailViewProps) {
           <div className="flex flex-wrap items-center gap-2 mb-1">
             <h2 className="text-lg font-semibold text-white">Forecast Error Over Time</h2>
             <span className="rounded-md border border-accent-amber/30 bg-accent-amber/10 px-2 py-0.5 text-[10px] font-semibold font-mono uppercase tracking-wide text-accent-amber">
-              Pre-promotion evaluation
+              Stored evaluation through Aug 28
             </span>
-            {hasRealizedProductionHistory && (
+            {hasLegacyHistory && (
+              <span className="rounded-md border border-accent-amber/30 bg-accent-amber/10 px-2 py-0.5 text-[10px] font-semibold font-mono uppercase tracking-wide text-accent-amber">
+                Legacy issued Sep 2–7
+              </span>
+            )}
+            {hasControlledOperationalHistory && (
               <span className="rounded-md border border-accent-emerald/30 bg-accent-emerald/10 px-2 py-0.5 text-[10px] font-semibold font-mono uppercase tracking-wide text-accent-emerald">
-                Live forecast
+                Controlled operational from Sep 8
               </span>
             )}
           </div>
           <p className="text-sm text-slate-400 mb-4">
-            The latest 60 realized sessions use predicted close minus actual close (₱). Issued
-            forecasts enter this graph only after the official target-session close is available;
-            the vertical marker shows where prospective production coverage begins.
+            The latest 60 realized sessions use predicted close minus actual close (₱). Legacy
+            history covers the September 2–7 pre-promotion period; controlled selected-model errors
+            begin September 8. Other model lines are comparison forecasts. A forecast appears only
+            after its official target-session close is available.
           </p>
           <ErrorChart
             dates={chartData.dates}
             actual={chartData.actual}
             byModel={chartData.byModel}
             selectedModel={company.model}
+            legacyStartDate={chartData.legacyStartDate}
+            legacyEndDate={chartData.legacyEndDate}
             liveStartDate={chartData.liveStartDate}
           />
         </section>
@@ -548,9 +567,10 @@ export default function CompanyDetailView({ company }: CompanyDetailViewProps) {
             </p>
             <p>
               &bull; <strong className="text-slate-300">MASE Benchmark: </strong>
-              MASE &lt; 1.0 indicates better performance than the naive baseline, MASE = 1.0
-              indicates approximately equal performance, and MASE &gt; 1.0 indicates worse
-              performance.
+              MASE &lt; 1.0 means the model&apos;s holdout MAE is lower than the development-period
+              in-sample Naive scaling error. It does not by itself establish statistically
+              significant improvement over the holdout Naive forecast; that requires the reported
+              benchmark-first Diebold–Mariano test and Holm-adjusted p-value.
             </p>
             <p>
               &bull; <strong className="text-slate-300">R² Interpretation: </strong>

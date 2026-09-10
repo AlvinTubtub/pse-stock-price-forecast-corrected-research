@@ -103,6 +103,7 @@ export async function getCompanyDetail(symbol: string): Promise<CompanyDetail | 
     operationalHistory: (operational.history ?? [])
       .filter((record) => record.symbol === symbol.toUpperCase())
       .sort((a, b) => a.forecastFor.localeCompare(b.forecastFor)),
+    operationalPromotionStartDate: operational.promotionBoundary.firstTargetDate,
     forecastDate: row.forecastFor, dataAsOf: row.dataAsOf, inferenceAt: row.issuedAt };
 
 }

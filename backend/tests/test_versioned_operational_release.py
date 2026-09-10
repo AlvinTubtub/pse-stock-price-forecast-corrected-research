@@ -5,7 +5,7 @@ import copy
 import json
 import shutil
 import sys
-from datetime import datetime
+from datetime import datetime, time
 from pathlib import Path
 from unittest.mock import Mock
 
@@ -16,7 +16,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from services import operational_deployment as ops
 from services.forecasting import lstm_model
 
-NOW = datetime.fromisoformat("2026-09-08T18:00:00+08:00")
+LATEST_DATA_DATE = pd.read_csv(
+    ops.BASE / "data/raw/ALI.csv", usecols=["Date"], parse_dates=["Date"]
+)["Date"].max().date()
+NOW = datetime.combine(LATEST_DATA_DATE, time(18), tzinfo=ops.PHT)
 
 
 def test_active_artifacts_are_complete_and_ict_uses_approved_30_session_lookback():
@@ -62,19 +65,21 @@ def test_corruption_and_configuration_mismatch_are_rejected(tmp_path):
 
 def test_daily_inference_never_calls_training_and_preserves_same_target(monkeypatch):
     before = (ops.OUTPUT / "current.json").read_bytes()
+    previous = ops.read_json(ops.OUTPUT / "current.json")
     monkeypatch.setattr(ops, "refit_predict", Mock(side_effect=AssertionError("training called")))
     from services.forecasting import arima_model, lag_regression
     monkeypatch.setattr(arima_model, "refit_deployment_arima", Mock(side_effect=AssertionError("training called")))
     monkeypatch.setattr(lag_regression, "refit_deployment_lag_regression", Mock(side_effect=AssertionError("training called")))
     monkeypatch.setattr(lstm_model, "refit_frozen_lstm", Mock(side_effect=AssertionError("training called")))
     payload = ops.infer_daily(now=NOW)
-    assert payload["deploymentVersion"] == ops.PROMOTION
+    assert payload["deploymentVersion"] == previous["deploymentVersion"]
+    assert payload["forecasts"] == previous["forecasts"]
     assert (ops.OUTPUT / "current.json").read_bytes() == before
 
 
 def test_history_from_superseded_deployment_validates_against_original_manifest():
     payload = ops.read_json(ops.OUTPUT / "current.json")
-    assert payload["deploymentVersion"] == ops.PROMOTION
+    assert any(row["deploymentVersion"] == ops.PROMOTION for row in payload["history"])
     assert ops.load_manifest()[0]["deployment_version"] != ops.PROMOTION
     ops.validate_batch(payload)
 
