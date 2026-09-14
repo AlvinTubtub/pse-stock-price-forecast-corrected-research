@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-11T16:02:23.489451+08:00",
+  "generatedAt": "2026-09-14T17:32:16.437274+08:00",
   "forecastDate": "2026-09-08",
-  "lastRunAt": "2026-09-11T08:02:17+00:00",
+  "lastRunAt": "2026-09-14T09:32:07+00:00",
   "status": "ok",
   "totalCompanies": 15,
   "missingCompanies": [],
@@ -28,17 +28,17 @@
     }
   ],
   "marketSummary": {
-    "gainers": 12,
-    "losers": 3,
+    "gainers": 11,
+    "losers": 4,
     "unchanged": 0
   },
   "topGainer": {
     "symbol": "MBT",
     "name": "Metropolitan Bank & Trust Co.",
     "sector": "Financials",
-    "latestClose": 63.05,
+    "latestClose": 63.3,
     "predictedClose": 65.86,
-    "pctChange": 4.46,
+    "pctChange": 4.04,
     "direction": "bullish",
     "bestModel": "ARIMA",
     "confidence": 86.2,
@@ -48,9 +48,9 @@
     "symbol": "ICT",
     "name": "Intl. Container Terminal Services",
     "sector": "Services",
-    "latestClose": 985.0,
+    "latestClose": 990.0,
     "predictedClose": 935.15,
-    "pctChange": -5.06,
+    "pctChange": -5.54,
     "direction": "bearish",
     "bestModel": "LSTM",
     "confidence": 98.9,
