@@ -1,9 +1,9 @@
 {
-  "last_run_at": "2026-09-14T09:32:07+00:00",
+  "last_run_at": "2026-09-16T08:02:10+00:00",
   "status": "ok",
-  "duration_seconds": 2.28,
-  "pdf_count": 1,
-  "record_count": 15,
+  "duration_seconds": 4.05,
+  "pdf_count": 2,
+  "record_count": 30,
   "symbols_updated": [
     "ALI",
     "APX",
