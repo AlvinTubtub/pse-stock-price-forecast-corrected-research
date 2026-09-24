@@ -2,10 +2,10 @@
   "symbol": "ICT",
   "name": "Intl. Container Terminal Services",
   "sector": "Services",
-  "previousClose": 900.0,
+  "previousClose": 885.0,
   "predictedClose": 935.15,
-  "pesoChange": 35.15,
-  "pctChange": 3.91,
+  "pesoChange": 50.15,
+  "pctChange": 5.67,
   "direction": "bullish",
   "model": "LSTM",
   "confidence": 98.9,
@@ -13235,6 +13235,14 @@
       "low": 899.0,
       "close": 900.0,
       "volume": 611172245
+    },
+    {
+      "date": "2026-09-24",
+      "open": 895.0,
+      "high": 912.0,
+      "low": 885.0,
+      "close": 885.0,
+      "volume": 760927120
     }
   ],
   "backtestDates": [
