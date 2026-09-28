@@ -6,7 +6,7 @@
   "approvalStatus": "approved",
   "promotionDate": "2026-09-08",
   "developmentOnly": false,
-  "generatedAt": "2026-09-25T16:02:22.800664+08:00",
+  "generatedAt": "2026-09-28T17:32:06.891886+08:00",
   "promotionBoundary": {
     "firstIssuedAt": "2026-09-07T20:53:45.931578+08:00",
     "firstTargetDate": "2026-09-08"
@@ -15,17 +15,17 @@
     "ALI": {
       "symbol": "ALI",
       "model": "Lag-Informed Regression",
-      "predictedClose": 15.1,
-      "previousClose": 15.12,
-      "dataAsOf": "2026-09-25",
-      "forecastFor": "2026-09-28",
-      "issuedAt": "2026-09-25T16:02:22.800664+08:00",
+      "predictedClose": 15.3,
+      "previousClose": 15.32,
+      "dataAsOf": "2026-09-28",
+      "forecastFor": "2026-09-29",
+      "issuedAt": "2026-09-28T17:32:06.891886+08:00",
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260908_105811Z",
       "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
-      "sourceDataSha256": "6e32ed1399250d0f550849b1eff19f664ab710d654f30c0c16796f17d8d4f11b",
+      "sourceDataSha256": "7843289401b62e9be151ac428d613ccb40a5725ee0c49c53fed79d395ccaa64c",
       "configuration": {
         "alpha": 0.1,
         "candidate_features": [
@@ -75,9 +75,9 @@
       "artifactSha256": "b47b9f54dffe7acb1f033058585061829be5638b76d26bca1af60e7e81981fc5",
       "coverage": "post_promotion_prospective",
       "comparisonForecasts": {
-        "Lag-Informed Regression": 15.1,
-        "ARIMA": 15.1,
-        "LSTM": 15.04
+        "Lag-Informed Regression": 15.3,
+        "ARIMA": 15.3,
+        "LSTM": 15.24
       },
       "comparisonApprovalId": "RUN02_COMPARISON_AUTH_20260910_01",
       "comparisonApprovalSha256": "68efbb548fc5bb38c0ccc547b71f5caab235d131f984fc89e7c731efb4547b3b",
@@ -96,17 +96,17 @@
     "APX": {
       "symbol": "APX",
       "model": "Lag-Informed Regression",
-      "predictedClose": 18.1,
-      "previousClose": 18.0,
-      "dataAsOf": "2026-09-25",
-      "forecastFor": "2026-09-28",
-      "issuedAt": "2026-09-25T16:02:22.800664+08:00",
+      "predictedClose": 17.19,
+      "previousClose": 17.1,
+      "dataAsOf": "2026-09-28",
+      "forecastFor": "2026-09-29",
+      "issuedAt": "2026-09-28T17:32:06.891886+08:00",
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260908_105811Z",
       "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
-      "sourceDataSha256": "0c1ea9b038992b88433a04cc720d600ff790f201e67c539321b47b49e2ed9116",
+      "sourceDataSha256": "c94c260f646ec8aa9e46ac9462c9d2bb5228fcf93fba3ef5e0bd256b14cb2ca8",
       "configuration": {
         "alpha": 0.01,
         "candidate_features": [
@@ -162,9 +162,9 @@
       "artifactSha256": "3ca4ada9bc234518672391f6e2a740d0be0414c0b984e4f67d7d4f42050bd459",
       "coverage": "post_promotion_prospective",
       "comparisonForecasts": {
-        "Lag-Informed Regression": 18.1,
-        "ARIMA": 18.06,
-        "LSTM": 18.03
+        "Lag-Informed Regression": 17.19,
+        "ARIMA": 17.14,
+        "LSTM": 17.08
       },
       "comparisonApprovalId": "RUN02_COMPARISON_AUTH_20260910_01",
       "comparisonApprovalSha256": "68efbb548fc5bb38c0ccc547b71f5caab235d131f984fc89e7c731efb4547b3b",
@@ -183,17 +183,17 @@
     "BPI": {
       "symbol": "BPI",
       "model": "ARIMA",
-      "predictedClose": 97.12,
-      "previousClose": 97.15,
-      "dataAsOf": "2026-09-25",
-      "forecastFor": "2026-09-28",
-      "issuedAt": "2026-09-25T16:02:22.800664+08:00",
+      "predictedClose": 96.1,
+      "previousClose": 95.9,
+      "dataAsOf": "2026-09-28",
+      "forecastFor": "2026-09-29",
+      "issuedAt": "2026-09-28T17:32:06.891886+08:00",
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260908_105811Z",
       "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
-      "sourceDataSha256": "c660fadfd4c87d604bde8428270e13564655992a3e8769df4260e83a0d0911df",
+      "sourceDataSha256": "306263786615320757074335248371a01c4410f816517262623182489cec3aca",
       "configuration": {
         "order": [
           1,
@@ -209,9 +209,9 @@
       "artifactSha256": "a40aee64054f431a981b8364b065183b24653e64f50243cd5a46c646cd363196",
       "coverage": "post_promotion_prospective",
       "comparisonForecasts": {
-        "Lag-Informed Regression": 97.02,
-        "ARIMA": 97.12,
-        "LSTM": 96.99
+        "Lag-Informed Regression": 96.05,
+        "ARIMA": 96.1,
+        "LSTM": 95.88
       },
       "comparisonApprovalId": "RUN02_COMPARISON_AUTH_20260910_01",
       "comparisonApprovalSha256": "68efbb548fc5bb38c0ccc547b71f5caab235d131f984fc89e7c731efb4547b3b",
@@ -230,17 +230,17 @@
     "GLO": {
       "symbol": "GLO",
       "model": "ARIMA",
-      "predictedClose": 1550.0,
-      "previousClose": 1550.0,
-      "dataAsOf": "2026-09-25",
-      "forecastFor": "2026-09-28",
-      "issuedAt": "2026-09-25T16:02:22.800664+08:00",
+      "predictedClose": 1559.0,
+      "previousClose": 1559.0,
+      "dataAsOf": "2026-09-28",
+      "forecastFor": "2026-09-29",
+      "issuedAt": "2026-09-28T17:32:06.891886+08:00",
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260908_105811Z",
       "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
-      "sourceDataSha256": "f50a45b0d68a9f28aac25e8d2fb51ababb1cf5a9edf8087cbe90601f8704b7b3",
+      "sourceDataSha256": "4674b4d940b0b5b69c0ace2e818b95df81d1cec8b93981181f648f3d48a949ad",
       "configuration": {
         "order": [
           0,
@@ -256,9 +256,9 @@
       "artifactSha256": "f9a123b0eef5169a4271d8a1ac68e754fe440b8f099d7ccbbc4d4bd55c5d4d94",
       "coverage": "post_promotion_prospective",
       "comparisonForecasts": {
-        "Lag-Informed Regression": 1549.83,
-        "ARIMA": 1550.0,
-        "LSTM": 1550.24
+        "Lag-Informed Regression": 1558.83,
+        "ARIMA": 1559.0,
+        "LSTM": 1559.54
       },
       "comparisonApprovalId": "RUN02_COMPARISON_AUTH_20260910_01",
       "comparisonApprovalSha256": "68efbb548fc5bb38c0ccc547b71f5caab235d131f984fc89e7c731efb4547b3b",
@@ -277,17 +277,17 @@
     "ICT": {
       "symbol": "ICT",
       "model": "LSTM",
-      "predictedClose": 914.31,
-      "previousClose": 920.0,
-      "dataAsOf": "2026-09-25",
-      "forecastFor": "2026-09-28",
-      "issuedAt": "2026-09-25T16:02:22.800664+08:00",
+      "predictedClose": 918.79,
+      "previousClose": 922.5,
+      "dataAsOf": "2026-09-28",
+      "forecastFor": "2026-09-29",
+      "issuedAt": "2026-09-28T17:32:06.891886+08:00",
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260908_105811Z",
       "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
-      "sourceDataSha256": "9c99ddfdf99244917d2d4138d94aa3a87931568e4d9d6e8838ef377d380005eb",
+      "sourceDataSha256": "c68e37bd324279df0853adb37efb552fcd6cf368cebad158cc1b7fdeb37a3dba",
       "configuration": {
         "lookback": 30,
         "hidden_size": 25,
@@ -304,9 +304,9 @@
       "artifactSha256": "14b4c3b77665ba0af753f0807f6128622dbdc7341de7c596e7fb20e2d4b6c10d",
       "coverage": "post_promotion_prospective",
       "comparisonForecasts": {
-        "Lag-Informed Regression": 919.17,
-        "ARIMA": 917.49,
-        "LSTM": 914.31
+        "Lag-Informed Regression": 922.93,
+        "ARIMA": 921.38,
+        "LSTM": 918.79
       },
       "comparisonApprovalId": "RUN02_COMPARISON_AUTH_20260910_01",
       "comparisonApprovalSha256": "68efbb548fc5bb38c0ccc547b71f5caab235d131f984fc89e7c731efb4547b3b",
@@ -325,17 +325,17 @@
     "JFC": {
       "symbol": "JFC",
       "model": "Lag-Informed Regression",
-      "predictedClose": 144.97,
-      "previousClose": 145.0,
-      "dataAsOf": "2026-09-25",
-      "forecastFor": "2026-09-28",
-      "issuedAt": "2026-09-25T16:02:22.800664+08:00",
+      "predictedClose": 142.47,
+      "previousClose": 142.5,
+      "dataAsOf": "2026-09-28",
+      "forecastFor": "2026-09-29",
+      "issuedAt": "2026-09-28T17:32:06.891886+08:00",
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260908_105811Z",
       "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
-      "sourceDataSha256": "f64aa62e0054a7d8dc854b537509019efbb94ea7acf12841197b781fa15230b0",
+      "sourceDataSha256": "0721cb5c272304a0ccca09885e40ec53370130c7d9f03f0aefff7a15dd34abcc",
       "configuration": {
         "alpha": 1.584893192461114,
         "candidate_features": [
@@ -391,9 +391,9 @@
       "artifactSha256": "298a8492fff526969096db846585f2ab7a1e6edcf5251ad2ca6d5da6509f43a7",
       "coverage": "post_promotion_prospective",
       "comparisonForecasts": {
-        "Lag-Informed Regression": 144.97,
-        "ARIMA": 145.4,
-        "LSTM": 144.7
+        "Lag-Informed Regression": 142.47,
+        "ARIMA": 142.91,
+        "LSTM": 142.16
       },
       "comparisonApprovalId": "RUN02_COMPARISON_AUTH_20260910_01",
       "comparisonApprovalSha256": "68efbb548fc5bb38c0ccc547b71f5caab235d131f984fc89e7c731efb4547b3b",
@@ -412,17 +412,17 @@
     "MBT": {
       "symbol": "MBT",
       "model": "ARIMA",
-      "predictedClose": 61.87,
+      "predictedClose": 61.92,
       "previousClose": 62.0,
-      "dataAsOf": "2026-09-25",
-      "forecastFor": "2026-09-28",
-      "issuedAt": "2026-09-25T16:02:22.800664+08:00",
+      "dataAsOf": "2026-09-28",
+      "forecastFor": "2026-09-29",
+      "issuedAt": "2026-09-28T17:32:06.891886+08:00",
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260908_105811Z",
       "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
-      "sourceDataSha256": "6de039ca1f5491008fa57f32b38b686ed7d5b6e7c9357f3824a254c2d7c0d5f8",
+      "sourceDataSha256": "0d3cf7e7cc336405dbbc0483e6b6f2150b15fae979ebaffd6cb739fd7d663c92",
       "configuration": {
         "order": [
           2,
@@ -438,9 +438,9 @@
       "artifactSha256": "173d3496c62e676e489f2453c1e1d3ee5828c0e92b286538053dd4703ade3f7e",
       "coverage": "post_promotion_prospective",
       "comparisonForecasts": {
-        "Lag-Informed Regression": 61.95,
-        "ARIMA": 61.87,
-        "LSTM": 61.88
+        "Lag-Informed Regression": 61.99,
+        "ARIMA": 61.92,
+        "LSTM": 61.95
       },
       "comparisonApprovalId": "RUN02_COMPARISON_AUTH_20260910_01",
       "comparisonApprovalSha256": "68efbb548fc5bb38c0ccc547b71f5caab235d131f984fc89e7c731efb4547b3b",
@@ -459,17 +459,17 @@
     "MEG": {
       "symbol": "MEG",
       "model": "Lag-Informed Regression",
-      "predictedClose": 2.17,
-      "previousClose": 2.17,
-      "dataAsOf": "2026-09-25",
-      "forecastFor": "2026-09-28",
-      "issuedAt": "2026-09-25T16:02:22.800664+08:00",
+      "predictedClose": 2.12,
+      "previousClose": 2.12,
+      "dataAsOf": "2026-09-28",
+      "forecastFor": "2026-09-29",
+      "issuedAt": "2026-09-28T17:32:06.891886+08:00",
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260908_105811Z",
       "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
-      "sourceDataSha256": "b4ff4279cc1d2f6129f00e45ed756e1c33148a9f721150f327840d78e2359a5e",
+      "sourceDataSha256": "087587947942b9ac7ec86e6c00c33ee1c4564964fecaafb8ebcd11f0cf48d788",
       "configuration": {
         "alpha": 0.01584893192461114,
         "candidate_features": [
@@ -519,9 +519,9 @@
       "artifactSha256": "b8654bc1f4eeadf772e9664988a286f7bc2ca256558ded4999d3a63a2c5e605d",
       "coverage": "post_promotion_prospective",
       "comparisonForecasts": {
-        "Lag-Informed Regression": 2.17,
-        "ARIMA": 2.17,
-        "LSTM": 2.17
+        "Lag-Informed Regression": 2.12,
+        "ARIMA": 2.12,
+        "LSTM": 2.12
       },
       "comparisonApprovalId": "RUN02_COMPARISON_AUTH_20260910_01",
       "comparisonApprovalSha256": "68efbb548fc5bb38c0ccc547b71f5caab235d131f984fc89e7c731efb4547b3b",
@@ -540,17 +540,17 @@
     "MER": {
       "symbol": "MER",
       "model": "Lag-Informed Regression",
-      "predictedClose": 444.7,
-      "previousClose": 444.2,
-      "dataAsOf": "2026-09-25",
-      "forecastFor": "2026-09-28",
-      "issuedAt": "2026-09-25T16:02:22.800664+08:00",
+      "predictedClose": 436.39,
+      "previousClose": 435.0,
+      "dataAsOf": "2026-09-28",
+      "forecastFor": "2026-09-29",
+      "issuedAt": "2026-09-28T17:32:06.891886+08:00",
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260908_105811Z",
       "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
-      "sourceDataSha256": "050dd1ef6df2ddda591fc6ca4f5655e505dbbcd70159fdc2e09e5a5e46e2b1ce",
+      "sourceDataSha256": "acbff63e7ceba1a147d2372c9270f7a382ba9cd428b480223d7eb7765811bfd4",
       "configuration": {
         "alpha": 0.3981071705534973,
         "candidate_features": [
@@ -608,9 +608,9 @@
       "artifactSha256": "b7a7b1f50b870b9f236c9d05656e2a06e84c92af7628824fe7421fd75c5b8cdf",
       "coverage": "post_promotion_prospective",
       "comparisonForecasts": {
-        "Lag-Informed Regression": 444.7,
-        "ARIMA": 446.04,
-        "LSTM": 444.41
+        "Lag-Informed Regression": 436.39,
+        "ARIMA": 437.41,
+        "LSTM": 436.06
       },
       "comparisonApprovalId": "RUN02_COMPARISON_AUTH_20260910_01",
       "comparisonApprovalSha256": "68efbb548fc5bb38c0ccc547b71f5caab235d131f984fc89e7c731efb4547b3b",
@@ -629,17 +629,17 @@
     "NIKL": {
       "symbol": "NIKL",
       "model": "Lag-Informed Regression",
-      "predictedClose": 4.07,
-      "previousClose": 4.07,
-      "dataAsOf": "2026-09-25",
-      "forecastFor": "2026-09-28",
-      "issuedAt": "2026-09-25T16:02:22.800664+08:00",
+      "predictedClose": 4.0,
+      "previousClose": 4.0,
+      "dataAsOf": "2026-09-28",
+      "forecastFor": "2026-09-29",
+      "issuedAt": "2026-09-28T17:32:06.891886+08:00",
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260908_105811Z",
       "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
-      "sourceDataSha256": "fe3fb836a087e91cd2680764e81e202b4f9d9a09c5dc5d628066407bd6abee03",
+      "sourceDataSha256": "ca3909b4c9e5886a73fe493f88bfa3da27c3b5805ca2980593a16d0c16e2a99c",
       "configuration": {
         "alpha": 0.025118864315095822,
         "candidate_features": [
@@ -689,9 +689,9 @@
       "artifactSha256": "b2aba624a2ca8c1efeca8440a61ee351e7b35464ea0b21cea79f0b823b78f3aa",
       "coverage": "post_promotion_prospective",
       "comparisonForecasts": {
-        "Lag-Informed Regression": 4.07,
-        "ARIMA": 4.07,
-        "LSTM": 4.07
+        "Lag-Informed Regression": 4.0,
+        "ARIMA": 4.01,
+        "LSTM": 4.0
       },
       "comparisonApprovalId": "RUN02_COMPARISON_AUTH_20260910_01",
       "comparisonApprovalSha256": "68efbb548fc5bb38c0ccc547b71f5caab235d131f984fc89e7c731efb4547b3b",
@@ -710,17 +710,17 @@
     "PGOLD": {
       "symbol": "PGOLD",
       "model": "ARIMA",
-      "predictedClose": 40.79,
-      "previousClose": 40.85,
-      "dataAsOf": "2026-09-25",
-      "forecastFor": "2026-09-28",
-      "issuedAt": "2026-09-25T16:02:22.800664+08:00",
+      "predictedClose": 40.25,
+      "previousClose": 40.2,
+      "dataAsOf": "2026-09-28",
+      "forecastFor": "2026-09-29",
+      "issuedAt": "2026-09-28T17:32:06.891886+08:00",
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260908_105811Z",
       "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
-      "sourceDataSha256": "86e57ee654ebc812501be94e10d99a3ce0e57db5163286bccdda261d7ea921b8",
+      "sourceDataSha256": "685c6321817d2b784601b52ae2b8207b50961cc02a3b3d40ec56a0a8656aaaea",
       "configuration": {
         "order": [
           1,
@@ -736,9 +736,9 @@
       "artifactSha256": "2d274924835f7ea4075e46345c0674bacbe31c982c31c1121a8c8e71c9e321ae",
       "coverage": "post_promotion_prospective",
       "comparisonForecasts": {
-        "Lag-Informed Regression": 40.85,
-        "ARIMA": 40.79,
-        "LSTM": 40.79
+        "Lag-Informed Regression": 40.2,
+        "ARIMA": 40.25,
+        "LSTM": 40.22
       },
       "comparisonApprovalId": "RUN02_COMPARISON_AUTH_20260910_01",
       "comparisonApprovalSha256": "68efbb548fc5bb38c0ccc547b71f5caab235d131f984fc89e7c731efb4547b3b",
@@ -757,17 +757,17 @@
     "SCC": {
       "symbol": "SCC",
       "model": "ARIMA",
-      "predictedClose": 15.28,
-      "previousClose": 15.28,
-      "dataAsOf": "2026-09-25",
-      "forecastFor": "2026-09-28",
-      "issuedAt": "2026-09-25T16:02:22.800664+08:00",
+      "predictedClose": 14.46,
+      "previousClose": 14.46,
+      "dataAsOf": "2026-09-28",
+      "forecastFor": "2026-09-29",
+      "issuedAt": "2026-09-28T17:32:06.891886+08:00",
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260908_105811Z",
       "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
-      "sourceDataSha256": "8fc0278d5213270e0165f58e12955bfe1b7cd3f749c3877aedc70481fba4ce46",
+      "sourceDataSha256": "37d00fc899fe1d3b431ceb92375fc6cfe1f8d5981089655c5bb81f1d42b1326a",
       "configuration": {
         "order": [
           0,
@@ -783,9 +783,9 @@
       "artifactSha256": "3781ba318930f9a03dc4f349dbe0e609b16122d83166d48cc557f22b7e8f5fb3",
       "coverage": "post_promotion_prospective",
       "comparisonForecasts": {
-        "Lag-Informed Regression": 15.28,
-        "ARIMA": 15.28,
-        "LSTM": 15.17
+        "Lag-Informed Regression": 14.46,
+        "ARIMA": 14.46,
+        "LSTM": 14.33
       },
       "comparisonApprovalId": "RUN02_COMPARISON_AUTH_20260910_01",
       "comparisonApprovalSha256": "68efbb548fc5bb38c0ccc547b71f5caab235d131f984fc89e7c731efb4547b3b",
@@ -804,17 +804,17 @@
     "SECB": {
       "symbol": "SECB",
       "model": "ARIMA",
-      "predictedClose": 62.09,
-      "previousClose": 62.1,
-      "dataAsOf": "2026-09-25",
-      "forecastFor": "2026-09-28",
-      "issuedAt": "2026-09-25T16:02:22.800664+08:00",
+      "predictedClose": 62.99,
+      "previousClose": 63.0,
+      "dataAsOf": "2026-09-28",
+      "forecastFor": "2026-09-29",
+      "issuedAt": "2026-09-28T17:32:06.891886+08:00",
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260908_105811Z",
       "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
-      "sourceDataSha256": "32013fa73743ba056fc17469b2825a43fa20f1342980de5b8d6fe191d437fcfc",
+      "sourceDataSha256": "0607c23e42ecaf216dea14b6434c57963486d3500b1075b630e1af6436bd4850",
       "configuration": {
         "order": [
           1,
@@ -830,9 +830,9 @@
       "artifactSha256": "0c253bae89abd30c64d8c799fe017226a9aebcb2dfaa3b80aca4b8a090942fa5",
       "coverage": "post_promotion_prospective",
       "comparisonForecasts": {
-        "Lag-Informed Regression": 62.03,
-        "ARIMA": 62.09,
-        "LSTM": 62.05
+        "Lag-Informed Regression": 62.93,
+        "ARIMA": 62.99,
+        "LSTM": 62.97
       },
       "comparisonApprovalId": "RUN02_COMPARISON_AUTH_20260910_01",
       "comparisonApprovalSha256": "68efbb548fc5bb38c0ccc547b71f5caab235d131f984fc89e7c731efb4547b3b",
@@ -851,17 +851,17 @@
     "SHLPH": {
       "symbol": "SHLPH",
       "model": "ARIMA",
-      "predictedClose": 8.24,
-      "previousClose": 8.25,
-      "dataAsOf": "2026-09-25",
-      "forecastFor": "2026-09-28",
-      "issuedAt": "2026-09-25T16:02:22.800664+08:00",
+      "predictedClose": 8.13,
+      "previousClose": 8.15,
+      "dataAsOf": "2026-09-28",
+      "forecastFor": "2026-09-29",
+      "issuedAt": "2026-09-28T17:32:06.891886+08:00",
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260908_105811Z",
       "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
-      "sourceDataSha256": "d69c1148440853f2ef0fea42444c9cc198fbb8ca290b3beac925c48587afb7ba",
+      "sourceDataSha256": "26a05df934f7ea46b6e88161a30afc7f0cc67fe41c4cfb7f9fa190a47a9fa7ff",
       "configuration": {
         "order": [
           0,
@@ -877,9 +877,9 @@
       "artifactSha256": "7346ba12ffb15d5438487726d35530e44252cb50ba5e6c3d1ffb3c9980b28279",
       "coverage": "post_promotion_prospective",
       "comparisonForecasts": {
-        "Lag-Informed Regression": 8.24,
-        "ARIMA": 8.24,
-        "LSTM": 8.26
+        "Lag-Informed Regression": 8.14,
+        "ARIMA": 8.13,
+        "LSTM": 8.16
       },
       "comparisonApprovalId": "RUN02_COMPARISON_AUTH_20260910_01",
       "comparisonApprovalSha256": "68efbb548fc5bb38c0ccc547b71f5caab235d131f984fc89e7c731efb4547b3b",
@@ -898,17 +898,17 @@
     "SMPH": {
       "symbol": "SMPH",
       "model": "Lag-Informed Regression",
-      "predictedClose": 16.01,
+      "predictedClose": 16.0,
       "previousClose": 16.0,
-      "dataAsOf": "2026-09-25",
-      "forecastFor": "2026-09-28",
-      "issuedAt": "2026-09-25T16:02:22.800664+08:00",
+      "dataAsOf": "2026-09-28",
+      "forecastFor": "2026-09-29",
+      "issuedAt": "2026-09-28T17:32:06.891886+08:00",
       "actual": null,
       "error": null,
       "deploymentVersion": "RUN02_OPS_20260908_105811Z",
       "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
-      "sourceDataSha256": "8240ce0ef7916dd51f7f9dcee47aed21ebfb42384ec66e0965a908ea2007cbb2",
+      "sourceDataSha256": "0c9fd1396c10732bd8fe5bdde6d491579ba04dd1be61f71cdd7fb4ceb6f9f095",
       "configuration": {
         "alpha": 0.039810717055349734,
         "candidate_features": [
@@ -960,8 +960,8 @@
       "artifactSha256": "cc791c805d667dd832cc33e3e3417f22d23a63257bd24b98f963385c0fecea92",
       "coverage": "post_promotion_prospective",
       "comparisonForecasts": {
-        "Lag-Informed Regression": 16.01,
-        "ARIMA": 16.01,
+        "Lag-Informed Regression": 16.0,
+        "ARIMA": 16.0,
         "LSTM": 15.96
       },
       "comparisonApprovalId": "RUN02_COMPARISON_AUTH_20260910_01",
@@ -10474,8 +10474,8 @@
       "dataAsOf": "2026-09-25",
       "forecastFor": "2026-09-28",
       "issuedAt": "2026-09-25T16:02:22.800664+08:00",
-      "actual": null,
-      "error": null,
+      "actual": 15.32,
+      "error": -0.22000000000000064,
       "deploymentVersion": "RUN02_OPS_20260908_105811Z",
       "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
@@ -10555,8 +10555,8 @@
       "dataAsOf": "2026-09-25",
       "forecastFor": "2026-09-28",
       "issuedAt": "2026-09-25T16:02:22.800664+08:00",
-      "actual": null,
-      "error": null,
+      "actual": 17.1,
+      "error": 1.0,
       "deploymentVersion": "RUN02_OPS_20260908_105811Z",
       "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
@@ -10642,8 +10642,8 @@
       "dataAsOf": "2026-09-25",
       "forecastFor": "2026-09-28",
       "issuedAt": "2026-09-25T16:02:22.800664+08:00",
-      "actual": null,
-      "error": null,
+      "actual": 95.9,
+      "error": 1.2199999999999989,
       "deploymentVersion": "RUN02_OPS_20260908_105811Z",
       "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
@@ -10689,8 +10689,8 @@
       "dataAsOf": "2026-09-25",
       "forecastFor": "2026-09-28",
       "issuedAt": "2026-09-25T16:02:22.800664+08:00",
-      "actual": null,
-      "error": null,
+      "actual": 1559.0,
+      "error": -9.0,
       "deploymentVersion": "RUN02_OPS_20260908_105811Z",
       "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
@@ -10736,8 +10736,8 @@
       "dataAsOf": "2026-09-25",
       "forecastFor": "2026-09-28",
       "issuedAt": "2026-09-25T16:02:22.800664+08:00",
-      "actual": null,
-      "error": null,
+      "actual": 922.5,
+      "error": -8.190000000000055,
       "deploymentVersion": "RUN02_OPS_20260908_105811Z",
       "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
@@ -10784,8 +10784,8 @@
       "dataAsOf": "2026-09-25",
       "forecastFor": "2026-09-28",
       "issuedAt": "2026-09-25T16:02:22.800664+08:00",
-      "actual": null,
-      "error": null,
+      "actual": 142.5,
+      "error": 2.469999999999999,
       "deploymentVersion": "RUN02_OPS_20260908_105811Z",
       "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
@@ -10871,8 +10871,8 @@
       "dataAsOf": "2026-09-25",
       "forecastFor": "2026-09-28",
       "issuedAt": "2026-09-25T16:02:22.800664+08:00",
-      "actual": null,
-      "error": null,
+      "actual": 62.0,
+      "error": -0.13000000000000256,
       "deploymentVersion": "RUN02_OPS_20260908_105811Z",
       "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
@@ -10918,8 +10918,8 @@
       "dataAsOf": "2026-09-25",
       "forecastFor": "2026-09-28",
       "issuedAt": "2026-09-25T16:02:22.800664+08:00",
-      "actual": null,
-      "error": null,
+      "actual": 2.12,
+      "error": 0.04999999999999982,
       "deploymentVersion": "RUN02_OPS_20260908_105811Z",
       "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
@@ -10999,8 +10999,8 @@
       "dataAsOf": "2026-09-25",
       "forecastFor": "2026-09-28",
       "issuedAt": "2026-09-25T16:02:22.800664+08:00",
-      "actual": null,
-      "error": null,
+      "actual": 435.0,
+      "error": 9.699999999999989,
       "deploymentVersion": "RUN02_OPS_20260908_105811Z",
       "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
@@ -11088,8 +11088,8 @@
       "dataAsOf": "2026-09-25",
       "forecastFor": "2026-09-28",
       "issuedAt": "2026-09-25T16:02:22.800664+08:00",
-      "actual": null,
-      "error": null,
+      "actual": 4.0,
+      "error": 0.07000000000000028,
       "deploymentVersion": "RUN02_OPS_20260908_105811Z",
       "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
@@ -11169,8 +11169,8 @@
       "dataAsOf": "2026-09-25",
       "forecastFor": "2026-09-28",
       "issuedAt": "2026-09-25T16:02:22.800664+08:00",
-      "actual": null,
-      "error": null,
+      "actual": 40.2,
+      "error": 0.5899999999999963,
       "deploymentVersion": "RUN02_OPS_20260908_105811Z",
       "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
@@ -11216,8 +11216,8 @@
       "dataAsOf": "2026-09-25",
       "forecastFor": "2026-09-28",
       "issuedAt": "2026-09-25T16:02:22.800664+08:00",
-      "actual": null,
-      "error": null,
+      "actual": 14.46,
+      "error": 0.8199999999999985,
       "deploymentVersion": "RUN02_OPS_20260908_105811Z",
       "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
@@ -11263,8 +11263,8 @@
       "dataAsOf": "2026-09-25",
       "forecastFor": "2026-09-28",
       "issuedAt": "2026-09-25T16:02:22.800664+08:00",
-      "actual": null,
-      "error": null,
+      "actual": 63.0,
+      "error": -0.9099999999999966,
       "deploymentVersion": "RUN02_OPS_20260908_105811Z",
       "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
@@ -11310,8 +11310,8 @@
       "dataAsOf": "2026-09-25",
       "forecastFor": "2026-09-28",
       "issuedAt": "2026-09-25T16:02:22.800664+08:00",
-      "actual": null,
-      "error": null,
+      "actual": 8.15,
+      "error": 0.08999999999999986,
       "deploymentVersion": "RUN02_OPS_20260908_105811Z",
       "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
@@ -11357,8 +11357,8 @@
       "dataAsOf": "2026-09-25",
       "forecastFor": "2026-09-28",
       "issuedAt": "2026-09-25T16:02:22.800664+08:00",
-      "actual": null,
-      "error": null,
+      "actual": 16.0,
+      "error": 0.010000000000001563,
       "deploymentVersion": "RUN02_OPS_20260908_105811Z",
       "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
       "formalRunId": "FORMAL_CORRECTED_20260828_02",
@@ -11416,6 +11416,972 @@
       "comparisonForecasts": {
         "Lag-Informed Regression": 16.01,
         "ARIMA": 16.01,
+        "LSTM": 15.96
+      },
+      "comparisonApprovalId": "RUN02_COMPARISON_AUTH_20260910_01",
+      "comparisonApprovalSha256": "68efbb548fc5bb38c0ccc547b71f5caab235d131f984fc89e7c731efb4547b3b",
+      "comparisonManifestSha256": "ccc03428b302db82642970ae7ca1dd31cc30eaeed6d0b643d19fc489759a2377",
+      "comparisonArtifactSha256": {
+        "Lag-Informed Regression": "cc791c805d667dd832cc33e3e3417f22d23a63257bd24b98f963385c0fecea92",
+        "ARIMA": "3df67de7033a0f274ee013312a69e40c685844862985b6e022f911c956ad3567",
+        "LSTM": "5d41bc750c5c5390d5d7cbba25036c1581f780baa53b9dcc38772a86e335049e"
+      },
+      "comparisonConfigurationSha256": {
+        "Lag-Informed Regression": "42cbd66f0200b1f7a19efcf67eea11a3d93de6121ad8f32427a00c0e1ddc4f39",
+        "ARIMA": "d510740c5db02c5b0aa98702bebef708407feb421067bc8c3c54be756821a19a",
+        "LSTM": "5ef6f6f58fdd9f028d2f2e5c6cf92fce41a8fc2bc7f2f35e9d3005b6629a83a5"
+      }
+    },
+    {
+      "symbol": "ALI",
+      "model": "Lag-Informed Regression",
+      "predictedClose": 15.3,
+      "previousClose": 15.32,
+      "dataAsOf": "2026-09-28",
+      "forecastFor": "2026-09-29",
+      "issuedAt": "2026-09-28T17:32:06.891886+08:00",
+      "actual": null,
+      "error": null,
+      "deploymentVersion": "RUN02_OPS_20260908_105811Z",
+      "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
+      "formalRunId": "FORMAL_CORRECTED_20260828_02",
+      "sourceDataSha256": "7843289401b62e9be151ac428d613ccb40a5725ee0c49c53fed79d395ccaa64c",
+      "configuration": {
+        "alpha": 0.1,
+        "candidate_features": [
+          "lag_1",
+          "lag_2",
+          "lag_3",
+          "lag_5",
+          "ma_5",
+          "ma_10",
+          "volume_ma_5",
+          "ema_10",
+          "ema_20",
+          "rsi_14",
+          "macd",
+          "macd_signal",
+          "bb_upper",
+          "bb_lower",
+          "daily_return",
+          "rolling_volatility",
+          "hl_range_pct",
+          "oc_return_pct",
+          "ema_gap_pct",
+          "macd_pct",
+          "bb_width_pct",
+          "bb_percent_b",
+          "return_lag_5",
+          "return_mean_5",
+          "return_mean_10",
+          "return_mean_20",
+          "return_vol_5",
+          "return_vol_10",
+          "return_vol_20",
+          "log_volume",
+          "volume_mean_10",
+          "volume_mean_20"
+        ],
+        "pacf_selected_lags": [
+          5
+        ],
+        "max_iter": 50000,
+        "tol": 0.001,
+        "seed": 42,
+        "target": "next_close_delta",
+        "scaler": "StandardScaler"
+      },
+      "configurationSha256": "fcef3c66a6c1b1691b97557f6f40542a3d58d54fda7cbce626c2369b290fb783",
+      "artifactSha256": "b47b9f54dffe7acb1f033058585061829be5638b76d26bca1af60e7e81981fc5",
+      "coverage": "post_promotion_prospective",
+      "comparisonForecasts": {
+        "Lag-Informed Regression": 15.3,
+        "ARIMA": 15.3,
+        "LSTM": 15.24
+      },
+      "comparisonApprovalId": "RUN02_COMPARISON_AUTH_20260910_01",
+      "comparisonApprovalSha256": "68efbb548fc5bb38c0ccc547b71f5caab235d131f984fc89e7c731efb4547b3b",
+      "comparisonManifestSha256": "ccc03428b302db82642970ae7ca1dd31cc30eaeed6d0b643d19fc489759a2377",
+      "comparisonArtifactSha256": {
+        "Lag-Informed Regression": "b47b9f54dffe7acb1f033058585061829be5638b76d26bca1af60e7e81981fc5",
+        "ARIMA": "e50c128c01fe882d3dd2fa5dbf798faba61c9ccec3c0ea4d9aba8588679a0d2c",
+        "LSTM": "dd74057354dd579469fbf8245e6a17b7a86600df13de42b2451f69aabd6eddd9"
+      },
+      "comparisonConfigurationSha256": {
+        "Lag-Informed Regression": "fcef3c66a6c1b1691b97557f6f40542a3d58d54fda7cbce626c2369b290fb783",
+        "ARIMA": "8e694f8f6ccede1e2770bb5198b96e970237b3d5af244746e35e8572b3ee2ea6",
+        "LSTM": "8da55efc268cb9385c224e1419c6f1087ccc137904abc81b1b7b771951538b6f"
+      }
+    },
+    {
+      "symbol": "APX",
+      "model": "Lag-Informed Regression",
+      "predictedClose": 17.19,
+      "previousClose": 17.1,
+      "dataAsOf": "2026-09-28",
+      "forecastFor": "2026-09-29",
+      "issuedAt": "2026-09-28T17:32:06.891886+08:00",
+      "actual": null,
+      "error": null,
+      "deploymentVersion": "RUN02_OPS_20260908_105811Z",
+      "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
+      "formalRunId": "FORMAL_CORRECTED_20260828_02",
+      "sourceDataSha256": "c94c260f646ec8aa9e46ac9462c9d2bb5228fcf93fba3ef5e0bd256b14cb2ca8",
+      "configuration": {
+        "alpha": 0.01,
+        "candidate_features": [
+          "lag_1",
+          "lag_2",
+          "lag_3",
+          "lag_5",
+          "ma_5",
+          "ma_10",
+          "volume_ma_5",
+          "ema_10",
+          "ema_20",
+          "rsi_14",
+          "macd",
+          "macd_signal",
+          "bb_upper",
+          "bb_lower",
+          "daily_return",
+          "rolling_volatility",
+          "hl_range_pct",
+          "oc_return_pct",
+          "ema_gap_pct",
+          "macd_pct",
+          "bb_width_pct",
+          "bb_percent_b",
+          "return_lag_1",
+          "return_lag_4",
+          "return_lag_6",
+          "return_lag_16",
+          "return_mean_5",
+          "return_mean_10",
+          "return_mean_20",
+          "return_vol_5",
+          "return_vol_10",
+          "return_vol_20",
+          "log_volume",
+          "volume_mean_10",
+          "volume_mean_20"
+        ],
+        "pacf_selected_lags": [
+          1,
+          4,
+          6,
+          16
+        ],
+        "max_iter": 50000,
+        "tol": 0.001,
+        "seed": 42,
+        "target": "next_close_delta",
+        "scaler": "StandardScaler"
+      },
+      "configurationSha256": "a6134dbc9c09a66e51afe68a3b84c188a42fd4f8578a7467e4b0abfc1ee89940",
+      "artifactSha256": "3ca4ada9bc234518672391f6e2a740d0be0414c0b984e4f67d7d4f42050bd459",
+      "coverage": "post_promotion_prospective",
+      "comparisonForecasts": {
+        "Lag-Informed Regression": 17.19,
+        "ARIMA": 17.14,
+        "LSTM": 17.08
+      },
+      "comparisonApprovalId": "RUN02_COMPARISON_AUTH_20260910_01",
+      "comparisonApprovalSha256": "68efbb548fc5bb38c0ccc547b71f5caab235d131f984fc89e7c731efb4547b3b",
+      "comparisonManifestSha256": "ccc03428b302db82642970ae7ca1dd31cc30eaeed6d0b643d19fc489759a2377",
+      "comparisonArtifactSha256": {
+        "Lag-Informed Regression": "3ca4ada9bc234518672391f6e2a740d0be0414c0b984e4f67d7d4f42050bd459",
+        "ARIMA": "b5457a772eee374ed0bbd64a428f6d17736492e3b42e7de92edca34b36f96c76",
+        "LSTM": "af8b223f0a4423775c4e6531cfb7ebcd6ff2800fcffe8c1f1d731035e1a72f7d"
+      },
+      "comparisonConfigurationSha256": {
+        "Lag-Informed Regression": "a6134dbc9c09a66e51afe68a3b84c188a42fd4f8578a7467e4b0abfc1ee89940",
+        "ARIMA": "a70ffa9a70b00c37f6dc2803d77bf535db680224e479af925053649e60f46300",
+        "LSTM": "e3f69a30cb7274af1146929aa031ab493e383bf9684ac2820035b7e3b335dee1"
+      }
+    },
+    {
+      "symbol": "BPI",
+      "model": "ARIMA",
+      "predictedClose": 96.1,
+      "previousClose": 95.9,
+      "dataAsOf": "2026-09-28",
+      "forecastFor": "2026-09-29",
+      "issuedAt": "2026-09-28T17:32:06.891886+08:00",
+      "actual": null,
+      "error": null,
+      "deploymentVersion": "RUN02_OPS_20260908_105811Z",
+      "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
+      "formalRunId": "FORMAL_CORRECTED_20260828_02",
+      "sourceDataSha256": "306263786615320757074335248371a01c4410f816517262623182489cec3aca",
+      "configuration": {
+        "order": [
+          1,
+          1,
+          1
+        ],
+        "trend": "n",
+        "method": "statespace",
+        "maxiter": 2000,
+        "target": "Close"
+      },
+      "configurationSha256": "026fe051e7cd437d59028c543ee43703b732e9ca6b1e97842e170a0a7a30afae",
+      "artifactSha256": "a40aee64054f431a981b8364b065183b24653e64f50243cd5a46c646cd363196",
+      "coverage": "post_promotion_prospective",
+      "comparisonForecasts": {
+        "Lag-Informed Regression": 96.05,
+        "ARIMA": 96.1,
+        "LSTM": 95.88
+      },
+      "comparisonApprovalId": "RUN02_COMPARISON_AUTH_20260910_01",
+      "comparisonApprovalSha256": "68efbb548fc5bb38c0ccc547b71f5caab235d131f984fc89e7c731efb4547b3b",
+      "comparisonManifestSha256": "ccc03428b302db82642970ae7ca1dd31cc30eaeed6d0b643d19fc489759a2377",
+      "comparisonArtifactSha256": {
+        "Lag-Informed Regression": "3c36f8842ba609503b7adef3ca55e9ea321467b9d6623db1d9164e6f427d791e",
+        "ARIMA": "a40aee64054f431a981b8364b065183b24653e64f50243cd5a46c646cd363196",
+        "LSTM": "c067b476913b037bfb776e78a9d101a750008867111bd2e199f188fdc0de617c"
+      },
+      "comparisonConfigurationSha256": {
+        "Lag-Informed Regression": "acc0c9f08836d219a0734d7cca962de5d3e5b1dc9bcda9e0288b0ca1eae63d0b",
+        "ARIMA": "026fe051e7cd437d59028c543ee43703b732e9ca6b1e97842e170a0a7a30afae",
+        "LSTM": "e3f69a30cb7274af1146929aa031ab493e383bf9684ac2820035b7e3b335dee1"
+      }
+    },
+    {
+      "symbol": "GLO",
+      "model": "ARIMA",
+      "predictedClose": 1559.0,
+      "previousClose": 1559.0,
+      "dataAsOf": "2026-09-28",
+      "forecastFor": "2026-09-29",
+      "issuedAt": "2026-09-28T17:32:06.891886+08:00",
+      "actual": null,
+      "error": null,
+      "deploymentVersion": "RUN02_OPS_20260908_105811Z",
+      "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
+      "formalRunId": "FORMAL_CORRECTED_20260828_02",
+      "sourceDataSha256": "4674b4d940b0b5b69c0ace2e818b95df81d1cec8b93981181f648f3d48a949ad",
+      "configuration": {
+        "order": [
+          0,
+          1,
+          0
+        ],
+        "trend": "n",
+        "method": "statespace",
+        "maxiter": 2000,
+        "target": "Close"
+      },
+      "configurationSha256": "683650fe40d1ec06923a32e1421bf3eac4575ddc2b1cec26f58277e2e9a26edb",
+      "artifactSha256": "f9a123b0eef5169a4271d8a1ac68e754fe440b8f099d7ccbbc4d4bd55c5d4d94",
+      "coverage": "post_promotion_prospective",
+      "comparisonForecasts": {
+        "Lag-Informed Regression": 1558.83,
+        "ARIMA": 1559.0,
+        "LSTM": 1559.54
+      },
+      "comparisonApprovalId": "RUN02_COMPARISON_AUTH_20260910_01",
+      "comparisonApprovalSha256": "68efbb548fc5bb38c0ccc547b71f5caab235d131f984fc89e7c731efb4547b3b",
+      "comparisonManifestSha256": "ccc03428b302db82642970ae7ca1dd31cc30eaeed6d0b643d19fc489759a2377",
+      "comparisonArtifactSha256": {
+        "Lag-Informed Regression": "f1fe8ec57edad3391d59d5d2f9a584c1fb03e54a5ee6969b0d276bae5b91da10",
+        "ARIMA": "f9a123b0eef5169a4271d8a1ac68e754fe440b8f099d7ccbbc4d4bd55c5d4d94",
+        "LSTM": "d16bd0ce078d90ab9c7bc756f460e459407fc540a1a8894eb9c302f3502b5900"
+      },
+      "comparisonConfigurationSha256": {
+        "Lag-Informed Regression": "ec2850a484a16e676361d29fee0dc933d2f4c28fc063947cbf6a3c1295097fd1",
+        "ARIMA": "683650fe40d1ec06923a32e1421bf3eac4575ddc2b1cec26f58277e2e9a26edb",
+        "LSTM": "5ed36f00c96308afd7299d7caf84a50dc03ff49a632bc00d58ffe62c2b32b283"
+      }
+    },
+    {
+      "symbol": "ICT",
+      "model": "LSTM",
+      "predictedClose": 918.79,
+      "previousClose": 922.5,
+      "dataAsOf": "2026-09-28",
+      "forecastFor": "2026-09-29",
+      "issuedAt": "2026-09-28T17:32:06.891886+08:00",
+      "actual": null,
+      "error": null,
+      "deploymentVersion": "RUN02_OPS_20260908_105811Z",
+      "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
+      "formalRunId": "FORMAL_CORRECTED_20260828_02",
+      "sourceDataSha256": "c68e37bd324279df0853adb37efb552fcd6cf368cebad158cc1b7fdeb37a3dba",
+      "configuration": {
+        "lookback": 30,
+        "hidden_size": 25,
+        "learning_rate": 0.001,
+        "batch_size": 16,
+        "fixed_epochs": 47,
+        "seed": 42,
+        "input_design": "univariate_close_delta",
+        "scaler": "MinMaxScaler",
+        "optimizer": "Adam",
+        "loss": "MSELoss"
+      },
+      "configurationSha256": "b5b9a40fe70a4338e7d0171f5561b12de0e3c406228fb4731cb0d84b0c69e24a",
+      "artifactSha256": "14b4c3b77665ba0af753f0807f6128622dbdc7341de7c596e7fb20e2d4b6c10d",
+      "coverage": "post_promotion_prospective",
+      "comparisonForecasts": {
+        "Lag-Informed Regression": 922.93,
+        "ARIMA": 921.38,
+        "LSTM": 918.79
+      },
+      "comparisonApprovalId": "RUN02_COMPARISON_AUTH_20260910_01",
+      "comparisonApprovalSha256": "68efbb548fc5bb38c0ccc547b71f5caab235d131f984fc89e7c731efb4547b3b",
+      "comparisonManifestSha256": "ccc03428b302db82642970ae7ca1dd31cc30eaeed6d0b643d19fc489759a2377",
+      "comparisonArtifactSha256": {
+        "Lag-Informed Regression": "06e17978b62d596268e8aa305ae72cbc1b033e8b43819e5f075bd7803ed9397f",
+        "ARIMA": "c4504da78d8d3d1cb3101d64629d5d3baba2585516e4e7dbfdb9aee4f61d0c82",
+        "LSTM": "14b4c3b77665ba0af753f0807f6128622dbdc7341de7c596e7fb20e2d4b6c10d"
+      },
+      "comparisonConfigurationSha256": {
+        "Lag-Informed Regression": "41f5778e148750e0354e53a460182cd4b6f71a233507b13d1a71d661a5087945",
+        "ARIMA": "8ddf2b051d8ff00d43092060394c2e8ea9addb1c9695b6ba6136503370f0534f",
+        "LSTM": "b5b9a40fe70a4338e7d0171f5561b12de0e3c406228fb4731cb0d84b0c69e24a"
+      }
+    },
+    {
+      "symbol": "JFC",
+      "model": "Lag-Informed Regression",
+      "predictedClose": 142.47,
+      "previousClose": 142.5,
+      "dataAsOf": "2026-09-28",
+      "forecastFor": "2026-09-29",
+      "issuedAt": "2026-09-28T17:32:06.891886+08:00",
+      "actual": null,
+      "error": null,
+      "deploymentVersion": "RUN02_OPS_20260908_105811Z",
+      "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
+      "formalRunId": "FORMAL_CORRECTED_20260828_02",
+      "sourceDataSha256": "0721cb5c272304a0ccca09885e40ec53370130c7d9f03f0aefff7a15dd34abcc",
+      "configuration": {
+        "alpha": 1.584893192461114,
+        "candidate_features": [
+          "lag_1",
+          "lag_2",
+          "lag_3",
+          "lag_5",
+          "ma_5",
+          "ma_10",
+          "volume_ma_5",
+          "ema_10",
+          "ema_20",
+          "rsi_14",
+          "macd",
+          "macd_signal",
+          "bb_upper",
+          "bb_lower",
+          "daily_return",
+          "rolling_volatility",
+          "hl_range_pct",
+          "oc_return_pct",
+          "ema_gap_pct",
+          "macd_pct",
+          "bb_width_pct",
+          "bb_percent_b",
+          "return_lag_4",
+          "return_lag_9",
+          "return_lag_16",
+          "return_lag_20",
+          "return_mean_5",
+          "return_mean_10",
+          "return_mean_20",
+          "return_vol_5",
+          "return_vol_10",
+          "return_vol_20",
+          "log_volume",
+          "volume_mean_10",
+          "volume_mean_20"
+        ],
+        "pacf_selected_lags": [
+          4,
+          9,
+          16,
+          20
+        ],
+        "max_iter": 50000,
+        "tol": 0.001,
+        "seed": 42,
+        "target": "next_close_delta",
+        "scaler": "StandardScaler"
+      },
+      "configurationSha256": "f0dc948185c9936c3143ad2e6faea62155a5f44553f591f7809789bc62997c9e",
+      "artifactSha256": "298a8492fff526969096db846585f2ab7a1e6edcf5251ad2ca6d5da6509f43a7",
+      "coverage": "post_promotion_prospective",
+      "comparisonForecasts": {
+        "Lag-Informed Regression": 142.47,
+        "ARIMA": 142.91,
+        "LSTM": 142.16
+      },
+      "comparisonApprovalId": "RUN02_COMPARISON_AUTH_20260910_01",
+      "comparisonApprovalSha256": "68efbb548fc5bb38c0ccc547b71f5caab235d131f984fc89e7c731efb4547b3b",
+      "comparisonManifestSha256": "ccc03428b302db82642970ae7ca1dd31cc30eaeed6d0b643d19fc489759a2377",
+      "comparisonArtifactSha256": {
+        "Lag-Informed Regression": "298a8492fff526969096db846585f2ab7a1e6edcf5251ad2ca6d5da6509f43a7",
+        "ARIMA": "ff8e30d27e89c7b28512ff63055702790e4fb6b4c9247f36590f5ecaa797011f",
+        "LSTM": "b9968ab8e4a452ee881bb88ebfdc3131ce82e113e6144416a00cf7554c88c436"
+      },
+      "comparisonConfigurationSha256": {
+        "Lag-Informed Regression": "f0dc948185c9936c3143ad2e6faea62155a5f44553f591f7809789bc62997c9e",
+        "ARIMA": "27fcc1690857d66913591c9b4ce86856ee3869bf7d97f331caa3c5da9757f227",
+        "LSTM": "40e24b020b530a4725d91cf66ebaf4e05c79ce34c8267419d0caf56ff4b2c5e2"
+      }
+    },
+    {
+      "symbol": "MBT",
+      "model": "ARIMA",
+      "predictedClose": 61.92,
+      "previousClose": 62.0,
+      "dataAsOf": "2026-09-28",
+      "forecastFor": "2026-09-29",
+      "issuedAt": "2026-09-28T17:32:06.891886+08:00",
+      "actual": null,
+      "error": null,
+      "deploymentVersion": "RUN02_OPS_20260908_105811Z",
+      "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
+      "formalRunId": "FORMAL_CORRECTED_20260828_02",
+      "sourceDataSha256": "0d3cf7e7cc336405dbbc0483e6b6f2150b15fae979ebaffd6cb739fd7d663c92",
+      "configuration": {
+        "order": [
+          2,
+          1,
+          0
+        ],
+        "trend": "n",
+        "method": "statespace",
+        "maxiter": 2000,
+        "target": "Close"
+      },
+      "configurationSha256": "3601aa41367e8bd350acb12e255045e93ff7bf331ddf347db21103787ec77304",
+      "artifactSha256": "173d3496c62e676e489f2453c1e1d3ee5828c0e92b286538053dd4703ade3f7e",
+      "coverage": "post_promotion_prospective",
+      "comparisonForecasts": {
+        "Lag-Informed Regression": 61.99,
+        "ARIMA": 61.92,
+        "LSTM": 61.95
+      },
+      "comparisonApprovalId": "RUN02_COMPARISON_AUTH_20260910_01",
+      "comparisonApprovalSha256": "68efbb548fc5bb38c0ccc547b71f5caab235d131f984fc89e7c731efb4547b3b",
+      "comparisonManifestSha256": "ccc03428b302db82642970ae7ca1dd31cc30eaeed6d0b643d19fc489759a2377",
+      "comparisonArtifactSha256": {
+        "Lag-Informed Regression": "dfa81c1550757f9b7579f9e8b17c33e1d684e022417314bd352a1f6ce619e60e",
+        "ARIMA": "173d3496c62e676e489f2453c1e1d3ee5828c0e92b286538053dd4703ade3f7e",
+        "LSTM": "86e819886f164af66ef104718b5823d4455a81a91bc5c4f484a846a27c6db13c"
+      },
+      "comparisonConfigurationSha256": {
+        "Lag-Informed Regression": "fcb5e3b63e3446c99cdd2280549ac323a570b34f53e6d96ab2017b05a19e2e79",
+        "ARIMA": "3601aa41367e8bd350acb12e255045e93ff7bf331ddf347db21103787ec77304",
+        "LSTM": "5ed36f00c96308afd7299d7caf84a50dc03ff49a632bc00d58ffe62c2b32b283"
+      }
+    },
+    {
+      "symbol": "MEG",
+      "model": "Lag-Informed Regression",
+      "predictedClose": 2.12,
+      "previousClose": 2.12,
+      "dataAsOf": "2026-09-28",
+      "forecastFor": "2026-09-29",
+      "issuedAt": "2026-09-28T17:32:06.891886+08:00",
+      "actual": null,
+      "error": null,
+      "deploymentVersion": "RUN02_OPS_20260908_105811Z",
+      "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
+      "formalRunId": "FORMAL_CORRECTED_20260828_02",
+      "sourceDataSha256": "087587947942b9ac7ec86e6c00c33ee1c4564964fecaafb8ebcd11f0cf48d788",
+      "configuration": {
+        "alpha": 0.01584893192461114,
+        "candidate_features": [
+          "lag_1",
+          "lag_2",
+          "lag_3",
+          "lag_5",
+          "ma_5",
+          "ma_10",
+          "volume_ma_5",
+          "ema_10",
+          "ema_20",
+          "rsi_14",
+          "macd",
+          "macd_signal",
+          "bb_upper",
+          "bb_lower",
+          "daily_return",
+          "rolling_volatility",
+          "hl_range_pct",
+          "oc_return_pct",
+          "ema_gap_pct",
+          "macd_pct",
+          "bb_width_pct",
+          "bb_percent_b",
+          "return_lag_1",
+          "return_mean_5",
+          "return_mean_10",
+          "return_mean_20",
+          "return_vol_5",
+          "return_vol_10",
+          "return_vol_20",
+          "log_volume",
+          "volume_mean_10",
+          "volume_mean_20"
+        ],
+        "pacf_selected_lags": [
+          1
+        ],
+        "max_iter": 50000,
+        "tol": 0.001,
+        "seed": 42,
+        "target": "next_close_delta",
+        "scaler": "StandardScaler"
+      },
+      "configurationSha256": "023a5c80e256e770cb70e2edd1dfc3722193a087320e2e2575f9c52f7f3f25ba",
+      "artifactSha256": "b8654bc1f4eeadf772e9664988a286f7bc2ca256558ded4999d3a63a2c5e605d",
+      "coverage": "post_promotion_prospective",
+      "comparisonForecasts": {
+        "Lag-Informed Regression": 2.12,
+        "ARIMA": 2.12,
+        "LSTM": 2.12
+      },
+      "comparisonApprovalId": "RUN02_COMPARISON_AUTH_20260910_01",
+      "comparisonApprovalSha256": "68efbb548fc5bb38c0ccc547b71f5caab235d131f984fc89e7c731efb4547b3b",
+      "comparisonManifestSha256": "ccc03428b302db82642970ae7ca1dd31cc30eaeed6d0b643d19fc489759a2377",
+      "comparisonArtifactSha256": {
+        "Lag-Informed Regression": "b8654bc1f4eeadf772e9664988a286f7bc2ca256558ded4999d3a63a2c5e605d",
+        "ARIMA": "5cb22851b49fa62e287cb85456571a586ea96501ab452b99d60a24b076b4d077",
+        "LSTM": "ac7a244578d1a9926398437c2ed5704b4d2262462a78ec8f42ce8add7dddacbb"
+      },
+      "comparisonConfigurationSha256": {
+        "Lag-Informed Regression": "023a5c80e256e770cb70e2edd1dfc3722193a087320e2e2575f9c52f7f3f25ba",
+        "ARIMA": "8e694f8f6ccede1e2770bb5198b96e970237b3d5af244746e35e8572b3ee2ea6",
+        "LSTM": "a39203868eda1d34e312ce761efb6c3a7e1dd5944ac62e672a512697a8535f9c"
+      }
+    },
+    {
+      "symbol": "MER",
+      "model": "Lag-Informed Regression",
+      "predictedClose": 436.39,
+      "previousClose": 435.0,
+      "dataAsOf": "2026-09-28",
+      "forecastFor": "2026-09-29",
+      "issuedAt": "2026-09-28T17:32:06.891886+08:00",
+      "actual": null,
+      "error": null,
+      "deploymentVersion": "RUN02_OPS_20260908_105811Z",
+      "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
+      "formalRunId": "FORMAL_CORRECTED_20260828_02",
+      "sourceDataSha256": "acbff63e7ceba1a147d2372c9270f7a382ba9cd428b480223d7eb7765811bfd4",
+      "configuration": {
+        "alpha": 0.3981071705534973,
+        "candidate_features": [
+          "lag_1",
+          "lag_2",
+          "lag_3",
+          "lag_5",
+          "ma_5",
+          "ma_10",
+          "volume_ma_5",
+          "ema_10",
+          "ema_20",
+          "rsi_14",
+          "macd",
+          "macd_signal",
+          "bb_upper",
+          "bb_lower",
+          "daily_return",
+          "rolling_volatility",
+          "hl_range_pct",
+          "oc_return_pct",
+          "ema_gap_pct",
+          "macd_pct",
+          "bb_width_pct",
+          "bb_percent_b",
+          "return_lag_1",
+          "return_lag_2",
+          "return_lag_8",
+          "return_lag_9",
+          "return_lag_11",
+          "return_mean_5",
+          "return_mean_10",
+          "return_mean_20",
+          "return_vol_5",
+          "return_vol_10",
+          "return_vol_20",
+          "log_volume",
+          "volume_mean_10",
+          "volume_mean_20"
+        ],
+        "pacf_selected_lags": [
+          1,
+          2,
+          8,
+          9,
+          11
+        ],
+        "max_iter": 50000,
+        "tol": 0.001,
+        "seed": 42,
+        "target": "next_close_delta",
+        "scaler": "StandardScaler"
+      },
+      "configurationSha256": "1ce46c0b20ce5cc6f46ad4a27c6438c516fbdfe2498f1d0d12f830258a9b3a94",
+      "artifactSha256": "b7a7b1f50b870b9f236c9d05656e2a06e84c92af7628824fe7421fd75c5b8cdf",
+      "coverage": "post_promotion_prospective",
+      "comparisonForecasts": {
+        "Lag-Informed Regression": 436.39,
+        "ARIMA": 437.41,
+        "LSTM": 436.06
+      },
+      "comparisonApprovalId": "RUN02_COMPARISON_AUTH_20260910_01",
+      "comparisonApprovalSha256": "68efbb548fc5bb38c0ccc547b71f5caab235d131f984fc89e7c731efb4547b3b",
+      "comparisonManifestSha256": "ccc03428b302db82642970ae7ca1dd31cc30eaeed6d0b643d19fc489759a2377",
+      "comparisonArtifactSha256": {
+        "Lag-Informed Regression": "b7a7b1f50b870b9f236c9d05656e2a06e84c92af7628824fe7421fd75c5b8cdf",
+        "ARIMA": "2095172c6aa1731d702fb69c8bef98a6c44f943f02f23db92578ea1d6a133486",
+        "LSTM": "f7c535f1fedcc27a8a14f9ed48f6a98d62fc6094e1affba10ae632823b75b3fe"
+      },
+      "comparisonConfigurationSha256": {
+        "Lag-Informed Regression": "1ce46c0b20ce5cc6f46ad4a27c6438c516fbdfe2498f1d0d12f830258a9b3a94",
+        "ARIMA": "0fbe46f715778c8ef65a59cb28155d93eb9151d012aaa46159e69724770c40e7",
+        "LSTM": "096a632067ce6299964dd622561c205eddf1dbe3e4b5f88c9a1eae95c0137739"
+      }
+    },
+    {
+      "symbol": "NIKL",
+      "model": "Lag-Informed Regression",
+      "predictedClose": 4.0,
+      "previousClose": 4.0,
+      "dataAsOf": "2026-09-28",
+      "forecastFor": "2026-09-29",
+      "issuedAt": "2026-09-28T17:32:06.891886+08:00",
+      "actual": null,
+      "error": null,
+      "deploymentVersion": "RUN02_OPS_20260908_105811Z",
+      "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
+      "formalRunId": "FORMAL_CORRECTED_20260828_02",
+      "sourceDataSha256": "ca3909b4c9e5886a73fe493f88bfa3da27c3b5805ca2980593a16d0c16e2a99c",
+      "configuration": {
+        "alpha": 0.025118864315095822,
+        "candidate_features": [
+          "lag_1",
+          "lag_2",
+          "lag_3",
+          "lag_5",
+          "ma_5",
+          "ma_10",
+          "volume_ma_5",
+          "ema_10",
+          "ema_20",
+          "rsi_14",
+          "macd",
+          "macd_signal",
+          "bb_upper",
+          "bb_lower",
+          "daily_return",
+          "rolling_volatility",
+          "hl_range_pct",
+          "oc_return_pct",
+          "ema_gap_pct",
+          "macd_pct",
+          "bb_width_pct",
+          "bb_percent_b",
+          "return_lag_13",
+          "return_mean_5",
+          "return_mean_10",
+          "return_mean_20",
+          "return_vol_5",
+          "return_vol_10",
+          "return_vol_20",
+          "log_volume",
+          "volume_mean_10",
+          "volume_mean_20"
+        ],
+        "pacf_selected_lags": [
+          13
+        ],
+        "max_iter": 50000,
+        "tol": 0.001,
+        "seed": 42,
+        "target": "next_close_delta",
+        "scaler": "StandardScaler"
+      },
+      "configurationSha256": "5f81972a113683046b8676f65cd9153fedb70afd252dc68b5dc93a10f57c6b85",
+      "artifactSha256": "b2aba624a2ca8c1efeca8440a61ee351e7b35464ea0b21cea79f0b823b78f3aa",
+      "coverage": "post_promotion_prospective",
+      "comparisonForecasts": {
+        "Lag-Informed Regression": 4.0,
+        "ARIMA": 4.01,
+        "LSTM": 4.0
+      },
+      "comparisonApprovalId": "RUN02_COMPARISON_AUTH_20260910_01",
+      "comparisonApprovalSha256": "68efbb548fc5bb38c0ccc547b71f5caab235d131f984fc89e7c731efb4547b3b",
+      "comparisonManifestSha256": "ccc03428b302db82642970ae7ca1dd31cc30eaeed6d0b643d19fc489759a2377",
+      "comparisonArtifactSha256": {
+        "Lag-Informed Regression": "b2aba624a2ca8c1efeca8440a61ee351e7b35464ea0b21cea79f0b823b78f3aa",
+        "ARIMA": "3f78b5d8089c1e67cf49a96b62f9ea8babd32767f9fed08c5af2f997c3d13b9e",
+        "LSTM": "4faef4241e8eb508950cdc463b05673eddd150ac85f7e179daef7fe5ebd29b88"
+      },
+      "comparisonConfigurationSha256": {
+        "Lag-Informed Regression": "5f81972a113683046b8676f65cd9153fedb70afd252dc68b5dc93a10f57c6b85",
+        "ARIMA": "d424f1db212ca60d9d6b2dd2d6925e7090b5693dcf61f43b8e1cc6a9e6573c4f",
+        "LSTM": "a39203868eda1d34e312ce761efb6c3a7e1dd5944ac62e672a512697a8535f9c"
+      }
+    },
+    {
+      "symbol": "PGOLD",
+      "model": "ARIMA",
+      "predictedClose": 40.25,
+      "previousClose": 40.2,
+      "dataAsOf": "2026-09-28",
+      "forecastFor": "2026-09-29",
+      "issuedAt": "2026-09-28T17:32:06.891886+08:00",
+      "actual": null,
+      "error": null,
+      "deploymentVersion": "RUN02_OPS_20260908_105811Z",
+      "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
+      "formalRunId": "FORMAL_CORRECTED_20260828_02",
+      "sourceDataSha256": "685c6321817d2b784601b52ae2b8207b50961cc02a3b3d40ec56a0a8656aaaea",
+      "configuration": {
+        "order": [
+          1,
+          1,
+          0
+        ],
+        "trend": "n",
+        "method": "statespace",
+        "maxiter": 2000,
+        "target": "Close"
+      },
+      "configurationSha256": "2f850ba4e450a46c356aec6c3e011c17a0eda8324db8d68a06f67f97bd1f76a1",
+      "artifactSha256": "2d274924835f7ea4075e46345c0674bacbe31c982c31c1121a8c8e71c9e321ae",
+      "coverage": "post_promotion_prospective",
+      "comparisonForecasts": {
+        "Lag-Informed Regression": 40.2,
+        "ARIMA": 40.25,
+        "LSTM": 40.22
+      },
+      "comparisonApprovalId": "RUN02_COMPARISON_AUTH_20260910_01",
+      "comparisonApprovalSha256": "68efbb548fc5bb38c0ccc547b71f5caab235d131f984fc89e7c731efb4547b3b",
+      "comparisonManifestSha256": "ccc03428b302db82642970ae7ca1dd31cc30eaeed6d0b643d19fc489759a2377",
+      "comparisonArtifactSha256": {
+        "Lag-Informed Regression": "ff3b9a79a2eeef8468addf40f8b1e1d454df6a914977481343a6cacac7f7f42d",
+        "ARIMA": "2d274924835f7ea4075e46345c0674bacbe31c982c31c1121a8c8e71c9e321ae",
+        "LSTM": "784123f99bac0c731f3dc8669d5f526947749606d14e5e09b97d69da4233966d"
+      },
+      "comparisonConfigurationSha256": {
+        "Lag-Informed Regression": "a44b9d0f9e62a5d1613e149c474604ec9148b0a5a637e7ccd344f3d888a03ae9",
+        "ARIMA": "2f850ba4e450a46c356aec6c3e011c17a0eda8324db8d68a06f67f97bd1f76a1",
+        "LSTM": "c2028720d32c3852fa697d497341c85d7150d9af7bda401e72d6b51a2e723182"
+      }
+    },
+    {
+      "symbol": "SCC",
+      "model": "ARIMA",
+      "predictedClose": 14.46,
+      "previousClose": 14.46,
+      "dataAsOf": "2026-09-28",
+      "forecastFor": "2026-09-29",
+      "issuedAt": "2026-09-28T17:32:06.891886+08:00",
+      "actual": null,
+      "error": null,
+      "deploymentVersion": "RUN02_OPS_20260908_105811Z",
+      "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
+      "formalRunId": "FORMAL_CORRECTED_20260828_02",
+      "sourceDataSha256": "37d00fc899fe1d3b431ceb92375fc6cfe1f8d5981089655c5bb81f1d42b1326a",
+      "configuration": {
+        "order": [
+          0,
+          1,
+          0
+        ],
+        "trend": "n",
+        "method": "statespace",
+        "maxiter": 2000,
+        "target": "Close"
+      },
+      "configurationSha256": "683650fe40d1ec06923a32e1421bf3eac4575ddc2b1cec26f58277e2e9a26edb",
+      "artifactSha256": "3781ba318930f9a03dc4f349dbe0e609b16122d83166d48cc557f22b7e8f5fb3",
+      "coverage": "post_promotion_prospective",
+      "comparisonForecasts": {
+        "Lag-Informed Regression": 14.46,
+        "ARIMA": 14.46,
+        "LSTM": 14.33
+      },
+      "comparisonApprovalId": "RUN02_COMPARISON_AUTH_20260910_01",
+      "comparisonApprovalSha256": "68efbb548fc5bb38c0ccc547b71f5caab235d131f984fc89e7c731efb4547b3b",
+      "comparisonManifestSha256": "ccc03428b302db82642970ae7ca1dd31cc30eaeed6d0b643d19fc489759a2377",
+      "comparisonArtifactSha256": {
+        "Lag-Informed Regression": "601f99a501e9cd95a4c5a2ea91062ddeabe0237d79b339623b0e874b4550125b",
+        "ARIMA": "3781ba318930f9a03dc4f349dbe0e609b16122d83166d48cc557f22b7e8f5fb3",
+        "LSTM": "4bc001abde74a560036406292ebbc066b7683995ee87927b68eeb336e4146f27"
+      },
+      "comparisonConfigurationSha256": {
+        "Lag-Informed Regression": "042191ead18c85733f2163771cebcb01f476e58dbcfe6cd052f74c83c4d25bf2",
+        "ARIMA": "683650fe40d1ec06923a32e1421bf3eac4575ddc2b1cec26f58277e2e9a26edb",
+        "LSTM": "8ece0c2c1d99a37cf82e1dd23a8ff18273201d89aba149e95cdc31194b140e51"
+      }
+    },
+    {
+      "symbol": "SECB",
+      "model": "ARIMA",
+      "predictedClose": 62.99,
+      "previousClose": 63.0,
+      "dataAsOf": "2026-09-28",
+      "forecastFor": "2026-09-29",
+      "issuedAt": "2026-09-28T17:32:06.891886+08:00",
+      "actual": null,
+      "error": null,
+      "deploymentVersion": "RUN02_OPS_20260908_105811Z",
+      "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
+      "formalRunId": "FORMAL_CORRECTED_20260828_02",
+      "sourceDataSha256": "0607c23e42ecaf216dea14b6434c57963486d3500b1075b630e1af6436bd4850",
+      "configuration": {
+        "order": [
+          1,
+          0,
+          0
+        ],
+        "trend": "n",
+        "method": "statespace",
+        "maxiter": 2000,
+        "target": "Close"
+      },
+      "configurationSha256": "32a261614074fdae97eeea4129761d645f3adad9496aff3f79f9c94e07f4ad0b",
+      "artifactSha256": "0c253bae89abd30c64d8c799fe017226a9aebcb2dfaa3b80aca4b8a090942fa5",
+      "coverage": "post_promotion_prospective",
+      "comparisonForecasts": {
+        "Lag-Informed Regression": 62.93,
+        "ARIMA": 62.99,
+        "LSTM": 62.97
+      },
+      "comparisonApprovalId": "RUN02_COMPARISON_AUTH_20260910_01",
+      "comparisonApprovalSha256": "68efbb548fc5bb38c0ccc547b71f5caab235d131f984fc89e7c731efb4547b3b",
+      "comparisonManifestSha256": "ccc03428b302db82642970ae7ca1dd31cc30eaeed6d0b643d19fc489759a2377",
+      "comparisonArtifactSha256": {
+        "Lag-Informed Regression": "0470206094aeb4f1cfd440e206d7219777cce14a14acb9d053afcacb5274dcd1",
+        "ARIMA": "0c253bae89abd30c64d8c799fe017226a9aebcb2dfaa3b80aca4b8a090942fa5",
+        "LSTM": "f871cfb2f85f62670d38f443a5d3c2f5b632c3776180a3297c350cefddf90b7c"
+      },
+      "comparisonConfigurationSha256": {
+        "Lag-Informed Regression": "09d1466529f11b016c3a4e1ccb3908e5abba0be211280965c0b72378adf2633e",
+        "ARIMA": "32a261614074fdae97eeea4129761d645f3adad9496aff3f79f9c94e07f4ad0b",
+        "LSTM": "a39203868eda1d34e312ce761efb6c3a7e1dd5944ac62e672a512697a8535f9c"
+      }
+    },
+    {
+      "symbol": "SHLPH",
+      "model": "ARIMA",
+      "predictedClose": 8.13,
+      "previousClose": 8.15,
+      "dataAsOf": "2026-09-28",
+      "forecastFor": "2026-09-29",
+      "issuedAt": "2026-09-28T17:32:06.891886+08:00",
+      "actual": null,
+      "error": null,
+      "deploymentVersion": "RUN02_OPS_20260908_105811Z",
+      "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
+      "formalRunId": "FORMAL_CORRECTED_20260828_02",
+      "sourceDataSha256": "26a05df934f7ea46b6e88161a30afc7f0cc67fe41c4cfb7f9fa190a47a9fa7ff",
+      "configuration": {
+        "order": [
+          0,
+          1,
+          3
+        ],
+        "trend": "t",
+        "method": "statespace",
+        "maxiter": 2000,
+        "target": "Close"
+      },
+      "configurationSha256": "6a003806732db247b9825cd1989abae894061ea232c29d6d5950add1443db773",
+      "artifactSha256": "7346ba12ffb15d5438487726d35530e44252cb50ba5e6c3d1ffb3c9980b28279",
+      "coverage": "post_promotion_prospective",
+      "comparisonForecasts": {
+        "Lag-Informed Regression": 8.14,
+        "ARIMA": 8.13,
+        "LSTM": 8.16
+      },
+      "comparisonApprovalId": "RUN02_COMPARISON_AUTH_20260910_01",
+      "comparisonApprovalSha256": "68efbb548fc5bb38c0ccc547b71f5caab235d131f984fc89e7c731efb4547b3b",
+      "comparisonManifestSha256": "ccc03428b302db82642970ae7ca1dd31cc30eaeed6d0b643d19fc489759a2377",
+      "comparisonArtifactSha256": {
+        "Lag-Informed Regression": "79adec7789f69b0efcb45e6ccadc3438fc167afa83f9fb8db1e4a26c664bf664",
+        "ARIMA": "7346ba12ffb15d5438487726d35530e44252cb50ba5e6c3d1ffb3c9980b28279",
+        "LSTM": "1778b722a281ba270dbd398e1034ca25da01ec4eb256c240b85955faae5d30dc"
+      },
+      "comparisonConfigurationSha256": {
+        "Lag-Informed Regression": "73b77a13ee6314c8646b72cec49ce2473845b2a6ef048c6b0b5a96459e52e1f6",
+        "ARIMA": "6a003806732db247b9825cd1989abae894061ea232c29d6d5950add1443db773",
+        "LSTM": "8da55efc268cb9385c224e1419c6f1087ccc137904abc81b1b7b771951538b6f"
+      }
+    },
+    {
+      "symbol": "SMPH",
+      "model": "Lag-Informed Regression",
+      "predictedClose": 16.0,
+      "previousClose": 16.0,
+      "dataAsOf": "2026-09-28",
+      "forecastFor": "2026-09-29",
+      "issuedAt": "2026-09-28T17:32:06.891886+08:00",
+      "actual": null,
+      "error": null,
+      "deploymentVersion": "RUN02_OPS_20260908_105811Z",
+      "manifestSha256": "9f48dd4c5e2623e3debd8b434a967dbbe4729e26d3bc17374cbcdf3b33284b0a",
+      "formalRunId": "FORMAL_CORRECTED_20260828_02",
+      "sourceDataSha256": "0c9fd1396c10732bd8fe5bdde6d491579ba04dd1be61f71cdd7fb4ceb6f9f095",
+      "configuration": {
+        "alpha": 0.039810717055349734,
+        "candidate_features": [
+          "lag_1",
+          "lag_2",
+          "lag_3",
+          "lag_5",
+          "ma_5",
+          "ma_10",
+          "volume_ma_5",
+          "ema_10",
+          "ema_20",
+          "rsi_14",
+          "macd",
+          "macd_signal",
+          "bb_upper",
+          "bb_lower",
+          "daily_return",
+          "rolling_volatility",
+          "hl_range_pct",
+          "oc_return_pct",
+          "ema_gap_pct",
+          "macd_pct",
+          "bb_width_pct",
+          "bb_percent_b",
+          "return_lag_1",
+          "return_lag_2",
+          "return_mean_5",
+          "return_mean_10",
+          "return_mean_20",
+          "return_vol_5",
+          "return_vol_10",
+          "return_vol_20",
+          "log_volume",
+          "volume_mean_10",
+          "volume_mean_20"
+        ],
+        "pacf_selected_lags": [
+          1,
+          2
+        ],
+        "max_iter": 50000,
+        "tol": 0.001,
+        "seed": 42,
+        "target": "next_close_delta",
+        "scaler": "StandardScaler"
+      },
+      "configurationSha256": "42cbd66f0200b1f7a19efcf67eea11a3d93de6121ad8f32427a00c0e1ddc4f39",
+      "artifactSha256": "cc791c805d667dd832cc33e3e3417f22d23a63257bd24b98f963385c0fecea92",
+      "coverage": "post_promotion_prospective",
+      "comparisonForecasts": {
+        "Lag-Informed Regression": 16.0,
+        "ARIMA": 16.0,
         "LSTM": 15.96
       },
       "comparisonApprovalId": "RUN02_COMPARISON_AUTH_20260910_01",
@@ -24578,6 +25544,14 @@
         "low": 14.94,
         "close": 15.12,
         "volume": 142288074
+      },
+      {
+        "date": "2026-09-28",
+        "open": 15.06,
+        "high": 15.44,
+        "low": 15.0,
+        "close": 15.32,
+        "volume": 167596558
       }
     ],
     "APX": [
@@ -37724,6 +38698,14 @@
         "low": 17.42,
         "close": 18.0,
         "volume": 44880418
+      },
+      {
+        "date": "2026-09-28",
+        "open": 17.8,
+        "high": 17.8,
+        "low": 17.0,
+        "close": 17.1,
+        "volume": 63013372
       }
     ],
     "BPI": [
@@ -50870,6 +51852,14 @@
         "low": 95.45,
         "close": 97.15,
         "volume": 203086792
+      },
+      {
+        "date": "2026-09-28",
+        "open": 97.15,
+        "high": 97.5,
+        "low": 94.3,
+        "close": 95.9,
+        "volume": 304169688
       }
     ],
     "GLO": [
@@ -64016,6 +65006,14 @@
         "low": 1532.0,
         "close": 1550.0,
         "volume": 55087715
+      },
+      {
+        "date": "2026-09-28",
+        "open": 1550.0,
+        "high": 1570.0,
+        "low": 1543.0,
+        "close": 1559.0,
+        "volume": 51998280
       }
     ],
     "ICT": [
@@ -77162,6 +78160,14 @@
         "low": 883.0,
         "close": 920.0,
         "volume": 903546585
+      },
+      {
+        "date": "2026-09-28",
+        "open": 935.0,
+        "high": 943.5,
+        "low": 915.5,
+        "close": 922.5,
+        "volume": 1339561470
       }
     ],
     "JFC": [
@@ -90308,6 +91314,14 @@
         "low": 140.0,
         "close": 145.0,
         "volume": 34939033
+      },
+      {
+        "date": "2026-09-28",
+        "open": 145.0,
+        "high": 145.5,
+        "low": 142.0,
+        "close": 142.5,
+        "volume": 21582414
       }
     ],
     "MBT": [
@@ -103454,6 +104468,14 @@
         "low": 61.05,
         "close": 62.0,
         "volume": 133948554
+      },
+      {
+        "date": "2026-09-28",
+        "open": 62.0,
+        "high": 62.2,
+        "low": 61.55,
+        "close": 62.0,
+        "volume": 97256013
       }
     ],
     "MEG": [
@@ -116600,6 +117622,14 @@
         "low": 2.11,
         "close": 2.17,
         "volume": 12868530
+      },
+      {
+        "date": "2026-09-28",
+        "open": 2.17,
+        "high": 2.17,
+        "low": 2.11,
+        "close": 2.12,
+        "volume": 4711000
       }
     ],
     "MER": [
@@ -129746,6 +130776,14 @@
         "low": 440.2,
         "close": 444.2,
         "volume": 153910266
+      },
+      {
+        "date": "2026-09-28",
+        "open": 446.0,
+        "high": 452.4,
+        "low": 435.0,
+        "close": 435.0,
+        "volume": 117281036
       }
     ],
     "NIKL": [
@@ -142892,6 +143930,14 @@
         "low": 3.9,
         "close": 4.07,
         "volume": 4442270
+      },
+      {
+        "date": "2026-09-28",
+        "open": 4.0,
+        "high": 4.06,
+        "low": 3.94,
+        "close": 4.0,
+        "volume": 12777900
       }
     ],
     "PGOLD": [
@@ -156038,6 +157084,14 @@
         "low": 39.85,
         "close": 40.85,
         "volume": 42232580
+      },
+      {
+        "date": "2026-09-28",
+        "open": 40.9,
+        "high": 41.1,
+        "low": 40.15,
+        "close": 40.2,
+        "volume": 10965905
       }
     ],
     "SCC": [
@@ -169184,6 +170238,14 @@
         "low": 15.14,
         "close": 15.28,
         "volume": 45105840
+      },
+      {
+        "date": "2026-09-28",
+        "open": 15.3,
+        "high": 15.3,
+        "low": 14.26,
+        "close": 14.46,
+        "volume": 42844718
       }
     ],
     "SECB": [
@@ -182330,6 +183392,14 @@
         "low": 61.8,
         "close": 62.1,
         "volume": 2051489
+      },
+      {
+        "date": "2026-09-28",
+        "open": 62.0,
+        "high": 63.0,
+        "low": 62.0,
+        "close": 63.0,
+        "volume": 1905902
       }
     ],
     "SHLPH": [
@@ -195476,6 +196546,14 @@
         "low": 8.04,
         "close": 8.25,
         "volume": 9219273
+      },
+      {
+        "date": "2026-09-28",
+        "open": 8.25,
+        "high": 8.31,
+        "low": 8.15,
+        "close": 8.15,
+        "volume": 7721315
       }
     ],
     "SMPH": [
@@ -208622,6 +209700,14 @@
         "low": 15.84,
         "close": 16.0,
         "volume": 137488998
+      },
+      {
+        "date": "2026-09-28",
+        "open": 16.0,
+        "high": 16.2,
+        "low": 15.86,
+        "close": 16.0,
+        "volume": 44126848
       }
     ]
   },
