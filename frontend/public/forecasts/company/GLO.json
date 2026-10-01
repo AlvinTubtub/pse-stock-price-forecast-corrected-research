@@ -2,10 +2,10 @@
   "symbol": "GLO",
   "name": "Globe Telecom, Inc.",
   "sector": "Services",
-  "previousClose": 1503.0,
+  "previousClose": 1535.0,
   "predictedClose": 1608.67,
-  "pesoChange": 105.67,
-  "pctChange": 7.03,
+  "pesoChange": 73.67,
+  "pctChange": 4.8,
   "direction": "bullish",
   "model": "ARIMA",
   "confidence": 94.3,
@@ -13275,6 +13275,14 @@
       "low": 1503.0,
       "close": 1503.0,
       "volume": 172357045
+    },
+    {
+      "date": "2026-10-01",
+      "open": 1501.0,
+      "high": 1562.0,
+      "low": 1500.0,
+      "close": 1535.0,
+      "volume": 96494715
     }
   ],
   "backtestDates": [
