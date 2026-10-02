@@ -2,10 +2,10 @@
   "symbol": "SECB",
   "name": "Security Bank Corporation",
   "sector": "Financials",
-  "previousClose": 62.5,
+  "previousClose": 61.1,
   "predictedClose": 64.64,
-  "pesoChange": 2.14,
-  "pctChange": 3.42,
+  "pesoChange": 3.54,
+  "pctChange": 5.79,
   "direction": "bullish",
   "model": "ARIMA",
   "confidence": 89.9,
@@ -13283,6 +13283,14 @@
       "low": 61.85,
       "close": 62.5,
       "volume": 1134950
+    },
+    {
+      "date": "2026-10-02",
+      "open": 62.5,
+      "high": 62.5,
+      "low": 61.1,
+      "close": 61.1,
+      "volume": 7832635
     }
   ],
   "backtestDates": [
