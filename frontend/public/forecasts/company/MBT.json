@@ -2,10 +2,10 @@
   "symbol": "MBT",
   "name": "Metropolitan Bank & Trust Co.",
   "sector": "Financials",
-  "previousClose": 60.05,
+  "previousClose": 60.9,
   "predictedClose": 65.86,
-  "pesoChange": 5.81,
-  "pctChange": 9.68,
+  "pesoChange": 4.96,
+  "pctChange": 8.14,
   "direction": "bullish",
   "model": "ARIMA",
   "confidence": 86.2,
@@ -13323,6 +13323,14 @@
       "low": 60.05,
       "close": 60.05,
       "volume": 314382122
+    },
+    {
+      "date": "2026-10-09",
+      "open": 60.2,
+      "high": 61.35,
+      "low": 60.2,
+      "close": 60.9,
+      "volume": 117310283
     }
   ],
   "backtestDates": [
