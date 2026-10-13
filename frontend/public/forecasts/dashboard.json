@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-10-12T17:32:25.602130+08:00",
+  "generatedAt": "2026-10-13T16:02:25.874074+08:00",
   "forecastDate": "2026-09-08",
-  "lastRunAt": "2026-10-12T09:32:05+00:00",
+  "lastRunAt": "2026-10-13T08:02:04+00:00",
   "status": "ok",
   "totalCompanies": 15,
   "missingCompanies": [],
@@ -28,32 +28,32 @@
     }
   ],
   "marketSummary": {
-    "gainers": 13,
-    "losers": 2,
+    "gainers": 14,
+    "losers": 1,
     "unchanged": 0
   },
   "topGainer": {
     "symbol": "SCC",
     "name": "Semirara Mining and Power Corp.",
     "sector": "Mining and Oil",
-    "latestClose": 11.5,
+    "latestClose": 11.28,
     "predictedClose": 17.7,
-    "pctChange": 53.91,
+    "pctChange": 56.91,
     "direction": "bullish",
     "bestModel": "ARIMA",
     "confidence": 97.1,
     "forecastDate": "2026-09-08"
   },
   "topLoser": {
-    "symbol": "PGOLD",
-    "name": "Puregold Price Club, Inc.",
-    "sector": "Services",
-    "latestClose": 40.5,
-    "predictedClose": 40.18,
-    "pctChange": -0.79,
+    "symbol": "ALI",
+    "name": "Ayala Land, Inc.",
+    "sector": "Property",
+    "latestClose": 15.24,
+    "predictedClose": 15.08,
+    "pctChange": -1.05,
     "direction": "bearish",
-    "bestModel": "ARIMA",
-    "confidence": 89.8,
+    "bestModel": "Lag-Informed Regression",
+    "confidence": 98.6,
     "forecastDate": "2026-09-08"
   }
 }
