@@ -2,10 +2,10 @@
   "symbol": "APX",
   "name": "Apex Mining Co., Inc.",
   "sector": "Mining and Oil",
-  "previousClose": 16.48,
+  "previousClose": 16.46,
   "predictedClose": 17.39,
-  "pesoChange": 0.91,
-  "pctChange": 5.52,
+  "pesoChange": 0.93,
+  "pctChange": 5.65,
   "direction": "bullish",
   "model": "Lag-Informed Regression",
   "confidence": 96.3,
@@ -13427,6 +13427,14 @@
       "low": 15.8,
       "close": 16.48,
       "volume": 67068398
+    },
+    {
+      "date": "2026-10-28",
+      "open": 16.5,
+      "high": 16.66,
+      "low": 16.14,
+      "close": 16.46,
+      "volume": 48788742
     }
   ],
   "backtestDates": [
