@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-10-29T16:02:56.909075+08:00",
+  "generatedAt": "2026-10-30T16:02:37.835909+08:00",
   "forecastDate": "2026-09-08",
-  "lastRunAt": "2026-10-29T08:02:28+00:00",
+  "lastRunAt": "2026-10-30T08:02:12+00:00",
   "status": "ok",
   "totalCompanies": 15,
   "missingCompanies": [],
@@ -28,17 +28,17 @@
     }
   ],
   "marketSummary": {
-    "gainers": 13,
-    "losers": 2,
+    "gainers": 14,
+    "losers": 1,
     "unchanged": 0
   },
   "topGainer": {
     "symbol": "SCC",
     "name": "Semirara Mining and Power Corp.",
     "sector": "Mining and Oil",
-    "latestClose": 10.66,
+    "latestClose": 10.74,
     "predictedClose": 17.7,
-    "pctChange": 66.04,
+    "pctChange": 64.8,
     "direction": "bullish",
     "bestModel": "ARIMA",
     "confidence": 97.1,
@@ -48,9 +48,9 @@
     "symbol": "ALI",
     "name": "Ayala Land, Inc.",
     "sector": "Property",
-    "latestClose": 15.34,
+    "latestClose": 15.36,
     "predictedClose": 15.08,
-    "pctChange": -1.69,
+    "pctChange": -1.82,
     "direction": "bearish",
     "bestModel": "Lag-Informed Regression",
     "confidence": 98.6,
