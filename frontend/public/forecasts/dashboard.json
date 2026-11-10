@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-11-09T17:32:27.659459+08:00",
+  "generatedAt": "2026-11-10T16:03:13.830608+08:00",
   "forecastDate": "2026-09-08",
-  "lastRunAt": "2026-11-09T09:32:05+00:00",
+  "lastRunAt": "2026-11-10T08:02:39+00:00",
   "status": "ok",
   "totalCompanies": 15,
   "missingCompanies": [],
@@ -36,24 +36,24 @@
     "symbol": "SCC",
     "name": "Semirara Mining and Power Corp.",
     "sector": "Mining and Oil",
-    "latestClose": 11.0,
+    "latestClose": 11.1,
     "predictedClose": 17.7,
-    "pctChange": 60.91,
+    "pctChange": 59.46,
     "direction": "bullish",
     "bestModel": "ARIMA",
     "confidence": 97.1,
     "forecastDate": "2026-09-08"
   },
   "topLoser": {
-    "symbol": "MEG",
-    "name": "Megaworld Corporation",
-    "sector": "Property",
-    "latestClose": 2.29,
-    "predictedClose": 2.26,
-    "pctChange": -1.31,
+    "symbol": "APX",
+    "name": "Apex Mining Co., Inc.",
+    "sector": "Mining and Oil",
+    "latestClose": 17.9,
+    "predictedClose": 17.39,
+    "pctChange": -2.85,
     "direction": "bearish",
     "bestModel": "Lag-Informed Regression",
-    "confidence": 92.2,
+    "confidence": 96.3,
     "forecastDate": "2026-09-08"
   }
 }
