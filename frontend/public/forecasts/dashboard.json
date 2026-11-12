@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-11-11T16:02:33.324057+08:00",
+  "generatedAt": "2026-11-12T16:03:03.061474+08:00",
   "forecastDate": "2026-09-08",
-  "lastRunAt": "2026-11-11T08:02:10+00:00",
+  "lastRunAt": "2026-11-12T08:02:28+00:00",
   "status": "ok",
   "totalCompanies": 15,
   "missingCompanies": [],
@@ -28,17 +28,17 @@
     }
   ],
   "marketSummary": {
-    "gainers": 12,
-    "losers": 3,
+    "gainers": 13,
+    "losers": 2,
     "unchanged": 0
   },
   "topGainer": {
     "symbol": "SCC",
     "name": "Semirara Mining and Power Corp.",
     "sector": "Mining and Oil",
-    "latestClose": 11.0,
+    "latestClose": 10.24,
     "predictedClose": 17.7,
-    "pctChange": 60.91,
+    "pctChange": 72.85,
     "direction": "bullish",
     "bestModel": "ARIMA",
     "confidence": 97.1,
