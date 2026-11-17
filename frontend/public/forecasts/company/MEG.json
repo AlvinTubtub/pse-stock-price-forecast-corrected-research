@@ -2,10 +2,10 @@
   "symbol": "MEG",
   "name": "Megaworld Corporation",
   "sector": "Property",
-  "previousClose": 2.19,
+  "previousClose": 2.16,
   "predictedClose": 2.26,
-  "pesoChange": 0.07,
-  "pctChange": 3.2,
+  "pesoChange": 0.1,
+  "pctChange": 4.63,
   "direction": "bullish",
   "model": "Lag-Informed Regression",
   "confidence": 92.2,
@@ -13523,6 +13523,14 @@
       "low": 2.19,
       "close": 2.19,
       "volume": 21751170
+    },
+    {
+      "date": "2026-11-17",
+      "open": 2.19,
+      "high": 2.21,
+      "low": 2.16,
+      "close": 2.16,
+      "volume": 26018560
     }
   ],
   "backtestDates": [
