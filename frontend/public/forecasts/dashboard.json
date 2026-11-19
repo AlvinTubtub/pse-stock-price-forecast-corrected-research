@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-11-17T16:02:45.288871+08:00",
+  "generatedAt": "2026-11-19T16:02:53.252929+08:00",
   "forecastDate": "2026-09-08",
-  "lastRunAt": "2026-11-17T08:02:09+00:00",
+  "lastRunAt": "2026-11-19T08:02:19+00:00",
   "status": "ok",
   "totalCompanies": 15,
   "missingCompanies": [],
@@ -28,32 +28,32 @@
     }
   ],
   "marketSummary": {
-    "gainers": 15,
-    "losers": 0,
+    "gainers": 14,
+    "losers": 1,
     "unchanged": 0
   },
   "topGainer": {
     "symbol": "SCC",
     "name": "Semirara Mining and Power Corp.",
     "sector": "Mining and Oil",
-    "latestClose": 10.04,
+    "latestClose": 8.68,
     "predictedClose": 17.7,
-    "pctChange": 76.29,
+    "pctChange": 103.92,
     "direction": "bullish",
     "bestModel": "ARIMA",
     "confidence": 97.1,
     "forecastDate": "2026-09-08"
   },
   "topLoser": {
-    "symbol": "JFC",
-    "name": "Jollibee Foods Corporation",
-    "sector": "Industrial",
-    "latestClose": 150.8,
-    "predictedClose": 150.97,
-    "pctChange": 0.11,
-    "direction": "bullish",
-    "bestModel": "Lag-Informed Regression",
-    "confidence": 98.3,
+    "symbol": "PGOLD",
+    "name": "Puregold Price Club, Inc.",
+    "sector": "Services",
+    "latestClose": 40.2,
+    "predictedClose": 40.18,
+    "pctChange": -0.05,
+    "direction": "bearish",
+    "bestModel": "ARIMA",
+    "confidence": 89.8,
     "forecastDate": "2026-09-08"
   }
 }
