@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-11-19T16:02:53.252929+08:00",
+  "generatedAt": "2026-11-20T16:02:34.901937+08:00",
   "forecastDate": "2026-09-08",
-  "lastRunAt": "2026-11-19T08:02:19+00:00",
+  "lastRunAt": "2026-11-20T08:02:09+00:00",
   "status": "ok",
   "totalCompanies": 15,
   "missingCompanies": [],
@@ -28,17 +28,17 @@
     }
   ],
   "marketSummary": {
-    "gainers": 14,
-    "losers": 1,
+    "gainers": 15,
+    "losers": 0,
     "unchanged": 0
   },
   "topGainer": {
     "symbol": "SCC",
     "name": "Semirara Mining and Power Corp.",
     "sector": "Mining and Oil",
-    "latestClose": 8.68,
+    "latestClose": 8.34,
     "predictedClose": 17.7,
-    "pctChange": 103.92,
+    "pctChange": 112.23,
     "direction": "bullish",
     "bestModel": "ARIMA",
     "confidence": 97.1,
@@ -48,10 +48,10 @@
     "symbol": "PGOLD",
     "name": "Puregold Price Club, Inc.",
     "sector": "Services",
-    "latestClose": 40.2,
+    "latestClose": 39.75,
     "predictedClose": 40.18,
-    "pctChange": -0.05,
-    "direction": "bearish",
+    "pctChange": 1.08,
+    "direction": "bullish",
     "bestModel": "ARIMA",
     "confidence": 89.8,
     "forecastDate": "2026-09-08"
