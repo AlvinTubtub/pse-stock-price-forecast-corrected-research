@@ -2,10 +2,10 @@
   "symbol": "ALI",
   "name": "Ayala Land, Inc.",
   "sector": "Property",
-  "previousClose": 13.7,
+  "previousClose": 13.66,
   "predictedClose": 15.08,
-  "pesoChange": 1.38,
-  "pctChange": 10.07,
+  "pesoChange": 1.42,
+  "pctChange": 10.4,
   "direction": "bullish",
   "model": "Lag-Informed Regression",
   "confidence": 98.6,
@@ -13571,6 +13571,14 @@
       "low": 13.7,
       "close": 13.7,
       "volume": 260612112
+    },
+    {
+      "date": "2026-11-25",
+      "open": 13.7,
+      "high": 13.86,
+      "low": 13.56,
+      "close": 13.66,
+      "volume": 124045398
     }
   ],
   "backtestDates": [
